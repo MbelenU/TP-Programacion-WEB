@@ -1,0 +1,66 @@
+.container-solic {
+    background-color: #E1E7D0;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    margin: 20px auto;
+    width: flex;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.solic-item {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.solic-details {
+    padding: 10px;
+    background-color: #eef1e5;
+    border-radius: 10px;
+    margin-top: 10px;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.titulo-solic {
+    font-size: 20px;
+}
+
+ul {
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+.btn {
+    width: 100%;
+    border: 2px solid #E1E7D0;
+    border-radius: 5px;
+    background-color: rgb(233, 67, 67);
+    color: black;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn:hover {
+    background-color: #e47f63;
+}
+
+.estado-empleo {
+    background-color: white;
+    text-align: center;
+    border-radius: 15px;
+    display: inline-block;
+    padding: 10px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.bi-geo-alt {
+    display: block;
+    margin-bottom: 10px;
+}
