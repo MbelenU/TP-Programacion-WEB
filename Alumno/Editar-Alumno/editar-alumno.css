@@ -1,0 +1,71 @@
+.star {
+    cursor: pointer;
+    font-size: 25px;
+    color: gray;
+}
+.star.selected {
+    color: gold;
+}
+
+
+.info {
+    
+    flex-direction: column; 
+    padding-left: 20px; 
+}
+
+.perfil-imagen {
+    display: block; 
+    margin-bottom: 0.5rem; 
+    width: 100%; 
+    max-width: 150px; 
+}
+
+.datospersonales {
+    background-color: #E1E7D0;   
+    border-radius: 30px;
+    padding: 20px; 
+    margin-top: 50px;
+}
+
+.datospersonales-header{
+    flex-direction: column;    
+    padding-top: 15px; 
+    padding-bottom: 20px; 
+    font-size: 25px;
+}
+
+
+#listaHabilidades {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 15px;   
+    padding-top: 15px; 
+}
+
+.btnhab{
+    border: 2px solid #969d83; 
+    border-radius: 10px; 
+    background-color: white; 
+    color: black;
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+
+.btnhab:hover {
+    background-color: #a8b585; 
+}
+
+.btn {
+    width: 100%; 
+    border: 2px solid #E1E7D0; 
+    border-radius: 5px; 
+    background-color: white; 
+    color: black; 
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+.btn:hover {
+    background-color: #a8b585; 
+}
+
