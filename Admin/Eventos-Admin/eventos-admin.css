@@ -1,0 +1,24 @@
+.filtro
+{
+    margin-top: 20px;
+}
+
+.form-control {
+    background-color: #E1E7D06B;
+    border-radius: 15px;
+}
+
+.botonFiltro {
+    border: none; 
+    border-radius: 15px; 
+    background-color: #E1E7D06B; 
+    color: rgb(0, 0, 0); 
+    padding: 10px 20px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+.botonFiltro:hover {
+    background-color: #E1E7D0; 
+}
