@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Inicio</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="/Empresa/Publicar-Empleo/publicar-empleo.css">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+	<script src="/Nav-bar/nav-bar.js" defer></script>
+	<script src="/scripts/toggleMenu.js" defer></script>
+	<script src="publicar-empleo.js" defer></script>
+</head>
+
+<body>
+	<nav class="navbar">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">
+				<img src="/Nav-bar/icon.png" alt="Icono Escalon-Uno" class="d-inline-block align-text-top">
+			</a>
+		</div>
+		<button class="navbar-toggler" type="button" id="menuToggle" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+	</nav>
+	<nav class="navbar2">
+		<div class="menu-content" id="menuContent">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<img src="/Nav-bar/perfil.jpg" alt="inserte foto de perfil" id="foto-perfil-navbar">
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/Empresa/Perfil-Empresa/perfil-empresa.html">Mi perfil</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/Empresa/Publicar-Empleo/publicar-empleo.html">Publicar empleo</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/Empresa/Publicaciones-Empresa/publicaciones-empresa.html">Publicaciones</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/Empresa/Reclutar-empresa/reclutar-empresa.html">Reclutar</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<section class="container">
+		<div class="titulo-header">
+			<div class="editar-header">
+				<div class="editar">
+					<div class="nombre-editar">
+						<h1>Publicar empleo</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container-background p-5">
+			<form class="row g-3">
+				<div class="col-md-12">
+					<div class="row mb-3">
+						<div class="col-md-6">
+							<label for="titulo" class="form-label">Titulo</label>
+							<input type="text" class="form-control" id="titulo" required>
+						</div>
+						<div class="col-md-6">
+							<label for="modalidad" class="form-label">Modalidad</label>
+							<select class="form-select" id="modalidad" required>
+								<option value="" disabled selected>Seleccione una modalidad</option>
+								<option value="Presencial">Presencial</option>
+								<option value="Remoto">Remoto</option>
+								<option value="Hibrido">Hibrido</option>
+							</select>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-md-6">
+							<label for="ubicación" class="form-label">Ubicación</label>
+							<input type="text" class="form-control" id="ubicacion" required>
+						</div>
+						<div class="col-md-6">
+							<label for="modalidad" class="form-label">Jornada</label>
+							<select class="form-select" id="modalidad" required>
+								<option value="" disabled selected>Seleccione un tipo de jornada</option>
+								<option value="jornada-completa">Jornada completa</option>
+								<option value="media-jornada">Media jornada</option>
+								<option value="practicas">Practicas</option>
+								<option value="voluntario">Voluntario</option>
+								<option value="otro">Otro</option>
+							</select>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-md-6">
+							<label for="text-area" class="form-label">Descripción</label>
+							<textarea class="form-control" id="text-area" rows="3"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 mb-3">
+					<div>
+						<h2 class="datospersonales-header">Habilidades requeridas</h2>
+						<div id="habilidaderror" class="text-danger"></div>
+						<select class="form-select" id="habilidad" required>
+							<option value="" disabled selected>Seleccione una habilidad</option>
+							<option value="HTML">HTML</option>
+							<option value="CSS">CSS</option>
+							<option value="JavaScript">JavaScript</option>
+							<option value="Base de Datos">Base de Datos</option>
+						</select>
+						<button type="button" class="btnhab btn-secondary mt-2" id="agregarHabilidad">Agregar
+							Habilidad</button>
+						<ul id="listaHabilidades" class="mb-3"></ul>
+					</div>
+					<div class="row justify-content-between">
+						<h2 class="datospersonales-header">Materias requeridas</h2>
+						<div class="col-md-6">
+							<div id="carreraerror" class="text-danger"></div>
+							<label for="carrera" class="form-label">Carrera</label>
+							<select class="form-select" id="carrera" required>
+								<option value="" disabled selected>Seleccione una opción</option>
+								<option value="Desarrollo de Software">Desarrollo de Software</option>
+								<option value="Turismo">Turismo</option>
+								<option value="Comercio Internacional">Comercio Internacional</option>
+								<option value="Gestión Aeroportuaria">Gestión Aeroportuaria</option>
+								<option value="Logistica">Logistica</option>
+								<option value="Higiene y Seguridad">Higiene y Seguridad</option>
+							</select>
+
+							<label for="planEstudios" class="form-label mt-3 d-none" id="planEstudiosLabel">Plan de
+								Estudios</label>
+							<div id="planerror" class="text-danger"></div>
+							<select class="form-select d-none" id="planEstudios" required>
+								<option value="" disabled selected>Seleccione un plan de estudios</option>
+							</select>
+
+							<label for="materia" class="form-label mt-3 d-none" id="materiaLabel">Materia</label>
+							<select class="form-select d-none" id="materia">
+								<option value="" disabled selected>Seleccione una materia</option>
+							</select>
+							<button type="button" class="btn btn-secondary mt-2 d-none" id="agregarMateria">Agregar
+								Materia
+								Aprobada</button>
+						</div>
+						<div class="col-md-6">
+							<ul id="materiasAprobadasList" class="mb-3"></ul>
+						</div>
+					</div>
+				</div>
+				<button type="submit" class="btn">GUARDAR</button>
+			</form>
+		</div>
+	</section>
+</body>
+
+
+</html>
