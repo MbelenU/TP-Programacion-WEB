@@ -85,9 +85,12 @@
 /* Ajustar el contenido principal */
 .container {
     padding: 20px; /* Espaciado del contenido principal */
-    padding-top: 100px; /* Espacio superior para que no esté pegado al navbar */
+    padding-top: 200px; /* Espacio superior para que no esté pegado al navbar */
 }
-
+.container-background {
+    background-color: #E1E7D0;   
+    border-radius: 15px;
+}
 
 .contact-info {
     background-color: #E1E7D0; /* Color de fondo */
@@ -171,10 +174,6 @@ body {
         flex-direction: column; /* Apila secciones en móviles */
     }
 }
-
-
-
-
 .star {
     cursor: pointer;
     font-size: 25px;
@@ -234,7 +233,6 @@ body {
 }
 
 .btn {
-    width: 100%; /* Hacer que el botón ocupe el ancho completo del contenedor */
     border: 2px solid #E1E7D0; /* Bordes de color azul (puedes cambiar el color) */
     border-radius: 5px; /* Bordes redondeados */
     background-color: white; /* Color de fondo blanco */
