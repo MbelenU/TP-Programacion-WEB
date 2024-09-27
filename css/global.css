@@ -1,0 +1,18 @@
+.bg-inicio, .bg-alt {
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+
+.bg-inicio{
+  background-image: url('/img/bg-inicio.avif');
+}
+
+.bg-alt{
+  background-image: url('/img/bg-inicio.svg');
+}
+
+.bg-navbar {
+  background-color: #E1E7D0;
+}
