@@ -99,7 +99,7 @@
                             aria-label="Buscar">
                         <button class="btn btn-outline-success" type="submit">Buscar</button>
                     </form>
-                    <div class="mt-4">
+                    <div class="mt-4 table-responsive-md">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -119,12 +119,11 @@
                                     <td>Alumno</td>
                                     <td>Activo</td>
                                     <td>
-                                        <select class="form-select form-select-sm">
-                                            <option selected disabled>Acciones</option>
-                                            <option value="bloquear" class="bg-warning ">Bloquear</option>
-                                            <option value="dar_de_baja" class="bg-danger text-white">Dar de Baja</option>
-                                            <option value="cambiar_contraseña" class="bg-info ">Cambiar Contraseña</option>
-                                        </select>
+                                        <div class="d-grid gap-1">
+                                            <button class="btn btn-success badge" type="button">Cambiar Contraseña</button>
+                                            <button class="btn btn-warning badge" type="button">Bloquar</button>
+                                            <button class="btn btn-danger badge" type="button">Dar de Baja</button>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -134,7 +133,7 @@
             </div>
             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                 <div class="mt-4">
-                    <h3>Dar de Alta Usuario</h3>
+                    <h5>Dar de Alta Usuario</h5>
                     <form>
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
