@@ -68,12 +68,21 @@
 							<input type="text" class="form-control" id="titulo" required>
 						</div>
 						<div class="col-md-6">
-							<label for="modalidad" class="form-label">Modalidad</label>
+							<label for="modalidad" class="form-label">Tipo</label>
 							<select class="form-select" id="modalidad" required>
-								<option value="" disabled selected>Seleccione una modalidad</option>
-								<option value="Presencial">Presencial</option>
-								<option value="Remoto">Virtual</option>
+								<option value="" disabled selected>Seleccione un tipo de evento</option>
+								<option value="capacitacion">Capacitación</option>
+								<option value="tutoria">Tutoría</option>
 							</select>
+						</div>
+						<div class="col-md-6">
+							<label for="fecha" class="form-label">Fecha</label>
+							<input type="date" class="form-control" id="fecha" required>
+						</div>
+
+						<div class="col-md-6">
+							<label for="hora" class="form-label">Hora</label>
+							<input type="time" class="form-control" id="hora" required>
 						</div>
 					</div>
 					<div class="row mb-3">
