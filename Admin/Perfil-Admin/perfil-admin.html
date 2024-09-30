@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="shortcut icon" href="../../img/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="perfil-admin.css">
+    <title>Perfil</title>
+</head>
+
+<body class="container-fluid min-vh-100 p-0 bg-inicio">
+    <header>
+        <nav class="navbar sticky-top bg-navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><img src="../../img/logo.png" alt="logo"></a>
+                <form class="d-none d-sm-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search " aria-label="Search">
+                    <button class="btn btn-outline-success d-grid align-content-center" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-search" viewBox="0 0 16 16">
+                            <path
+                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+                    </button>
+                </form>
+                <button class="navbar-toggler shadow-sm" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
+                    aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <img src="../../img/logo.png" alt="logo">
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <a href="/perfil-admin.html"><img src="../../img/perfil.jpg" alt="foto-perfil"
+                                        class="rounded-circle w-25"></a>
+                            </li>
+                            <li class="nav-item p-1">
+                                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            </li>
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="#">Link</a>
+                            </li>
+                            <li class="nav-item dropdown p-1">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Dropdown
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <form class="d-flex d-sm-none mt-3" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success d-grid align-content-center" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-search" viewBox="0 0 16 16">
+                                    <path
+                                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-5 ">
+        <div class="row">
+            <div class="col-md-3">
+                <img src="../../img/perfil.jpg" alt="foto-perfil" class="rounded-circle w-25">
+            </div>
+            <div class="col-md-9">
+                <h1 class="h3">Universidad Provincial de Ezeiza</h1>
+            </div>
+        </div>
+    
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <p><i class="bi bi-geo-alt"></i> Ezeiza, Barrio Uno</p>
+                <p><i class="bi bi-envelope"></i> hola@upe.com</p>
+                <button class="btn btn-outline-success">Publicar evento</button>
+            </div>
+        </div>
+    
+        <div class="row mt-4">
+            <h2 class="mt-4">Eventos</h2>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="event-card bg-success text-white rounded d-flex justify-content-center align-items-center" style="height: 200px;">
+                            <span class="edit-icon">
+                                <i class="bi bi-pencil" style="font-size: 1.5rem;"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="event-card bg-success text-white rounded d-flex justify-content-center align-items-center" style="height: 200px;">
+                            <span class="edit-icon">
+                                <i class="bi bi-pencil" style="font-size: 1.5rem;"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="event-card bg-success text-white rounded d-flex justify-content-center align-items-center" style="height: 200px;">
+                            <span class="edit-icon">
+                                <i class="bi bi-pencil" style="font-size: 1.5rem;"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="event-card bg-success text-white rounded d-flex justify-content-center align-items-center" style="height: 200px;">
+                            <span class="edit-icon">
+                                <i class="bi bi-pencil" style="font-size: 1.5rem;"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.js"></script>
+</body>
+
+</html>
