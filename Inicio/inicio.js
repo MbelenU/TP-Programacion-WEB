@@ -1,3 +1,4 @@
+import * as check from '../scripts/validation.js';
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", function () {
     const formInicio = document.getElementById('form-inicio');
@@ -10,14 +11,14 @@ document.addEventListener("DOMContentLoaded", function () {
         // Obtener los valores de los inputs
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-
-        // Simular un proceso de autenticación (podrías hacer algo más complejo aquí)
-        if (email === "usuario@gmail.com" && password === "contraseña123") {
+        console.log(1);
+        // Simular un proceso de autenticación
+        if (email === "usuario@gmail.com" && password === "Contraseña123") {
             // Si los datos son correctos, redirigir a una nueva página
             window.location.href = "dashboard.html";
         } 
         // Validar todos los campos
-        else if (formInicio.checkValidity() === false) {
+        else if (check.validateEmail(email) == false || check.validatePassword(password) == false) {
             // Mostrar los mensajes de error de HTML5
             formInicio.classList.add("was-validated");
             // Resetea el Formulario
