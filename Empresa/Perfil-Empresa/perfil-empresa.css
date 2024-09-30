@@ -13,7 +13,11 @@
 .nombre {
     margin-top: 10px; /* Mantén el margen superior */
 }
-
+.container-background {
+    background-color: #E1E7D0;   
+    border-radius: 15px;
+    margin-top: 75px;
+}
 .descripcion {
     margin-top: 5px; /* Espacio entre el nombre y la descripción */
     font-size: 15px;
@@ -32,9 +36,9 @@
     height: 70px; /* Ajusta el tamaño según sea necesario */
     border-radius: 50%; /* Hace la imagen circular */
 }
-
-
-
+.titulo-header {
+    margin-top: 75px;
+}
 .navbar {
     background-color: #E1E7D0;
     width: 100%; 
