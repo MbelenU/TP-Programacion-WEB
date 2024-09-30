@@ -34,17 +34,6 @@
 }
 
 
-
-.navbar {
-    background-color: #E1E7D0;
-    width: 100%; 
-    height: 130px; /* Define la altura del navbar */
-    position: fixed; /* Fija el navbar en la parte superior */
-    top: 0; /* Se sitúa en la parte superior */
-    left: 0; /* Alineado a la izquierda */
-    z-index: 1000; /* Asegura que esté por encima de otros elementos */
-}
-
 .menu-content {
     position: fixed; /* Mantener el menú en su lugar */
     top: 130px; /* Altura del primer navbar */
@@ -83,10 +72,7 @@
 }
 
 /* Ajustar el contenido principal */
-.container {
-    padding: 20px; /* Espaciado del contenido principal */
-    padding-top: 200px; /* Espacio superior para que no esté pegado al navbar */
-}
+
 .container-background {
     background-color: #E1E7D0;   
     border-radius: 15px;

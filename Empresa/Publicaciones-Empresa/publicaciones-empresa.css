@@ -34,17 +34,6 @@
 }
 
 
-
-.navbar {
-    background-color: #E1E7D0;
-    width: 100%; 
-    height: 130px; /* Define la altura del navbar */
-    position: fixed; /* Fija el navbar en la parte superior */
-    top: 0; /* Se sitúa en la parte superior */
-    left: 0; /* Alineado a la izquierda */
-    z-index: 1000; /* Asegura que esté por encima de otros elementos */
-}
-
 .menu-content {
     position: fixed; /* Mantener el menú en su lugar */
     top: 130px; /* Altura del primer navbar */
@@ -83,11 +72,11 @@
 }
 
 /* Ajustar el contenido principal */
-.container {
-    padding: 20px; /* Espaciado del contenido principal */
-    padding-top: 100px; /* Espacio superior para que no esté pegado al navbar */
-}
 
+.container-background {
+    background-color: #E1E7D0;   
+    border-radius: 15px;
+}
 
 .contact-info {
     background-color: #E1E7D0; /* Color de fondo */
@@ -171,10 +160,6 @@ body {
         flex-direction: column; /* Apila secciones en móviles */
     }
 }
-
-
-
-
 .star {
     cursor: pointer;
     font-size: 25px;
@@ -197,20 +182,14 @@ body {
     width: 100%; /* Ajusta el ancho de la imagen */
     max-width: 150px; /* Limita el tamaño de la imagen */
 }
-.container-background {
-    background-color: #E1E7D0;   
-    border-radius: 15px;
-    margin-top: 75px;
-}
-.titulo-header {
-    margin-top: 75px;
-}
+
 .datospersonales {
     background-color: #E1E7D0;   
     border-radius: 30px;
     padding: 20px; /* Agrega padding para que se vea mejor */
     margin-top: 50px;
 }
+
 .datospersonales-header{
     flex-direction: column; /* Alinea verticalmente */   
     padding-top: 15px; /* Espacio entre la foto y el texto */
@@ -240,12 +219,14 @@ body {
 }
 
 .btn {
-    border: 2px solid #a8b585; /* Bordes de color azul (puedes cambiar el color) */
+    border: 2px solid #E1E7D0; /* Bordes de color azul (puedes cambiar el color) */
     border-radius: 5px; /* Bordes redondeados */
     background-color: white; /* Color de fondo blanco */
     color: black; /* Color del texto */
     transition: background-color 0.3s, color 0.3s; /* Transiciones para hover */
 }
+
 .btn:hover {
     background-color: #a8b585; /* Cambia el fondo al hacer hover */
 }
+

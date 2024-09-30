@@ -1,31 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('form-perfil');
-    const btnChangePassword = document.getElementById('btnChangePassword');
-    const passwordFields = document.getElementById('passwordFields');
+    const form = document.getElementById('form-perfil-empresa');
 
     const profileData = {
         profilePhoto: 'perfil.jpg',
-        universityName: 'Universidad Provincial de Ezeiza',
-        email: 'ejemplo@universidad.edu',
-        password: 'password123'
+        companyName: 'Empresa S.A.',
+        email: 'contacto@empresa.com',
+        phone: '+11 111 111 111',
+        website: 'https://www.empresa.com',
+        description: 'Descripción de empresa'
     };
 
-    document.getElementById('universityName').value = profileData.universityName;
+    document.getElementById('companyName').value = profileData.companyName;
     document.getElementById('email').value = profileData.email;
-
-    btnChangePassword.addEventListener('click', () => {
-        passwordFields.classList.toggle('d-none');
-    });
+    document.getElementById('phone').value = profileData.phone;
+    document.getElementById('website').value = profileData.website;
+    document.getElementById('description').value = profileData.description;
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
         const profilePhoto = document.getElementById('profilePhoto').files[0];
-        const universityName = document.getElementById('universityName').value.trim();
+        const companyName = document.getElementById('companyName').value.trim();
         const email = document.getElementById('email').value.trim();
-        const oldPassword = document.getElementById('oldPassword').value.trim();
-        const newPassword = document.getElementById('newPassword').value.trim();
-        const confirmPassword = document.getElementById('confirmPassword').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const website = document.getElementById('website').value.trim();
+        const description = document.getElementById('description').value.trim();
 
         let errors = [];
 
@@ -33,45 +32,39 @@ document.addEventListener('DOMContentLoaded', () => {
             errors.push("Debes subir una foto de perfil.");
         }
 
-        if (universityName === "") {
-            errors.push("El nombre de la universidad es obligatorio.");
+        if (companyName === "") {
+            errors.push("El nombre de la empresa es obligatorio.");
         }
 
         if (email === "" || !validateEmail(email)) {
             errors.push("Debes proporcionar un correo electrónico válido.");
         }
 
-        if (!passwordFields.classList.contains('d-none')) {
-            if (oldPassword === "") {
-                errors.push("La contraseña antigua es obligatoria.");
-            } else if (oldPassword !== profileData.password) {
-                errors.push("La contraseña antigua no coincide con la registrada.");
-            }
-
-            if (newPassword === "" || newPassword.length < 6) {
-                errors.push("La nueva contraseña debe tener al menos 6 caracteres.");
-            }
-
-            if (confirmPassword !== newPassword) {
-                errors.push("La confirmación de la contraseña no coincide.");
-            }
+        if (phone === "") {
+            errors.push("El teléfono es obligatorio.");
         }
 
-       if (errors.length > 0) {
+        if (website === "") {
+            errors.push("El sitio web es obligatorio.");
+        }
+
+        if (description === "") {
+            errors.push("La descripción es obligatoria.");
+        }
+
+        if (errors.length > 0) {
             alert(errors.join("\n"));
             return;
         }
 
         const formData = {
             profilePhoto: profilePhoto ? profilePhoto.name : "",
-            universityName: universityName,
-            email: email
+            companyName: companyName,
+            email: email,
+            phone: phone,
+            website: website,
+            description: description
         };
-
-        if (!passwordFields.classList.contains('d-none')) {
-            formData.newPassword = newPassword;
-            profileData.password = newPassword;
-        }
 
         console.log(JSON.stringify(formData, null, 2));
         alert("Datos guardados correctamente.");

@@ -1,11 +1,3 @@
-.container-background {
-    background-color: #E1E7D0;   
-    border-radius: 15px;
-    margin-top: 75px;
-}
-.titulo-header {
-    margin-top: 75px;
-}
 .perfil-header {
     display: flex;
     align-items: center;
@@ -21,11 +13,7 @@
 .nombre {
     margin-top: 10px; /* Mantén el margen superior */
 }
-.container-background {
-    background-color: #E1E7D0;   
-    border-radius: 15px;
-    margin-top: 75px;
-}
+
 .descripcion {
     margin-top: 5px; /* Espacio entre el nombre y la descripción */
     font-size: 15px;
@@ -44,18 +32,7 @@
     height: 70px; /* Ajusta el tamaño según sea necesario */
     border-radius: 50%; /* Hace la imagen circular */
 }
-.titulo-header {
-    margin-top: 75px;
-}
-.navbar {
-    background-color: #E1E7D0;
-    width: 100%; 
-    height: 130px; /* Define la altura del navbar */
-    position: fixed; /* Fija el navbar en la parte superior */
-    top: 0; /* Se sitúa en la parte superior */
-    left: 0; /* Alineado a la izquierda */
-    z-index: 1000; /* Asegura que esté por encima de otros elementos */
-}
+
 
 .menu-content {
     position: fixed; /* Mantener el menú en su lugar */
@@ -95,11 +72,11 @@
 }
 
 /* Ajustar el contenido principal */
-.container {
-    padding: 20px; /* Espaciado del contenido principal */
-    padding-top: 100px; /* Espacio superior para que no esté pegado al navbar */
-}
 
+.container-background {
+    background-color: #E1E7D0;   
+    border-radius: 15px;
+}
 
 .contact-info {
     background-color: #E1E7D0; /* Color de fondo */
@@ -183,7 +160,73 @@ body {
         flex-direction: column; /* Apila secciones en móviles */
     }
 }
+.star {
+    cursor: pointer;
+    font-size: 25px;
+    color: gray;
+}
+.star.selected {
+    color: gold;
+}
 
 
+.info {
+    
+    flex-direction: column; /* Alinea verticalmente */
+    padding-left: 20px; /* Espacio entre la foto y el texto */
+}
 
+.perfil-imagen {
+    display: block; /* Asegura que la imagen sea un bloque */
+    margin-bottom: 0.5rem; /* Espacio entre la imagen y el label */
+    width: 100%; /* Ajusta el ancho de la imagen */
+    max-width: 150px; /* Limita el tamaño de la imagen */
+}
+
+.datospersonales {
+    background-color: #E1E7D0;   
+    border-radius: 30px;
+    padding: 20px; /* Agrega padding para que se vea mejor */
+    margin-top: 50px;
+}
+
+.datospersonales-header{
+    flex-direction: column; /* Alinea verticalmente */   
+    padding-top: 15px; /* Espacio entre la foto y el texto */
+    padding-bottom: 20px; /* Espacio entre la foto y el texto */
+    font-size: 25px;
+}
+
+
+#listaHabilidades {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se muevan a la siguiente línea si no hay suficiente espacio */
+    gap: 15px; /* Espacio entre las habilidades */   
+    padding-top: 15px; /* Espacio entre la foto y el texto */
+}
+
+.btnhab{
+    border: 2px solid #969d83; 
+    border-radius: 10px; 
+    background-color: white; /* Color de fondo blanco */
+    color: black; /* Color del texto */
+    transition: background-color 0.3s, color 0.3s; /* Transiciones para hover */
+}
+
+
+.btnhab:hover {
+    background-color: #a8b585; /* Cambia el fondo al hacer hover */
+}
+
+.btn {
+    border: 2px solid #E1E7D0; /* Bordes de color azul (puedes cambiar el color) */
+    border-radius: 5px; /* Bordes redondeados */
+    background-color: white; /* Color de fondo blanco */
+    color: black; /* Color del texto */
+    transition: background-color 0.3s, color 0.3s; /* Transiciones para hover */
+}
+
+.btn:hover {
+    background-color: #a8b585; /* Cambia el fondo al hacer hover */
+}
 
