@@ -17,7 +17,6 @@
 .nombre {
     margin-top: 10px; 
 }
-
 .descripcion {
     margin-top: 5px; 
     font-size: 15px;
@@ -164,4 +163,10 @@ body {
     .profile-sections {
         flex-direction: column; 
     }
+}
+
+.container-background {
+    background-color: #E1E7D0;   
+    border-radius: 15px;
+    margin-top: 75px;
 }
