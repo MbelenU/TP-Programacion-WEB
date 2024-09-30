@@ -79,7 +79,6 @@
 }
 
 .contact-info {
-    background-color: #E1E7D0; /* Color de fondo */
     border-radius: 15px; /* Bordes circulares */
     padding: 20px; /* Espaciado interno */
     text-align: center; /* Centra el texto dentro del div */
@@ -111,7 +110,6 @@
 
 .habilidades {
     flex: 1; /* Toma espacio del lado izquierdo */
-    background-color: #E1E7D0; /* Color de fondo */
     border-radius: 10px; /* Bordes redondeados */
     padding: 10px; /* Espaciado interno */
     margin-right: 10px; /* Espacio a la derecha */
@@ -121,7 +119,6 @@
     display: flex; /* Usar flex para las secciones derechas */
     flex-direction: column; /* Apilar verticalmente */
     flex: 1; /* Toma el espacio restante */
-    background-color: #E1E7D0; /* Color de fondo */
     border-radius: 10px; /* Bordes redondeados */
     padding: 10px; /* Espaciado interno */
     margin-bottom: 10px; /* Espacio entre secciones */
