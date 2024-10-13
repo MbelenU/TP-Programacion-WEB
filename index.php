@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <?php include './components/header.php'; ?>
+    <?php require __DIR__.'/components/header.php'; ?>
+    <title>Inicio</title>
 </head>
 <body>
-    <?php include './components/navbar-admin.php'; ?>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <?php require __DIR__ .'/components/navbar-admin.php'; ?>
+    <?php include __DIR__.'/components/footer.php'?>
 </body>
 </html>
