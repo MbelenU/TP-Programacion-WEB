@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../includes/base-url.php' ?>
 <nav class="navbar sticky-top bg-navbar">
     <div class="container-fluid">
         <a class="navbar-brand" href="#"><img src="<?php echo BASE_URL ?>img/logo.png" alt="logo"></a>
@@ -28,14 +29,14 @@
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link active" aria-current="page"
-                            href="<?php echo BASE_URL ?>Admin/Perfil-Admin/perfil-admin.html">Mi Perfil</a>
+                            href="<?php echo BASE_URL ?>Admin/perfil.php">Mi Perfil</a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link"
-                            href="<?php echo BASE_URL ?>Admin/Editar-Perfil/editar-perfil-admin.html">Editar Perfil</a>
+                            href="<?php echo BASE_URL ?>Admin/editar-perfil.php">Editar Perfil</a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link" href="<?php echo BASE_URL ?>Admin/gestion-usuario-admin.html">Usuarios</a>
+                        <a class="nav-link" href="<?php echo BASE_URL ?>Admin/usuarios.php">Usuarios</a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link"
@@ -44,6 +45,14 @@
                     <li class="nav-item ">
                         <a class="nav-link"
                             href="<?php echo BASE_URL ?>Admin/Notificacion-Admin/pagina-notificaciones.html">Notificaciones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" 
+                            href="<?php echo BASE_URL ?>Admin/Visualizar-Carrera/visualizar-carreras-admin.html">Carreras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="<?php echo BASE_URL ?>Admin/Visualizar-Habilidades/visualizar-habilidades.html">Habilidades</a>
                     </li>
                 </ul>
                 <form class="d-flex d-sm-none mt-3" role="search">

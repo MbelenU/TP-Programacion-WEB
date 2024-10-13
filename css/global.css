@@ -7,11 +7,11 @@
 }
 
 .bg-inicio {
-  background-image: url('/img/bg-inicio.avif');
+  background-image: url('../img/bg-inicio.avif');
 }
 
 .bg-alt {
-  background-image: url('/img/bg-inicio.svg');
+  background-image: url('../img/bg-inicio.svg');
 }
 
 .bg-navbar {
