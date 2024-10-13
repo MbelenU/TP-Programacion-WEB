@@ -1,18 +1,30 @@
-.bg-inicio, .bg-alt {
+.bg-inicio,
+.bg-alt {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
 }
 
-.bg-inicio{
+.bg-inicio {
   background-image: url('/img/bg-inicio.avif');
 }
 
-.bg-alt{
+.bg-alt {
   background-image: url('/img/bg-inicio.svg');
 }
 
 .bg-navbar {
   background-color: #E1E7D0;
+}
+
+.nav-link {
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+}
+
+.nav-link:hover {
+  background-color: #e2e6ea;
+  color: black;
 }
