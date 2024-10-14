@@ -1,5 +1,5 @@
 <?php require_once __DIR__ . '/../includes/base-url.php' ?>
-<nav class="navbar sticky-top bg-navbar">
+<nav class="navbar sticky-top bg-navbar p-0">
     <div class="container-fluid">
         <a class="navbar-brand" href="#"><img src="<?php echo BASE_URL ?>img/logo.png" alt="logo"></a>
         <!-- Buscador -->
@@ -16,7 +16,7 @@
         </button>
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
             aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header bg-navbar">
+            <div class="offcanvas-header bg-navbar py-2">
                 <img src="<?php echo BASE_URL ?>img/logo.png" alt="logo">
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>

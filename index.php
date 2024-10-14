@@ -5,7 +5,7 @@
     <title>Inicio</title>
 </head>
 <body>
-    <?php require __DIR__ .'/components/navbar-admin.php'; ?>
+    <?php require __DIR__ .'/components/admin-navbar.php'; ?>
     <?php include __DIR__.'/components/footer.php'?>
 </body>
 </html>

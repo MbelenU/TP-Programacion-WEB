@@ -5,7 +5,7 @@
     <?php require __DIR__ . '/../../components/header.php' ?>
 </head>
 
-<body class="bg-inicio">
+<body class="bg-inicio p-0">
     <?php require __DIR__ . '/../../components/admin-navbar.php' ?>
     <div class="container p-sm-4 bg-secondary-subtle">
         <div class="row p-3">
