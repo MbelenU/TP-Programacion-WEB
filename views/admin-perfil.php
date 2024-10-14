@@ -21,7 +21,7 @@
             <div class="col-md-12">
                 <p><i class="bi bi-geo-alt"></i> Ezeiza, Barrio Uno</p>
                 <p><i class="bi bi-envelope"></i> hola@upe.com</p>
-                <a href="<?php echo BASE_URL ?>Admin/Evento/publicar.php"><button class="btn btn-outline-success">Publicar
+                <a href="<?php echo BASE_URL ?>views/admin-publicar-evento.php"><button class="btn btn-outline-success">Publicar
                         evento</button></a>
             </div>
         </div>

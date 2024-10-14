@@ -15,7 +15,7 @@
                 <div class="nombre-evento">
                     <h1>Eventos</h1>
                 </div>
-                <a href="/Admin/Eventos-Admin/crear-eventoadmin.html"><button class="btn btn-outline-success">Publicar
+                <a href="<?php echo BASE_URL ?>views/admin-publicar-evento.php"><button class="btn btn-outline-success">Publicar
                         evento</button></a>
             </div>
             <form class="filtro d-flex mb-sm-3" role="search">
