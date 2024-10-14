@@ -3,7 +3,6 @@
 
 <head>
     <?php require __DIR__ . '/../components/header.php'?>
-    <title>Perfil</title>
 </head>
 
 <body class="container-fluid min-vh-100 p-0 bg-inicio">

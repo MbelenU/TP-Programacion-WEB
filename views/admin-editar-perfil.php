@@ -4,7 +4,6 @@
 <head>
     <?php require __DIR__ . '/../components/header.php'?>
     <script src='<?php echo BASE_URL ?>scripts/admin/editar-perfil.js' defer></script>
-    <title>Escalón Uno</title>
 </head>
 
 <body class="bg-inicio">

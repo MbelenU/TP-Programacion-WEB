@@ -3,7 +3,6 @@
 
 <head>
     <?php require __DIR__.'/../components/header.php';?>
-    <title>Escalón Uno</title>
 </head>
 
 <body class="bg-inicio">

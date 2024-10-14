@@ -3,7 +3,6 @@
 
 <head>
     <?php require __DIR__ . '/../../components/header.php' ?>
-    <title>Crear Evento</title>
 </head>
 
 <body class="bg-inicio">
