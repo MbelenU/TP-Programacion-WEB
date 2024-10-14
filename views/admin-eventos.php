@@ -3,8 +3,8 @@
 
 <head>
     <?php require __DIR__ . '/../components/header.php'?>
-    <script src="/Admin/Eventos-Admin/eventos-admin.js" defer></script>
-    
+    <script src="<?php echo BASE_URL?>scripts/admin/eventos.js" defer></script>
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>css/admin-eventos.css">
 </head>
 
 <body class="bg-inicio p-0">
@@ -19,7 +19,7 @@
                         evento</button></a>
             </div>
             <form class="filtro d-flex mb-sm-3" role="search">
-                <input class="form-control me-2" type="search"
+                <input class="form-control me-2" type="search" id="form-control"
                     placeholder="Tipo del evento | Nombre del evento | Fecha | Horario" aria-label="Search">
                 <button class="botonFiltro btn btn-light border border-dark" type="submit">Filtrar</button>
             </form>
@@ -30,7 +30,7 @@
 
                 <div class="row mb-5">
                     <div class="list-group col-12 p-0">
-                        <a href="detalle-eventoadmin.html" class="list-group-item list-group-item-action">
+                        <a href="<?php echo BASE_URL ?>views/admin-detalle-evento.php" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1">Explorando la Deep Web: entre mitos y realidades</h5>
                             </div>
@@ -42,7 +42,7 @@
                                 <i class="bi bi-calendar3"><strong> Fecha:</strong> 19/09/2024 19 hs. </i>
                             </div>
                         </a>
-                        <a href="detalle-eventoadmin.html" class="list-group-item list-group-item-action">
+                        <a href="<?php echo BASE_URL ?>views/admin-detalle-evento.php" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1">Tutorías - Desarrollo de Software</h5>
                             </div>
