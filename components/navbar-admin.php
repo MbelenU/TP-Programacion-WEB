@@ -23,36 +23,36 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a href="<?php echo BASE_URL ?>views/perfil-admin.php"><img
+                        <a href="<?php echo BASE_URL ?>views/admin-perfil.php"><img
                                 src="<?php echo BASE_URL ?>img/perfil.jpg" alt="foto-perfil"
                                 class="rounded-circle w-25 pb-2"></a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link active" aria-current="page"
-                            href="<?php echo BASE_URL ?>views/perfil-admin.php">Mi Perfil</a>
+                            href="<?php echo BASE_URL ?>views/admin-perfil.php">Mi Perfil</a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link"
-                            href="<?php echo BASE_URL ?>views/editarPerfil-admin.php">Editar Perfil</a>
+                            href="<?php echo BASE_URL ?>views/admin-editar-perfil.php">Editar Perfil</a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link" href="<?php echo BASE_URL ?>views/gestionarUsuarios-admin.php">Usuarios</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link"
-                            href="<?php echo BASE_URL ?>views/eventos-admin.html">Eventos</a>
+                        <a class="nav-link" href="<?php echo BASE_URL ?>views/admin-gestionar-usuarios.php">Usuarios</a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link"
-                            href="<?php echo BASE_URL ?>views/pagina-notificaciones.html">Notificaciones</a>
+                            href="<?php echo BASE_URL ?>views/admin-eventos.php">Eventos</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link"
+                            href="<?php echo BASE_URL ?>views/admin-notificaciones.php">Notificaciones</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" 
-                            href="<?php echo BASE_URL ?>views/visualizar-carreras-admin.html">Carreras</a>
+                            href="<?php echo BASE_URL ?>views/admin-visualizar-carreras.php">Carreras</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link"
-                            href="<?php echo BASE_URL ?>views/visualizar-habilidades.html">Habilidades</a>
+                            href="<?php echo BASE_URL ?>views/admin-visualizar-habilidades.php">Habilidades</a>
                     </li>
                 </ul>
                 <form class="d-flex d-sm-none mt-3" role="search">
