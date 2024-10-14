@@ -6,7 +6,7 @@
 </head>
 
 <body class="container-fluid min-vh-100 p-0 bg-inicio">
-    <?php require __DIR__ . '/../components/navbar-admin.php' ?>
+    <?php require __DIR__ . '/../components/admin-navbar.php' ?>
     <div class="container p-sm-4 bg-secondary-subtle">
         <div class="row">
             <div class="col-md-3">
