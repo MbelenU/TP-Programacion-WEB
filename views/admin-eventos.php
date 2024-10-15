@@ -15,13 +15,13 @@
                 <div class="nombre-evento">
                     <h1>Eventos</h1>
                 </div>
-                <a href="<?php echo BASE_URL ?>views/admin-publicar-evento.php"><button class="btn btn-outline-success">Publicar
+                <a href="<?php echo BASE_URL ?>views/admin-publicar-evento.php"><button class="btn btn-success">Publicar
                         evento</button></a>
             </div>
             <form class="filtro d-flex mb-sm-3" role="search">
                 <input class="form-control me-2" type="search" id="form-control"
                     placeholder="Tipo del evento | Nombre del evento | Fecha | Horario" aria-label="Search">
-                <button class="botonFiltro btn btn-light border border-dark" type="submit">Filtrar</button>
+                <button class="botonFiltro btn btn-light border border-success-subtle " type="submit">Filtrar</button>
             </form>
         </div>
 

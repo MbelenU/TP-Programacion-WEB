@@ -52,7 +52,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link"
-                            href="<?php echo BASE_URL ?>views/admin-visualizar-habilidades.php">Habilidades</a>
+                            href="<?php echo BASE_URL ?>views/admin-gestionar-habilidades.php">Habilidades</a>
                     </li>
                 </ul>
                 <form class="d-flex d-sm-none mt-3" role="search">

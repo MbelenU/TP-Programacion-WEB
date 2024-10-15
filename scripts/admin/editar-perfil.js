@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-       if (errors.length > 0) {
+        if (errors.length > 0) {
             alert(errors.join("\n"));
             return;
         }
