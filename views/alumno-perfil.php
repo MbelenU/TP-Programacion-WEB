@@ -2,53 +2,67 @@
 <html lang="es">
 
 <head>
-    <?php require __DIR__ . '/../components/header.php'?>
+    <?php require __DIR__ . '/../components/header.php' ?>
     <link rel="stylesheet" href="<?php echo BASE_URL ?>css/alumno-perfil.css">
 
 </head>
 
-<body>
+<body class="bg-inicio">
     <?php require __DIR__ . '/../components/alumno-navbar.php' ?>
-    <div class="container mt-5">
-        <div class=" row d-sm-inline-block d-md-flex align-items-center mb-3">
-            <div class="col">
-                <img src="<?php echo BASE_URL ?>img/perfil.jpg" alt="Foto de perfil" id="foto-perfil">
-            </div>
-            <div class="info">
-                <div class="nombre">
-                    <h1>Gregorio Costa</h1>
-                </div>
-                <div class="descripcion">
-                    <p>Breve descripción.</p>
+    <div class="container bg-white">
+        <div class="row px-4 pb-3  ">
+            <div class="col p-3 ">
+                <div class="row row-cols-md-2 ">
+                    <div class="col-md-2 d-flex justify-content-center align-items-center d-md-block">
+                        <img src="<?php echo BASE_URL ?>img/perfil.jpg" alt="Foto de perfil" id="foto-perfil">
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row row-cols-1">
+                            <div class="col">
+                                <h1>Gregorio Costa</h1>
+                            </div>
+                            <div class="col">
+                                <p>Breve descripción.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="contact-info d-sm-flex">
-            <div class="info-item mb-6">
-                <i class="bi bi-geo-alt"></i>
-                <span>Ezeiza, Barrio Uno</span>
-            </div>
-            <div class="info-item mb-6">
-                <i class="bi bi-phone"></i>
-                <span>1123456789</span>
-            </div>
-            <div class="info-item mb-6">
-                <i class="bi bi-book"></i>
-                <span>Tecnicatura en Desarrollo de Software</span>
-            </div>
-            <div class="info-item mb-6">
-                <i class="bi bi-envelope"></i>
-                <span>gcosta@email.com</span>
+        <div class="row px-4 pb-3">
+            <div class="container bg-navbar rounded-3 p-3 ">
+                <div class="row row-cols-md-2 row-gap-2 ">
+                    <div class="">
+                        <span>
+                            <i class="bi bi-geo-alt"></i> Ezeiza, Barrio Uno
+                        </span>
+                    </div>
+                    <div class="">
+                        <span>
+                            <i class="bi bi-phone"></i> 1123456789
+                        </span>
+                    </div>
+                    <div class="">
+                        <span>
+                            <i class="bi bi-book"></i> Tecnicatura en Desarrollo de Software
+                        </span>
+                    </div>
+                    <div class="">
+                        <span>
+                            <i class="bi bi-envelope"></i> gcosta@email.com
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="profile-sections">
-            <section class="habilidades mb-3">
-                <h2>Habilidades</h2>
+        <div class="row d-sm-flex px-4 pb-4 justify-content-between gap-3">
+            <div class="bg-navbar rounded-3 col-md p-3">
+                <h4>Habilidades</h4>
                 <ul>
                     <li>
-                        HTML
                         <span class="stars">
+                            HTML
                             <i class="star bi bi-star-fill"></i>
                             <i class="star bi bi-star-fill"></i>
                             <i class="star bi bi-star-fill"></i>
@@ -57,8 +71,8 @@
                         </span>
                     </li>
                     <li>
-                        CSS
                         <span class="stars">
+                            CSS
                             <i class="star bi bi-star-fill"></i>
                             <i class="star bi bi-star-fill"></i>
                             <i class="star bi bi-star-fill"></i>
@@ -67,8 +81,8 @@
                         </span>
                     </li>
                     <li>
-                        JAVASCRIPT
                         <span class="stars">
+                            JAVASCRIPT
                             <i class="star bi bi-star-fill"></i>
                             <i class="star bi bi-star-fill"></i>
                             <i class="star bi bi-star"></i>
@@ -77,14 +91,20 @@
                         </span>
                     </li>
                 </ul>
-            </section>
-            <div class="right-sections">
-                <section class="experiencia mb-3">
-                    <h2>Avance Académico</h2>
-                    <li>PROGRAMACIÓN WEB</li>
-                    <li>BASE DE DATOS I</li>
-                    <li>BASE DE DATOS II</li>
-                </section>
+            </div>
+            <div class="bg-navbar rounded-3 col-md p-3">
+                <h4>Avance Académico</h4>
+                <ul>
+                    <li>
+                        <span>PROGRAMACIÓN WEB</span>
+                    </li>
+                    <li>
+                        <span>BASE DE DATOS I</span>
+                    </li>
+                    <li>
+                        <span>BASE DE DATOS II</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
