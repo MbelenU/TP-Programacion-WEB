@@ -10,8 +10,10 @@
 <body>
     <?php require __DIR__ . '/../components/alumno-navbar.php' ?>
     <div class="container mt-5">
-        <div class="perfil-header">
-            <img src="<?php echo BASE_URL ?>img/perfil.jpg" alt="Foto de perfil" id="foto-perfil">
+        <div class=" row d-sm-inline-block d-md-flex align-items-center mb-3">
+            <div class="col">
+                <img src="<?php echo BASE_URL ?>img/perfil.jpg" alt="Foto de perfil" id="foto-perfil">
+            </div>
             <div class="info">
                 <div class="nombre">
                     <h1>Gregorio Costa</h1>
