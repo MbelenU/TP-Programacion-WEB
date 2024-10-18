@@ -70,7 +70,7 @@
                 <div class="row px-2">
                     <button class="toggleButton btn border-0 d-flex justify-content-between align-items-center w-100">
                         <div class="titulo-empleo">Programador de Base de Datos</div>
-                        <i class="bi bi-geo-alt">Ezeiza, Bs As, Argentina</i>
+                        <i class="bi bi-geo-alt">Argentina</i>
                         <i class="arrowIcon fas fa-chevron-left "></i>
                     </button>
                 </div>
