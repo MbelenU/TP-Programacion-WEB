@@ -7,7 +7,7 @@
 
 <body class="bg-inicio p-0">
     <?php require __DIR__ . '/../components/admin-navbar.php' ?>
-    <div class="container p-sm-4 bg-secondary-subtle">
+    <div class="container p-sm-4 bg-white">
         <div class="row">
             <div class="col-md-3">
                 <img src="<?php echo BASE_URL?>img/perfil.jpg" alt="foto-perfil" class="rounded-circle w-50">

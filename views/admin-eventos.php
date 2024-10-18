@@ -3,7 +3,6 @@
 
 <head>
     <?php require __DIR__ . '/../components/header.php'?>
-    <script src="<?php echo BASE_URL?>scripts/admin/eventos.js" defer></script>
     <link rel="stylesheet" href="<?php echo BASE_URL ?>css/admin-eventos.css">
 </head>
 

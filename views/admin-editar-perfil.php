@@ -8,7 +8,7 @@
 
 <body class="bg-inicio p-0">
     <?php require __DIR__ . '/../components/admin-navbar.php'; ?>
-    <div class="container p-sm-4 bg-secondary-subtle">
+    <div class="container p-sm-4 bg-white">
         <h2 class="mb-4">Editar perfil</h2>
         <form id="form-perfil">
             <div class="row">

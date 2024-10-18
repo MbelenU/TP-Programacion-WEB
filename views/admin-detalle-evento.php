@@ -8,7 +8,7 @@
 
 <body class="p-0 bg-inicio">
     <?php require __DIR__ . '/../components/admin-navbar.php' ?>
-    <div class="container p-sm-4 bg-secondary-subtle">
+    <div class="container p-sm-4 bg-white">
         <section class="container">
             <div class="titulo-header">
                 <h1>Evento</h1>

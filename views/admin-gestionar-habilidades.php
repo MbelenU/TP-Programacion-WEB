@@ -9,7 +9,7 @@
 
 <body class="bg-inicio">
     <?php require __DIR__ . '/../components/admin-navbar.php' ?>
-    <div class="container p-sm-4 bg-secondary-subtle">
+    <div class="container p-sm-4 bg-white">
         <div class="row">
             <h2 class="mb-4">Gestión de Habilidades</h2>
 
