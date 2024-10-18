@@ -38,6 +38,9 @@
                         <a class="nav-link" href="<?php echo BASE_URL ?>views/alumno-eventos.php">Eventos</a>
                     </li>
                     <li class="nav-item ">
+                        <a class="nav-link" href="<?php echo BASE_URL ?>views/alumno-empleos.php">Empleos</a>
+                    </li>
+                    <li class="nav-item ">
                         <a class="nav-link"
                             href="<?php echo BASE_URL ?>views/alumno-notificaciones.php">Notificaciones</a>
                     </li>
