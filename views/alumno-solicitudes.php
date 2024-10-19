@@ -58,7 +58,11 @@
                             <li>Presencial en nuestras oficinas de San Isidro.</li>
                         </ul>
                     </div>
-                    <button class="btn btn-light mt-3">DAR DE BAJA</button>
+                    <div class="d-flex justify-content-center align-items-center ">
+                        <button class="btn btn-outline-danger mt-3 d-flex justify-content-center align-items-center">
+                            DAR DE BAJA <i class="bi bi-person-fill-down fs-5"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -111,7 +115,11 @@
                             <li>Híbrida (2 días presenciales en Parque Patricios / 3 días home office)</li>
                         </ul>
                     </div>
-                    <button class="btn btn-light mt-3">DAR DE BAJA</button>
+                    <div class="d-flex justify-content-center align-items-center ">
+                        <button class="btn btn-outline-danger mt-3 d-flex justify-content-center align-items-center">
+                            DAR DE BAJA <i class="bi bi-person-fill-down fs-5"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

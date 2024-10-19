@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // eliminar la solicitud 
-    document.querySelectorAll('.btn-light').forEach(button => {
+    document.querySelectorAll('.btn-outline-danger').forEach(button => {
         button.addEventListener('click', (event) => {
             event.stopPropagation();
             const solicItem = button.closest('.solic-item');
