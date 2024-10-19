@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const container = solicItem.closest('.container-solic');
             if (container) {
                 container.remove();
-            }
+            };
         });
     });
 });
