@@ -62,7 +62,7 @@ ul {
     list-style-type: disc;
 }
 
-#arrowIcon {
+.arrowIcon {
     transition: transform 0.3s ease;
 }
 

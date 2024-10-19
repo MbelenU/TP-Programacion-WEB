@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     eventoDetails.style.height = '0';
                 }, 10);
-                eventoDetails.classList.remove('open');}
+                eventoDetails.classList.remove('open');
+            };
         });
     });
 });
