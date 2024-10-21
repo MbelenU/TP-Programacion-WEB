@@ -1,0 +1,163 @@
+.info {
+    flex-direction: column; /* Alinea verticalmente */
+    padding-left: 20px; /* Espacio entre la foto y el texto */
+}
+
+.nombre {
+    margin-top: 10px; /* Mantén el margen superior */
+}
+
+.descripcion {
+    margin-top: 5px; /* Espacio entre el nombre y la descripción */
+    font-size: 15px;
+}
+
+/* Ajustar el contenido principal */
+.main-content {
+    margin-left: 220px; /* Margen a la izquierda para el menú */
+    padding: 20px;
+}
+
+/* Ajustar el contenido principal */
+
+.container-background {
+    background-color: #E1E7D0;   
+    border-radius: 15px;
+}
+
+.contact-info {
+    background-color: #E1E7D0; /* Color de fondo */
+    border-radius: 15px; /* Bordes circulares */
+    padding: 20px; /* Espaciado interno */
+    text-align: center; /* Centra el texto dentro del div */
+    margin: 20px auto; /* Centra el div en la página */
+    width: fit-content; /* Ajusta el ancho al contenido */
+    display: flex; /* Usar flexbox */
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+    justify-content: space-around; /* Espacia los elementos */
+}
+
+.info-item {
+    display: flex; /* Usar flex para alinear icono y texto */
+    align-items: center; /* Centra verticalmente */
+    width: 45%; /* Cada elemento ocupará aproximadamente la mitad del contenedor */
+    margin: 10px 0; /* Margen superior e inferior */
+}
+
+.info-item i {
+    margin-right: 10px; /* Espacio entre el icono y el texto */
+}
+
+.profile-sections {
+    display: flex; /* Habilita Flexbox */
+    flex-wrap: wrap; /* Permite que las secciones se envuelvan */
+    justify-content: space-between; /* Espacia las secciones */
+    margin: 20px 0; /* Margen vertical opcional */
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+}
+
+.habilidades {
+    flex: 1; /* Toma espacio del lado izquierdo */
+    background-color: #E1E7D0; /* Color de fondo */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 10px; /* Espaciado interno */
+    margin-right: 10px; /* Espacio a la derecha */
+}
+
+.right-sections {
+    display: flex; /* Usar flex para las secciones derechas */
+    flex-direction: column; /* Apilar verticalmente */
+    flex: 1; /* Toma el espacio restante */
+    background-color: #E1E7D0; /* Color de fondo */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 10px; /* Espaciado interno */
+    margin-bottom: 10px; /* Espacio entre secciones */
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .menu-content {
+        width: 100%; /* Menú ocupa todo el ancho en pantallas pequeñas */
+        height: auto; /* Altura automática */
+    }
+
+    .perfil-header {
+        flex-direction: column; /* Apila verticalmente en móviles */
+        align-items: center; /* Centra los elementos */
+    }
+
+    .info {
+        padding-left: 0; /* Quita el padding en móviles */
+    }
+
+    .info-item {
+        width: 100%; /* Cada ítem ocupa todo el ancho */
+    }
+
+    .profile-sections {
+        flex-direction: column; /* Apila secciones en móviles */
+    }
+}
+
+.star {
+    cursor: pointer;
+    font-size: 25px;
+    color: gray;
+}
+.star.selected {
+    color: gold;
+}
+
+
+.info {
+    
+    flex-direction: column; /* Alinea verticalmente */
+    padding-left: 20px; /* Espacio entre la foto y el texto */
+}
+
+.perfil-imagen {
+    display: block; /* Asegura que la imagen sea un bloque */
+    margin-bottom: 0.5rem; /* Espacio entre la imagen y el label */
+    width: 100%; /* Ajusta el ancho de la imagen */
+    max-width: 150px; /* Limita el tamaño de la imagen */
+}
+
+.datospersonales {
+    background-color: #E1E7D0;   
+    border-radius: 30px;
+    padding: 20px; /* Agrega padding para que se vea mejor */
+    margin-top: 50px;
+}
+
+.datospersonales-header{
+    flex-direction: column; /* Alinea verticalmente */   
+    padding-top: 15px; /* Espacio entre la foto y el texto */
+    padding-bottom: 20px; /* Espacio entre la foto y el texto */
+    font-size: 25px;
+}
+
+
+#listaHabilidades {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se muevan a la siguiente línea si no hay suficiente espacio */
+    gap: 15px; /* Espacio entre las habilidades */   
+    padding-top: 15px; /* Espacio entre la foto y el texto */
+}
+
+.btnhab{
+    border: 2px solid #969d83; 
+    border-radius: 10px; 
+    background-color: white; /* Color de fondo blanco */
+    color: black; /* Color del texto */
+    transition: background-color 0.3s, color 0.3s; /* Transiciones para hover */
+}
+
+
+.btnhab:hover {
+    background-color: #a8b585; /* Cambia el fondo al hacer hover */
+}
+
+.btn:hover {
+    background-color: #a8b585; /* Cambia el fondo al hacer hover */
+}
+
