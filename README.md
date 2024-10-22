@@ -13,6 +13,7 @@
     DB_PASSWORD=contraseña
 
 ## Como usar git flow
+## Por cada nueva implementacion
     git checkout develop
     git pull origin develop
     git flow init
