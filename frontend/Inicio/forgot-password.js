@@ -11,8 +11,6 @@ document.getElementById('forgot-password-form').addEventListener('submit', funct
     const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
     
     if (email) {
-        // Si el email es válido:
-        // Cambiar modal a estilo de éxito
         modalHeader.classList.remove('bg-danger');
         modalHeader.classList.add('bg-success');
         modalButton.classList.remove('btn-danger');
