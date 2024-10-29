@@ -3,7 +3,8 @@
 class Alumno extends Usuario {
     private string $apellidoAlumno;
     private string $fotoDePerfil;
-    // private Carrera $carrera;
+    private Carrera $carrera;
+    private PlanEstudio $planEstudio;
     private array $habilidades;
     private array $actividadExtraCurricular;
     private array $experienciasLaborales;
@@ -33,14 +34,21 @@ class Alumno extends Usuario {
     public function setFotoDePerfil(string $fotoDePerfil): void {
         $this->fotoDePerfil = $fotoDePerfil;
     }
+    public function getPlanEstudio(): PlanEstudio {
+        return $this->planEstudio;
+    }
 
-    // public function getCarrera(): Carrera {
-    //     return $this->carrera;
-    // }
+    public function setPlanEstudio(PlanEstudio $planEstudio): void {
+        $this->planEstudio = $planEstudio;
+    }
 
-    // public function setCarrera(Carrera $carrera): void {
-    //     $this->carrera = $carrera;
-    // }
+    public function getCarrera(): Carrera {
+        return $this->carrera;
+    }
+
+    public function setCarrera(Carrera $carrera): void {
+        $this->carrera = $carrera;
+    }
 
     public function getHabilidades(): array {
         return $this->habilidades;

@@ -4,12 +4,10 @@
     $usuarioController = new UsuarioController();
     $error = "";
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
-        $email = htmlspecialchars($_POST["email"]);
-        $password = htmlspecialchars($_POST["password"]);
-        $resultado = $usuarioController->iniciarSesion($email, $password);
+        $resultado = $usuarioController->iniciarSesion();
         if($resultado) {
-            $_SESSION['user'] = $resultado;
-            switch($resultado['user_type']) {
+            $_SESSION['user'] = $resultado['usuario'];
+            switch($resultado['usuario']['user_type']) {
                 case 'Alumno':
                     header("Location: ./alumno-perfil.php");
                     exit();
@@ -18,9 +16,6 @@
                     exit();
                 case 'Empresa':
                     header("Location: ./empresa-perfil.php");
-                    exit();
-                default:
-                    header("Location: ./error.php");
                     exit();
             }
         }else {
@@ -65,9 +60,8 @@
                 </div>
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary" name="login">Iniciar Sesión</button>
-                    <a href="register.php" class="btn btn-secondary">Registrarse</a>
+                    <a href="./register.php" class="btn btn-secondary">Registrarse</a>
                 </div>
-
             </form>
         </div>
     </div>

@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/controllers/UsuarioController.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -8,7 +7,11 @@ require_once __DIR__ . '/controllers/UsuarioController.php';
     <title>Inicio</title>
 </head>
 <body>
-    <?php require __DIR__ .'/frontend/components/admin-navbar.php'; ?>
-    <?php include __DIR__.'/frontend/components/footer.php'?>
+    <?php
+        if (!isset($_SESSION['user'])) {
+            Header("Location: ./frontend/views/inicio.php");
+            exit();
+        }
+    ?>
 </body>
 </html>

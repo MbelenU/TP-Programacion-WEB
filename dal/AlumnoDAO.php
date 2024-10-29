@@ -10,7 +10,9 @@ class AlumnoDAO {
     public function __construct() {
         $this->conn = (new Database())->getConnection();
     }
+    public function editarPerfil(string $nombre, string $password, string $email, string $telefono, array $habilidades, Carrera $carrera, PlanEstudio $plan_estudio, array $materias, array $foto_perfil): ?Alumno {
 
+    }
     public function iniciarSesion(string $email, string $password): ?Alumno {
         $queryUser = "SELECT * FROM usuario WHERE Mail = :email AND Clave = :password LIMIT 1";
     

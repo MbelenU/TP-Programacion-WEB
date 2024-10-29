@@ -1,15 +1,10 @@
 <?php
-session_start();
-if (!isset($_SESSION['user'])) {
-    header("Location: ./inicio.php");
-    exit();
-}
-$allowedRoles = ['Admin'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
-    echo "Acceso denegado. No tienes permisos para acceder a esta página.";
-    exit();
-}
+    require_once __DIR__ . '/../../controllers/validate-session.php';
+
+    $allowedRoles = ['Admin'];
+    validarSesion($allowedRoles);
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 

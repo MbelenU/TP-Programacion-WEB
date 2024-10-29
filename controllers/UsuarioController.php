@@ -6,6 +6,12 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+$usuarioController = new UsuarioController();
+
 class UsuarioController {
     private UsuarioDAO $usuarioDao;
 
@@ -13,17 +19,28 @@ class UsuarioController {
         $this->usuarioDao = new UsuarioDAO();
     }
 
-    public function iniciarSesion($email, $password) {
+    public function iniciarSesion() {
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
+
         $usuario = $this->usuarioDao->iniciarSesion($email, $password);
+
         if ($usuario) {
-            return $usuario;
+            return [
+                'success' => true,
+                'message' => 'Inicio de sesión exitoso',
+                'usuario' => $usuario,
+            ];
         } else {
-            return false;
+            return [
+                'status_code' => 401,
+                'success' => false,
+                'message' => 'Credenciales incorrectas',
+            ];
         }
     }
 
     public function register() {
-        $data = json_decode(file_get_contents('php://input'), true);
     
         $typeUser = $data['typeUser'] ?? '';
         $email = $data['email'] ?? '';
@@ -102,4 +119,3 @@ class UsuarioController {
     
 
 }
-
