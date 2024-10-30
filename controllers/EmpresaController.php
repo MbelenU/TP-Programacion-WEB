@@ -8,18 +8,6 @@ class EmpresaC {
     public function __construct() {
         $this->usuarioDao = new UsuarioDAO();
     }
-
-    public function iniciarSesion() {
-        $email = htmlspecialchars($_POST["email"]);
-        $password = htmlspecialchars($_POST["password"]);
-        $usuario = $this->usuarioDao->iniciarSesion($email, $password);
-        if ($usuario) {
-            return $usuario;
-        } else {
-            return false;
-        }
-    }
-
     public function register() {
         $error = '';
         $typeUser = htmlspecialchars($_POST['tipoUsuario'] ?? '');

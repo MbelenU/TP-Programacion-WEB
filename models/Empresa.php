@@ -1,44 +1,30 @@
 <?php
 
 class Empresa extends Usuario{
-    private string $telefono;
-    private string $contraseña;
     private array $empleosPublicados;
-    private string $descripcion;
-    private string $ubicacion;
-
+    private string $razonSocial;
+    private string $CUIT;
     public function __construct() {}
 
-    public function getTelefono(): string {
-        return $this->telefono;
+    public function getEmpleos(): array {
+        return $this->empleosPublicados;
     }
-
-    public function setTelefono(string $telefono): string {
-        $this->telefono = $telefono;
+    public function setEmpleos(array $empleosPublicados) {
+        $this->empleosPublicados = $empleosPublicados;
     }
-
-    public function getContraseña(): string {
-        return $this->contraseña;
+    public function getRazonSocial(): string {
+        return $this->razonSocial;
     }
-
-    public function setContraseña(string $contraseña): string {
-        $this->contraseña = $contraseña;
+    
+    public function setRazonSocial(string $razonSocial) {
+        $this->razonSocial = $razonSocial;
     }
-
-    public function getDescripcion(): string {
-        return $this->descripcion;
+    
+    public function getCUIT(): string {
+        return $this->CUIT;
     }
-
-    public function getUbicacion(): string {
-        return $this->ubicacion;
-    }
-
-    public function setDescripcion(string $descripcion): void {
-        $this->descripcion = $descripcion;
-    }
-
-    public function setUbicacion(string $ubicacion): void {
-        $this->ubicacion = $ubicacion;
+    public function setCUIT(string $CUIT) {
+        $this->CUIT = $CUIT;
     }
 }
 ?>

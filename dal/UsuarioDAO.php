@@ -195,7 +195,10 @@ class UsuarioDAO {
     
         } catch (Exception $e) {
             $this->conn->rollBack();
-            return false;
+            return [
+                'success' => false,
+                'message' => 'Error al registrar: ' . $e->getMessage()
+            ];
         }
     }
     

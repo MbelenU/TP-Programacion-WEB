@@ -97,6 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
             empresaData.RazonSocial = document.getElementById('RazonSocial').value;
             empresaData.CUIT = document.getElementById('CUIT').value;
             const data = await registrarse(empresaData);
+            console.log(data)
             if(data.success){
                 mensaje();
             }
@@ -109,26 +110,18 @@ document.addEventListener("DOMContentLoaded", function () {
 async function registrarse(userData) {
     try {
         const BASEURL = "localhost:80/TP-Programacion-WEB"
-        const response = await fetch(`http://${BASEURL}/index.php?endpoint=register`, {
+        const response = await fetch(`http://${BASEURL}/controllers/UsuarioController.php?endpoint=register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(userData)
         });
-
-        if (!response.ok) {
-            throw new Error('Error en la respuesta de la red');
-        }
-
         const data = await response.json(); 
-
-        // Manejo de datos
         if (data.success) {
-            console.log('Inicio de sesión exitoso:', data.alumno);
             return data;
         } else {
-            console.log('Error al iniciar sesión:', data.message);
+            console.log('Error al iniciar sesión:', data.mess age);
         }
     } catch (error) {
         console.error('Error:', error);
