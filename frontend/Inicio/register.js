@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function registrarse(userData) {
     try {
-        const BASEURL = "localhost:80/TP-Programacion-WEB"
+        const BASEURL = "localhost:80/Proyecto-Final-Back"
         const response = await fetch(`http://${BASEURL}/index.php?endpoint=register`, {
             method: 'POST',
             headers: {
@@ -122,7 +122,7 @@ async function registrarse(userData) {
         }
 
         const data = await response.json(); 
-
+        console.log(data)
         // Manejo de datos
         if (data.success) {
             console.log('Inicio de sesión exitoso:', data.alumno);

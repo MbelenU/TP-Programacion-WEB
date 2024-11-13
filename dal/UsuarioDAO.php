@@ -27,7 +27,6 @@ class UsuarioDAO {
             WHERE u.Mail = :email AND u.Clave = :password
             LIMIT 1;
         ";
-
         $stmtUser = $this->conn->prepare($queryUser);
         $stmtUser->bindParam(':email', $email);
         $stmtUser->bindParam(':password', $password);
@@ -195,10 +194,7 @@ class UsuarioDAO {
     
         } catch (Exception $e) {
             $this->conn->rollBack();
-            return [
-                'success' => false,
-                'message' => 'Error al registrar: ' . $e->getMessage()
-            ];
+            return false;
         }
     }
     

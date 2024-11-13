@@ -14,18 +14,13 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="../../img/logo.png" type="image/x-icon">
-    <link rel="stylesheet" href="editar-perfil-empresa.css">
-    <link rel="stylesheet" href="/css/global.css">
-    <script src='main.js' defer></script>
-    <title>Editar Perfil Empresa</title>
-</head>
-<body class="bg-inicio">
     <?php require __DIR__ . '/../components/header.php' ?>
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/global.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/empresa.css">
+</head>
+
+<body class="bg-inicio">
+    <?php require __DIR__ . '/../components/empresa-navbar.php' ?>
     <div class="container p-sm-4 bg-secondary-subtle">
         <div class="container mt-5">
             <h1 class="mb-4">Editar Perfil de Empresa</h1>
@@ -34,7 +29,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                     <div class="col-md-6 mb-3">
                         <label for="profilePhoto" class="form-label">Foto de perfil</label>
                         <div class="mb-3">
-                            <img src="/Nav-bar/perfil.jpg" class="img-thumbnail" alt="Foto de perfil">
+                            <img src="../Nav-bar/perfil.jpg" class="img-thumbnail" alt="Foto de perfil">
                         </div>
                         <input class="form-control" type="file" id="profilePhoto">
                     </div>

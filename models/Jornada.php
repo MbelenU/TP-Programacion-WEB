@@ -1,9 +1,12 @@
 <?php
 
-class Jornada extends PublicacionEmpleo {
+class Jornada {
     private int $id;
     private string $descripcionJornada;
-
+    public function __construct(int $id, string $descripcion) {
+        $this->setId($id);
+        $this->setDescripcionJornada($descripcion);
+    }
     public function getId(): int {
         return $this->id;
     }
@@ -18,6 +21,12 @@ class Jornada extends PublicacionEmpleo {
 
     public function setDescripcionJornada(string $descripcionJornada): void {
         $this->descripcionJornada = $descripcionJornada;
+    }
+    public function toArray(): array {
+        return [
+            'id' => $this->id,
+            'descripcionJornada' => $this->descripcionJornada
+        ];
     }
 }
 

@@ -29,7 +29,7 @@
                                     alt="foto-perfil" class="rounded-circle w-25 pb-2" id="foto-perfil-navbar"></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?php echo BASE_URL ?>views/empresa-perfil.php">Mi perfil</a>
+                            <a class="nav-link" href="<?php echo BASE_URL ?>views/empresa-visualizar-perfil.php">Mi perfil</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo BASE_URL ?>views/empresa-publicar-empleo.php">Publicar
@@ -37,10 +37,10 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link"
-                                href="<?php echo BASE_URL ?>views/empresa-publicaciones.php">Publicaciones</a>
+                                href="<?php echo BASE_URL ?>views/empresa-visualizar-publicaciones.php">Publicaciones</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?php echo BASE_URL ?>views/empresa-reclutar.php">Reclutar</a>
+                            <a class="nav-link" href="<?php echo BASE_URL ?>views/empresa-reclutar-alumno.php">Reclutar</a>
                         </li>
                     </ul>
                     <form class="d-flex d-sm-none mt-3" role="search">

@@ -1,46 +1,17 @@
-
-// Esperar a que el DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", function () {
     const tipoUsuario = document.getElementById('tipoUsuario');
     const formAlumno = document.getElementById('formAlumno');
     const formEmpresa = document.getElementById('formEmpresa');
+    const errorAlert = document.getElementById("errorAlert");
+    const successAlert = document.getElementById("successAlert");
 
-    // Obtener los elementos del modal
-    const modalHeader = document.getElementById('modalHeader');
-    const modalBody = document.getElementById('modalBody');
-    const modalButton = document.getElementById('modalButton');
-    const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
-
-    function mensaje (){
-        // Si completó el formulario:
-            // Cambiar modal a estilo de éxito
-            modalHeader.classList.add('bg-success');
-            modalButton.classList.add('btn-success');
-
-            // Actualizar contenido del modal
-            document.getElementById('confirmationModalLabel').textContent = "Solicitud enviada";
-            modalBody.innerHTML = `Se ha enviado una petición de registro. Por favor esté atento su correo electrónico.`;
-
-            // Mostrar el modal
-            confirmationModal.show();
-
-            // Redirigir después de cerrar el modal
-            document.getElementById('confirmationModal').addEventListener('hidden.bs.modal', function () {
-                window.location.href = "inicio.html";
-            });
-    };
-    
     tipoUsuario.addEventListener('change', function() {
         const usuarioSeleccionado = tipoUsuario.value;
-
-        // Ocultar ambos formularios al inicio
         formAlumno.classList.add('d-none');
         formEmpresa.classList.add('d-none');
-        // Quita la validación al cambiar de usuario
         formEmpresa.classList.remove('was-validated');
         formAlumno.classList.remove('was-validated');
-
-        // Mostrar el formulario correspondiente según la selección
+        
         if (usuarioSeleccionado === 'alumno') {
             formAlumno.classList.remove('d-none');
         } else if (usuarioSeleccionado === 'empresa') {
@@ -48,82 +19,77 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Validación de los formularios (Opcional)
     formAlumno.addEventListener('submit', async function(event) {
         event.preventDefault();
-
         if (formAlumno.checkValidity() === false) {
-            // Mostrar los mensajes de error de HTML5
             formAlumno.classList.add("was-validated");
-            // Resetea el Formulario
-            //formAlumno.reset();
-        }else{
-            let alumnoData = {};
-            alumnoData.typeUser = tipoUsuario.value;
-            alumnoData.email = document.getElementById('email').value;
-            alumnoData.password = document.getElementById('password').value;
-            alumnoData.repeatPassword = document.getElementById('repeatPassword').value;
-            alumnoData.direccion = document.getElementById('direccion').value;
-            alumnoData.telefono = document.getElementById('telefono').value;
-            alumnoData.nombreUsuario = document.getElementById('nombreUsuario').value;
-            alumnoData.nombre = document.getElementById('nombre').value;
-            alumnoData.apellido = document.getElementById('apellido').value;
-            alumnoData.dni = document.getElementById('dni').value;
+        } else {
+            let alumnoData = {
+                typeUser: tipoUsuario.value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                repeatPassword: document.getElementById('repeatPassword').value,
+                direccion: document.getElementById('direccion').value,
+                telefono: document.getElementById('telefono').value,
+                nombreUsuario: document.getElementById('nombreUsuario').value,
+                nombre: document.getElementById('nombre').value,
+                apellido: document.getElementById('apellido').value,
+                dni: document.getElementById('dni').value,
+            };
             const data = await registrarse(alumnoData);
-            if(data.success){
-                mensaje();
-            }
-        } 
+            mostrarMensaje(data);
+        }
     });
 
     formEmpresa.addEventListener('submit', async function(event) {
         event.preventDefault();
-
         if (formEmpresa.checkValidity() === false) {
-            // Mostrar los mensajes de error de HTML5
             formEmpresa.classList.add("was-validated");
-            // Resetea el Formulario
-            formEmpresa.reset();
-        }else{
-            const empresaData = {}
-            empresaData.typeUser = tipoUsuario.value;
-            empresaData.nombreUsuario = document.getElementById('nombreUsuarioEmpresa').value;
-            empresaData.nombreEmpresa = document.getElementById('nombreEmpresa').value;
-            empresaData.email = document.getElementById('emailEmpresa').value;
-            empresaData.password = document.getElementById('passwordEmpresa').value;
-            empresaData.repeatPassword = document.getElementById('repeatPasswordEmpresa').value;
-            empresaData.direccion = document.getElementById('direccionEmpresa').value;
-            empresaData.telefono = document.getElementById('telefonoEmpresa').value;
-            empresaData.RazonSocial = document.getElementById('RazonSocial').value;
-            empresaData.CUIT = document.getElementById('CUIT').value;
+        } else {
+            const empresaData = {
+                typeUser: tipoUsuario.value,
+                nombreUsuario: document.getElementById('nombreUsuarioEmpresa').value,
+                nombreEmpresa: document.getElementById('nombreEmpresa').value,
+                email: document.getElementById('emailEmpresa').value,
+                password: document.getElementById('passwordEmpresa').value,
+                repeatPassword: document.getElementById('repeatPasswordEmpresa').value,
+                direccion: document.getElementById('direccionEmpresa').value,
+                telefono: document.getElementById('telefonoEmpresa').value,
+                RazonSocial: document.getElementById('RazonSocial').value,
+                CUIT: document.getElementById('CUIT').value,
+            };
             const data = await registrarse(empresaData);
-            console.log(data)
-            if(data.success){
-                mensaje();
-            }
-        } 
-        
+            mostrarMensaje(data);
+        }
     });
 
-});
-
-async function registrarse(userData) {
-    try {
-        const BASEURL = "localhost:80/TP-Programacion-WEB"
-        const response = await fetch(`http://${BASEURL}/controllers/UsuarioController.php?endpoint=register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        });
-        const data = await response.json(); 
-        if (data.success) {
-            return data;
-        } else {
-            console.log('Error al iniciar sesión:', data.mess age);
+    async function registrarse(userData) {
+        try {
+            const BASEURL = "localhost:80/Proyecto-Final-Back";
+            const response = await fetch(`http://${BASEURL}/controllers/UsuarioController.php?endpoint=register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+            return await response.json(); 
+        } catch (error) {
+            return { success: false, message: 'Error en el servidor: ' + error.message };
         }
-    } catch (error) {
-        console.error('Error:', error);
     }
-}
+
+    function mostrarMensaje(data) {
+        // Resetear mensajes anteriores
+        errorAlert.classList.add("d-none");
+        successAlert.classList.add("d-none");
+        
+        if (data.success) {
+            successAlert.textContent = "Registro exitoso";
+            successAlert.classList.remove("d-none");
+        } else {
+            errorAlert.textContent = data.message || "Error en el registro";
+            errorAlert.classList.remove("d-none");
+        }
+    }
+});

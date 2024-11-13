@@ -16,8 +16,8 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 
 <head>
     <?php require __DIR__ . '/../components/header.php' ?>
-    <link rel="stylesheet" href="<?php echo BASE_URL ?>css/empresa-editar-empleo.css">
-    <script src="<?php echo BASE_URL ?>scripts/empresa/editar-empleo.js" defer></script>
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/global.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/empresa.css">
 </head>
 
 <body class="bg-inicio">

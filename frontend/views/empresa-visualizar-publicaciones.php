@@ -15,67 +15,15 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 <html lang="es">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Inicio</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" defer></script>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-	<link rel="stylesheet" href="/css/global.css">
-	<link rel="stylesheet" href="/Empresa/Publicaciones-Empresa/publicaciones-empresa.css">
-	<script src="/Nav-bar/nav-bar.js" defer></script>
-	<script src="postulaciones-empresa.js" defer></script>
+    <?php require __DIR__ . '/../components/header.php' ?>
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/global.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/empresa.css">
 </head>
 
+
 <body class="bg-inicio">
-	<header>
-		<nav class="navbar sticky-top bg-navbar">
-			<div class="container-fluid">
-				<a class="navbar-brand" href="#"><img src="../../img/logo.png" alt="logo"></a>
-				<form class="d-none d-sm-flex" role="search">
-					<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-					<button class="btn btn-outline-success d-grid align-content-center" type="submit">
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-							<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-						</svg>
-					</button>
-				</form>
-				<button class="navbar-toggler shadow-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-					<div class="offcanvas-header">
-						<img src="../../img/logo.png" alt="logo">
-						<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-					</div>
-					<div class="offcanvas-body">
-						<ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
-							<li class="nav-item">
-								<a class="nav-link" href="/Empresa/Perfil-Empresa/perfil-empresa.html">Mi perfil</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="/Empresa/Publicar-Empleo/publicar-empleo.html">Publicar empleo</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="/Empresa/Publicaciones-Empresa/publicaciones-empresa.html">Publicaciones</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="/Empresa/Reclutar-empresa/reclutar-empresa.html">Reclutar</a>
-							</li>
-						</ul>
-						<form class="d-flex d-sm-none mt-3" role="search">
-							<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-							<button class="btn btn-outline-success d-grid align-content-center" type="submit">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-									<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-								</svg>
-							</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</nav>
-	</header>
+	<?php require __DIR__ . '/../components/empresa-navbar.php' ?>
+	
     <div class="container p-sm-4 bg-secondary-subtle">
         <div class="container mt-5">
 			<div class="pb-5">
@@ -86,7 +34,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 			</div>
 			<div class="row mb-5">
 				<div class="list-group col-12 p-0">
-					<a href="puesto.html" class="list-group-item list-group-item-action" aria-current="true">
+					<a href="<?php echo BASE_URL ?>views/empresa-visualizar-puesto.php" class="list-group-item list-group-item-action" aria-current="true">
 						<div class="d-flex w-100 justify-content-between">
 						  <h5 class="mb-1">Desarrollador de Software</h5>
 						  <small>Hace 3 días</small>
@@ -94,7 +42,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 						<p class="mb-1">Responsable del diseño, desarrollo y mantenimiento de aplicaciones web y móviles.</p>
 						<small>Conocimiento en lenguajes de programación como Java, Python y C#.</small>
 					  </a>
-					  <a href="puesto.html" class="list-group-item list-group-item-action">
+					  <a href="<?php echo BASE_URL ?>views/empresa-visualizar-puesto.php" class="list-group-item list-group-item-action">
 						<div class="d-flex w-100 justify-content-between">
 						  <h5 class="mb-1">Especialista en Seguridad e Higiene</h5>
 						  <small class="text-muted">Hace 5 días</small>
@@ -102,7 +50,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 						<p class="mb-1">Encargado de implementar y supervisar normas de seguridad en el lugar de trabajo.</p>
 						<small class="text-muted">Certificaciones en normativas de seguridad industrial y ambiental.</small>
 					  </a>
-					  <a href="puesto.html" class="list-group-item list-group-item-action">
+					  <a href="<?php echo BASE_URL ?>views/empresa-visualizar-puesto.php" class="list-group-item list-group-item-action">
 						<div class="d-flex w-100 justify-content-between">
 						  <h5 class="mb-1">Analista de Comercio Internacional</h5>
 						  <small class="text-muted">Hace 1 semana</small>
@@ -110,7 +58,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 						<p class="mb-1">Gestiona operaciones de exportación e importación, asegurando el cumplimiento de regulaciones aduaneras.</p>
 						<small class="text-muted">Experiencia en tratados internacionales y logística global.</small>
 					  </a>
-					  <a href="puesto.html" class="list-group-item list-group-item-action" aria-current="true">
+					  <a href="<?php echo BASE_URL ?>views/empresa-visualizar-puesto.php" class="list-group-item list-group-item-action" aria-current="true">
 						<div class="d-flex w-100 justify-content-between">
 						  <h5 class="mb-1">Guía Turístico</h5>
 						  <small>Hace 2 días</small>
@@ -118,7 +66,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 						<p class="mb-1">Acompaña y asesora a grupos de turistas durante sus visitas a lugares de interés.</p>
 						<small>Conocimiento en historia local y habilidad para comunicarse en varios idiomas.</small>
 					  </a>
-					  <a href="puesto.html" class="list-group-item list-group-item-action">
+					  <a href="<?php echo BASE_URL ?>views/empresa-visualizar-puesto.php" class="list-group-item list-group-item-action">
 						<div class="d-flex w-100 justify-content-between">
 						  <h5 class="mb-1">Agente de Viajes</h5>
 						  <small class="text-muted">Hace 4 días</small>

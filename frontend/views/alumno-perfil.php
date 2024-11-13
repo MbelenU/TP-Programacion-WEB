@@ -16,7 +16,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 
 <head>
     <?php require __DIR__ . '/../components/header.php' ?>
-    <link rel="stylesheet" href="<?php echo BASE_URL ?>css/alumno-perfil.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/alumno-perfil.css">
 
 </head>
 

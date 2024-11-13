@@ -4,7 +4,7 @@ if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
-$allowedRoles = ['Admin'];
+$allowedRoles = ['Administrador'];
 if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();

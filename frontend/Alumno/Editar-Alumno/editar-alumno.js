@@ -1,4 +1,4 @@
-// planes de estudio por carrera
+// Array de planes de estudio por carrera
 const planesEstudio = {
     "Desarrollo de Software": ["2016", "2019"],
     "Turismo": ["2016", "2019"],
@@ -8,7 +8,7 @@ const planesEstudio = {
     "Higiene y Seguridad": ["2016", "2019"]
 };
 
-// materias por carrera y plan de estudios
+// Materias por carrera y plan de estudios
 const materiasPorCarreraYPlan = {
     "Desarrollo de Software": {
         "2016": ["Programación I", "Base de Datos", "Redes", "Matemáticas", "Inglés"],
@@ -36,7 +36,7 @@ const materiasPorCarreraYPlan = {
     }
 };
 
-
+// Obtener elementos del DOM
 const carreraSelect = document.getElementById('carrera');
 const planEstudiosSelect = document.getElementById('planEstudios');
 const planEstudiosLabel = document.getElementById('planEstudiosLabel');
@@ -50,7 +50,7 @@ const carreraerror = document.getElementById('carreraerror');
 const planerror = document.getElementById('planerror');
 const listaHabilidades = document.getElementById('listaHabilidades');
 
-
+// Función para manejar la selección de la carrera
 function handleCarreraChange() {
     const selectedCarrera = carreraSelect.value;
     planEstudiosSelect.innerHTML = '<option value="" disabled selected>Seleccione un plan de estudios</option>';
@@ -58,11 +58,11 @@ function handleCarreraChange() {
     agregarMateriaBtn.classList.add('d-none');
 
     if (selectedCarrera) {
-        
+        // Mostrar el select de planes de estudio
         planEstudiosSelect.classList.remove('d-none');
         planEstudiosLabel.classList.remove('d-none');
 
-        
+        // Agregar opciones de planes de estudio
         planesEstudio[selectedCarrera].forEach(function(plan) {
             const option = document.createElement('option');
             option.value = plan;
@@ -75,21 +75,21 @@ function handleCarreraChange() {
     }
 }
 
-
+// Función para manejar la selección del plan de estudios
 function handlePlanEstudiosChange() {
     const selectedPlan = planEstudiosSelect.value;
     materiaSelect.innerHTML = '<option value="" disabled selected>Seleccione una materia</option>';
     agregarMateriaBtn.classList.add('d-none');
 
     if (selectedPlan) {
-       
+        // Obtener la carrera seleccionada
         const selectedCarrera = carreraSelect.value;
         
-        
+        // Mostrar el select de materias
         materiaSelect.classList.remove('d-none');
         materiaLabel.classList.remove('d-none');
 
-       
+        // Agregar opciones de materias según la carrera y el plan de estudios
         if (selectedCarrera && materiasPorCarreraYPlan[selectedCarrera][selectedPlan]) {
             materiasPorCarreraYPlan[selectedCarrera][selectedPlan].forEach(function(materia) {
                 const option = document.createElement('option');
@@ -106,13 +106,13 @@ function handlePlanEstudiosChange() {
     }
 }
 
-// agregar una materia aprobada
+// Función para agregar una materia aprobada
 function handleAgregarMateria() {
     const selectedMateria = materiaSelect.value;
     let materias = materiasAprobadasList.querySelectorAll('li');
     materias = Array.from(materias).map(materia => materia.textContent);
     if (!selectedMateria || materias.includes(selectedMateria)) {
-        return; 
+        return; // No hacer nada si no hay materia seleccionada
     }
 
 
@@ -120,11 +120,11 @@ function handleAgregarMateria() {
     textMateria.textContent = selectedMateria;
     materiasAprobadasList.appendChild(textMateria);
 
-    
+    // Resetear el select de materia
     materiaSelect.selectedIndex = 0;
 }
 
-// manejar habilidades
+// Función para manejar la adición de habilidades
 function handleAddHabilidad() {
     const habilidad = habilidadSelect.value;
 
@@ -135,26 +135,19 @@ function handleAddHabilidad() {
 
     habilidaderror.innerHTML = "";
 
-    // verificar si la habilidad ya se agrego
-    const habilidadesAgregadas = Array.from(listaHabilidades.children).map(div => div.querySelector('label').textContent);
-    if (habilidadesAgregadas.includes(habilidad)) {
-         habilidaderror.innerHTML = "Esta habilidad ya ha sido agregada.";
-        return; 
-    }
-
     const divHabilidad = document.createElement('div');
     divHabilidad.classList.add('mb-2');
 
-    
+    // Crear y agregar el label de la habilidad
     const label = document.createElement('label');
     label.textContent = habilidad;
     divHabilidad.appendChild(label);
 
-    
+    // Crear div para las estrellas
     const starsDiv = document.createElement('div');
     starsDiv.classList.add('stars');
 
-    
+    // Crear estrellas para calificar
     for (let i = 1; i <= 5; i++) {
         const star = document.createElement('span');
         star.classList.add('star');
@@ -162,7 +155,7 @@ function handleAddHabilidad() {
         star.setAttribute('data-value', i);
         star.innerHTML = '&#9733;';
 
-        
+        // Evento para calificar con estrellas
         star.addEventListener('click', function() {
             const rating = star.getAttribute('data-value');
             starsDiv.querySelectorAll('.star').forEach(s => {
@@ -173,26 +166,26 @@ function handleAddHabilidad() {
         starsDiv.appendChild(star);
     }
 
-    
+    // Botón para eliminar la habilidad
     const btnEliminar = document.createElement('button');
     btnEliminar.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-2');
     btnEliminar.textContent = 'Eliminar';
 
-    
+    // Evento para eliminar la habilidad
     btnEliminar.addEventListener('click', function() {
         divHabilidad.remove();
     });
 
-    
+    // Agregar todo al div de la habilidad
     divHabilidad.appendChild(starsDiv);
     divHabilidad.appendChild(btnEliminar);
     listaHabilidades.appendChild(divHabilidad);
 
-   
+    // Resetear el select de habilidad
     habilidadSelect.selectedIndex = 0;
 }
 
-// eventos
+// Asignar eventos
 carreraSelect.addEventListener('change', handleCarreraChange);
 planEstudiosSelect.addEventListener('change', handlePlanEstudiosChange);
 agregarMateriaBtn.addEventListener('click', handleAgregarMateria);

@@ -18,6 +18,11 @@
                     <img src="../img/logo.png" alt="logo" class="img-fluid">
                 </div>
                 <h2 class="text-center mb-4">Solicitud de Registro</h2>
+                
+                <!-- Contenedores para mostrar mensajes -->
+                <div id="errorAlert" class="alert alert-danger d-none" role="alert"></div>
+                <div id="successAlert" class="alert alert-success d-none" role="alert"></div>
+                
                 <div class="mb-3 input-group">
                     <label for="tipoUsuario" class="input-group-text">Tipo de usuario</label>
                     <select id="tipoUsuario" class="form-select rounded-end">
@@ -127,23 +132,6 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Enviar Solicitud</button>
                 </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-success" id="modalHeader">
-                    <h5 class="modal-title text-white" id="confirmationModalLabel"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="modalBody"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="modalButton"
-                        data-bs-dismiss="modal">Aceptar</button>
-                </div>
             </div>
         </div>
     </div>

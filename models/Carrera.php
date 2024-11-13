@@ -2,8 +2,12 @@
 class Carrera {
     private int $id;
     private string $nombreCarrera;
-    private array $planDeEstudios; // List<PlanDeEstudio>
-
+    private array $planEstudios; 
+    public function __construct(int $id, string $nombreCarrera, array $planEstudios) {
+        $this->setId($id);
+        $this->setNombreCarrera($nombreCarrera);
+        $this->setPlanEstudios($planEstudios);
+    }
     public function getId(): int {
         return $this->id;
     }
@@ -20,12 +24,20 @@ class Carrera {
         $this->nombreCarrera = $nombreCarrera;
     }
 
-    public function getPlanDeEstudios(): array {
-        return $this->planDeEstudios;
+    public function getPlanEstudios(): array {
+        return $this->planEstudios;
     }
 
-    public function setPlanDeEstudios(array $planDeEstudios): void {
-        $this->planDeEstudios = $planDeEstudios;
+    public function setPlanEstudios(array $planEstudios): void {
+        $this->planEstudios = $planEstudios;
+    }
+    
+    public function toArray(): array {
+        return [
+            'id' => $this->id,
+            'nombreCarrera' => $this->nombreCarrera,
+            'planEstudios' => $this->planEstudios
+        ];
     }
 }
 

@@ -6,9 +6,26 @@ class Evento {
     private string $fechaEvento;
     private string $ubicacionEvento;
     private string $modalidadEvento;
+    private string $descripcionEvento;
+    private float $creditos;//agregado
+    private string $tipoEvento;//agregado
     private array $suscripciones; // Lista de suscripciones
     private EstadoEvento $estadoEvento; // Objeto de la clase EstadoEvento
 
+    //cambiar evento
+    //linea con ubicacion y modalidad que falta en la bbdd
+    //public function __construct(int $id, string $nombreEvento, string $fechaEvento, string $ubicacionEvento, string $modalidadEvento, string $descripcionEvento, string $tipoEvento)
+    public function __construct(int $id, string $nombreEvento, string $fechaEvento, string $descripcionEvento, float $creditos, string $tipoEvento) {
+        $this->setId($id);
+        $this->setNombreEvento($nombreEvento);
+        $this->setFechaEvento($fechaEvento);
+        //$this->setUbicacionEvento($ubicacionEvento); falta en bbdd
+        //$this->setModalidadEvento($modalidadEvento);
+        $this->setDescripcionEvento($descripcionEvento);
+        $this->setCreditos($creditos);
+        $this->setTipoEvento($tipoEvento);
+    }
+    
     public function getId(): int {
         return $this->id;
     }
@@ -64,6 +81,47 @@ class Evento {
     public function setEstadoEvento(EstadoEvento $estadoEvento): void {
         $this->estadoEvento = $estadoEvento;
     }
+
+    public function getDescripcionEvento(): string {
+        return $this->descripcionEvento;
+    }
+    
+
+    public function setDescripcionEvento(string $descripcionEvento) : void {
+        $this->descripcionEvento = $descripcionEvento;
+    }
+
+    public function toArray(): array {
+        return [
+            'idEvento'=>$this->id,
+            'descripcionEvento'=>$this->descripcionEvento,
+            'nombreEvento'=>$this->nombreEvento,
+            'fechaEvento'=>$this->fechaEvento,
+            'tipoEvento'=>$this->tipoEvento,
+            'creditosEvento'=>$this->creditos
+            //'ubicacion'=>$this->ubicacion,
+            //'modalidad'=>$this->modalidad,
+
+        ];
+    }
+
+    public function getCreditos(): float {
+        return $this->creditos;
+    }
+
+    public function setCreditos(int $creditos): void {
+        $this->creditos = $creditos;
+    }
+
+    public function getTipoEvento(): string {
+        return $this->tipoEvento;
+    }
+
+    public function setTipoEvento(string $tipoEvento): void {
+        $this->tipoEvento = $tipoEvento;
+    }
+    
 }
+
 
 ?>

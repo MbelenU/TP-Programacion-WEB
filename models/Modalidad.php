@@ -1,9 +1,12 @@
 <?php
 
-class Modalidad extends PublicacionEmpleo {
+class Modalidad {
     private int $id;
     private string $descripcionModalidad;
-
+    public function __construct(int $id, string $descripcion) {
+        $this->setId($id);
+        $this->setDescripcionModalidad($descripcion);
+    }
     public function getId(): int {
         return $this->id;
     }
@@ -18,6 +21,12 @@ class Modalidad extends PublicacionEmpleo {
 
     public function setDescripcionModalidad(string $descripcionModalidad): void {
         $this->descripcionModalidad = $descripcionModalidad;
+    }
+    public function toArray(): array {
+        return [
+            'id' => $this->id,
+            'descripcionModalidad' => $this->descripcionModalidad
+        ];
     }
 }
 

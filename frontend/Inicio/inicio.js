@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function iniciarSesion(email, password) {
     try {
-        const BASEURL = "localhost:80/TP-Programacion-WEB"
+        const BASEURL = "localhost:80/Proyecto-Final-Back"
         const response = await fetch(`http://${BASEURL}/index.php?endpoint=login`, {
             method: 'POST',
             headers: {
