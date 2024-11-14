@@ -76,7 +76,7 @@ class UsuarioController {
             return;
         }
 
-        if ($typeUser === 'alumno') {
+        if ($typeUser == 2) {
             $nombre = htmlspecialchars($input['nombre'] ?? '');
             $apellido = htmlspecialchars($input['apellido'] ?? '');
             $dni = htmlspecialchars($input['dni'] ?? '');
@@ -92,7 +92,7 @@ class UsuarioController {
 
             $respose = $this->usuarioDao->registerAlumno($nombreUsuario, $password, $email, $telefono, $direccion, $nombre, $apellido, $dni);
     
-        } else if ($typeUser === 'empresa') {
+        } else if ($typeUser == 3) {
             $RazonSocial = htmlspecialchars($input['RazonSocial'] ?? '');
             $CUIT = htmlspecialchars($input['CUIT'] ?? '');
 

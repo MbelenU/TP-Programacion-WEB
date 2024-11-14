@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const errorAlert = document.getElementById("errorAlert");
     const successAlert = document.getElementById("successAlert");
 
+
     tipoUsuario.addEventListener('change', function() {
         const usuarioSeleccionado = tipoUsuario.value;
         formAlumno.classList.add('d-none');
@@ -12,9 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
         formEmpresa.classList.remove('was-validated');
         formAlumno.classList.remove('was-validated');
         
-        if (usuarioSeleccionado === 'alumno') {
+        if (usuarioSeleccionado == 2) {
             formAlumno.classList.remove('d-none');
-        } else if (usuarioSeleccionado === 'empresa') {
+        } else if (usuarioSeleccionado == 3) {
             formEmpresa.classList.remove('d-none');
         }
     });
@@ -65,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function registrarse(userData) {
         try {
-            const BASEURL = "localhost:80/Proyecto-Final-Back";
+            const BASEURL = "localhost:80/TP-Programacion-WEB";
             const response = await fetch(`http://${BASEURL}/controllers/UsuarioController.php?endpoint=register`, {
                 method: 'POST',
                 headers: {

@@ -8,17 +8,17 @@
         if($resultado['success']) {
             $_SESSION['user'] = $resultado['usuario'];
             switch($resultado['usuario']['user_type']) {
-                case 'Alumno':
+                case '2':
                     header("Location: ./alumno-perfil.php");
                     exit();
-                case 'Administrador':
+                case '1':
                     header("Location: ./admin-perfil.php");
                     exit();
-                case 'Empresa':
+                case '3':
                     header("Location: ./empresa-visualizar-perfil.php");
                     exit();
             }
-        }else {
+        } else {
             $error = "Credenciales incorrectas. Por favor, intenta de nuevo.";
         }
     }

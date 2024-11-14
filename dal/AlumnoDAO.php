@@ -22,36 +22,36 @@ class AlumnoDAO
         $paramsUser = [];
 
         if ($email !== null) {
-            $updateUserFields[] = "Mail = :email";
+            $updateUserFields[] = "mail = :email";
             $paramsUser[':email'] = $email;
         }
         if ($username !== null) {
-            $updateUserFields[] = "NombreUsuario = :username";
+            $updateUserFields[] = "nombre = :username";
             $paramsUser[':username'] = $username;
         }
         if ($password !== null) {
-            $updateUserFields[] = "Clave = :password";
+            $updateUserFields[] = "clave = :password";
             $paramsUser[':password'] = $password;
         }
         if ($telefono !== null) {
-            $updateUserFields[] = "Telefono = :telefono";
+            $updateUserFields[] = "telefono = :telefono";
             $paramsUser[':telefono'] = $telefono;
         }
         if ($direccion !== null) {
-            $updateUserFields[] = "Direccion = :direccion";
+            $updateUserFields[] = "direccion = :direccion";
             $paramsUser[':direccion'] = $direccion;
         }
         if ($fotoPerfil !== null) {
-            $updateUserFields[] = "fotoPerfil = :fotoPerfil";
+            $updateUserFields[] = "foto_perfil = :fotoPerfil";
             $paramsUser[':fotoPerfil'] = $fotoPerfil;
         }
         if ($deBaja !== null) {
-            $updateUserFields[] = "deBaja = :deBaja";
+            $updateUserFields[] = "de_baja = :deBaja";
             $paramsUser[':deBaja'] = $deBaja;
         }
 
         if (count($updateUserFields) > 0) {
-            $updateUserQuery .= implode(", ", $updateUserFields) . " WHERE idUsuario = :idUsuario";
+            $updateUserQuery .= implode(", ", $updateUserFields) . " WHERE id = :idUsuario";
             $paramsUser[':idUsuario'] = $id;
 
             $stmtUserUpdate = $this->conn->prepare($updateUserQuery);
@@ -67,11 +67,11 @@ class AlumnoDAO
         $paramsAlumno = [];
 
         if ($nombre !== null) {
-            $updateAlumnoFields[] = "NombreAlumno = :nombre";
+            $updateAlumnoFields[] = "nombre = :nombre";
             $paramsAlumno[':nombre'] = $nombre;
         }
         if ($apellido !== null) {
-            $updateAlumnoFields[] = "ApellidoAlumno = :apellido";
+            $updateAlumnoFields[] = "apellido = :apellido";
             $paramsAlumno[':apellido'] = $apellido;
         }
 
@@ -81,7 +81,7 @@ class AlumnoDAO
         // }
 
         if (count($updateAlumnoFields) > 0) {
-            $updateAlumnoQuery .= implode(", ", $updateAlumnoFields) . " WHERE FK_idUsuario = :idUsuario";
+            $updateAlumnoQuery .= implode(", ", $updateAlumnoFields) . " WHERE id_usuario = :idUsuario";
             $paramsAlumno[':idUsuario'] = $id;
 
             $stmtAlumnoUpdate = $this->conn->prepare($updateAlumnoQuery);
@@ -100,8 +100,8 @@ class AlumnoDAO
 
         // Verificar las habilidades actuales del usuario
         $queryHabilidadesActuales = "
-    SELECT FK_idHabilidad FROM habilidadxalumno WHERE FK_idAlumno = :idAlumno
-";
+            SELECT id_habilidad FROM habilidades_alumnos WHERE id_usuario = :idAlumno
+        ";
         $stmtHabilidades = $this->conn->prepare($queryHabilidadesActuales);
         $stmtHabilidades->bindValue(':idAlumno', $id);
         $stmtHabilidades->execute();
@@ -119,8 +119,8 @@ class AlumnoDAO
         // Eliminar las habilidades que ya no están asociadas al usuario
         if (count($habilidadesAEliminar) > 0) {
             $queryEliminarHabilidades = "
-        DELETE FROM habilidadxalumno 
-        WHERE FK_idAlumno = :idAlumno AND FK_idHabilidad IN (" . implode(",", array_map('intval', $habilidadesAEliminar)) . ")
+        DELETE FROM habilidades_alumnos 
+        WHERE id_usuario = :idAlumno AND id_habilidad IN (" . implode(",", array_map('intval', $habilidadesAEliminar)) . ")
     ";
             $stmtEliminar = $this->conn->prepare($queryEliminarHabilidades);
             $stmtEliminar->bindValue(':idAlumno', $id);
@@ -133,7 +133,7 @@ class AlumnoDAO
         // Insertar las nuevas habilidades
         if (count($habilidadesANuevas) > 0) {
             $queryAgregarHabilidades = "
-        INSERT INTO habilidadxalumno (FK_idAlumno, FK_idHabilidad) 
+        INSERT INTO habilidades_alumnos (id_usuario, id_habilidad) 
         VALUES (:idAlumno, :idHabilidad)
     ";
             $stmtAgregar = $this->conn->prepare($queryAgregarHabilidades);
@@ -152,7 +152,7 @@ class AlumnoDAO
     private function obtenerAlumnoPorId($id): ?Alumno
     {
         // Implementación de consulta para obtener el Alumno por su ID (FK_idUsuario)
-        $query = "SELECT * FROM alumno WHERE FK_idUsuario = :idUsuario LIMIT 1";
+        $query = "SELECT * FROM alumno WHERE id_usuario = :idUsuario LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':idUsuario', $id);
         $stmt->execute();
@@ -160,8 +160,8 @@ class AlumnoDAO
         if ($stmt->rowCount() > 0) {
             $rowAlumno = $stmt->fetch(PDO::FETCH_ASSOC);
             $alumno = new Alumno();
-            $alumno->setNombre($rowAlumno['NombreAlumno']);
-            $alumno->setApellidoAlumno($rowAlumno['ApellidoAlumno']);
+            $alumno->setNombre($rowAlumno['nombre']);
+            $alumno->setApellidoAlumno($rowAlumno['apellido']);
             // Añadir más propiedades según sea necesario
             return $alumno;
         }
@@ -171,7 +171,7 @@ class AlumnoDAO
 
     public function getHabilidades()
     {
-        $query = "SELECT * FROM habilidad";
+        $query = "SELECT * FROM habilidades";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
@@ -181,8 +181,8 @@ class AlumnoDAO
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $habilidad = new Habilidad();
 
-                $habilidad->setId($row['idHabilidad']);
-                $habilidad->setNombreHabilidad($row['Descripcion']);
+                $habilidad->setId($row['id']);
+                $habilidad->setNombreHabilidad($row['descripcion']);
 
                 $habilidades[] = $habilidad;
             }
@@ -195,7 +195,7 @@ class AlumnoDAO
     
 
     public function getEventos() {
-        $queryEventos = "SELECT * FROM evento";
+        $queryEventos = "SELECT * FROM eventos";
         $stmt = $this->conn->prepare($queryEventos);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
@@ -203,12 +203,12 @@ class AlumnoDAO
             
             $eventosArray = [];
             foreach($eventos as $evento){
-                $id = $evento['idEvento'];
-                $descripcion = $evento['descripcionEvento'];
-                $nombre = $evento['NombreEvento'];
-                $fecha = $evento['FechaEvento'];
-                $tipo = $evento['tipoEvento'];
-                $creditos = $evento['creditosEvento'];
+                $id = $evento['id'];
+                $descripcion = $evento['descripcion'];
+                $nombre = $evento['nombre'];
+                $fecha = $evento['fecha'];
+                $tipo = $evento['tipo'];
+                $creditos = $evento['creditos'];
                 //$ubicacion = $evento['ubicacion']; falta en la bbdd
                 //$modalidad = $evento['modalidad']; falta en la bbdd
                 

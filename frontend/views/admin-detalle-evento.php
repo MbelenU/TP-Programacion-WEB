@@ -1,7 +1,7 @@
 <?php
     require_once __DIR__ . '/../../controllers/validate-session.php';
 
-    $allowedRoles = ['Administrador'];
+    $allowedRoles = ['1'];
     validarSesion($allowedRoles);
 ?>
 

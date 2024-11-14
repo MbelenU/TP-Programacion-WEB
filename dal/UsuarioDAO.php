@@ -13,18 +13,11 @@ class UsuarioDAO {
 
     public function iniciarSesion($email, $password) {
         $queryUser = "
-            SELECT u.idUsuario as user_id, 
-                   CASE 
-                       WHEN a.idAlumno IS NOT NULL THEN 'Alumno'
-                       WHEN e.idEmpresa IS NOT NULL THEN 'Empresa'
-                       WHEN ad.idAdministradorUniversidad IS NOT NULL THEN 'Administrador'
-                       ELSE NULL
-                   END as user_type
+            SELECT u.id as user_id, 
+                   id_rol as user_type
             FROM usuario u
-            LEFT JOIN alumno a ON u.idUsuario = a.FK_idUsuario
-            LEFT JOIN empresa e ON u.idUsuario = e.FK_idUsuario
-            LEFT JOIN administradoruniversidad ad ON u.idUsuario = ad.FK_idUsuario
-            WHERE u.Mail = :email AND u.Clave = :password
+            LEFT JOIN roles_usuario a ON u.id = a.id_usuario
+            WHERE u.mail = :email AND u.clave = :password
             LIMIT 1;
         ";
         $stmtUser = $this->conn->prepare($queryUser);
@@ -45,7 +38,7 @@ class UsuarioDAO {
         try {
             $queryCheckUser = "
                 SELECT COUNT(*) as count FROM usuario 
-                WHERE Mail = :mail OR NombreUsuario = :nombreUsuario
+                WHERE mail = :mail OR nombre = :nombreUsuario
             ";
             
             $stmtCheckUser = $this->conn->prepare($queryCheckUser);
@@ -63,7 +56,7 @@ class UsuarioDAO {
     
             $queryCheckDNI = "
                 SELECT COUNT(*) as count FROM alumno 
-                WHERE DNI_Alumno = :dniAlumno
+                WHERE dni = :dniAlumno
             ";
             
             $stmtCheckDNI = $this->conn->prepare($queryCheckDNI);
@@ -81,7 +74,7 @@ class UsuarioDAO {
             $this->conn->beginTransaction();
     
             $queryUser = "
-                INSERT INTO usuario (NombreUsuario, Clave, Mail, Telefono, Direccion) 
+                INSERT INTO usuario (nombre, clave, mail, telefono, direccion) 
                 VALUES (:nombreUsuario, :clave, :mail, :telefono, :direccion)
             ";
             
@@ -96,7 +89,7 @@ class UsuarioDAO {
             $idUsuario = $this->conn->lastInsertId();
     
             $queryAlumno = "
-                INSERT INTO alumno (FK_idUsuario, NombreAlumno, ApellidoAlumno, DNI_Alumno) 
+                INSERT INTO alumno (id_usuario, nombre, apellido, dni) 
                 VALUES (:idUsuario, :nombreAlumno, :apellidoAlumno, :dniAlumno)
             ";
             
@@ -106,6 +99,15 @@ class UsuarioDAO {
             $stmtAlumno->bindParam(':apellidoAlumno', $apellidoAlumno);
             $stmtAlumno->bindParam(':dniAlumno', $dniAlumno);
             $stmtAlumno->execute();
+
+            $queryRolesUsuario = "
+                INSERT INTO roles_usuario (id_rol, id_usuario) 
+                VALUES (2, :idUsuario)
+            ";
+            
+            $stmtRolesUsuario = $this->conn->prepare($queryRolesUsuario);
+            $stmtRolesUsuario->bindParam(':idUsuario', $idUsuario);
+            $stmtRolesUsuario->execute();
     
             $this->conn->commit();
 
@@ -124,7 +126,7 @@ class UsuarioDAO {
         try {
             $queryCheckUser = "
                 SELECT COUNT(*) as count FROM usuario 
-                WHERE Mail = :email OR NombreUsuario = :nombreUsuario
+                WHERE mail = :email OR nombre = :nombreUsuario
             ";
             
             $stmtCheckUser = $this->conn->prepare($queryCheckUser);
@@ -141,8 +143,8 @@ class UsuarioDAO {
             }
 
             $queryCheckCUIT = "
-                SELECT COUNT(*) as count FROM empresa 
-                WHERE CUIT = :CUIT
+                SELECT COUNT(*) as count FROM empresas 
+                WHERE cuit = :CUIT
             ";
             
             $stmtCheckCUIT = $this->conn->prepare($queryCheckCUIT);
@@ -160,7 +162,7 @@ class UsuarioDAO {
             $this->conn->beginTransaction();
     
             $queryUser = "
-                INSERT INTO usuario (NombreUsuario, Clave, Mail, Telefono, Direccion) 
+                INSERT INTO usuario (nombre, clave, mail, telefono, direccion) 
                 VALUES (:nombreUsuario, :clave, :email, :telefono, :direccion)
             ";
             
@@ -175,7 +177,7 @@ class UsuarioDAO {
             $idUsuario = $this->conn->lastInsertId();
     
             $queryEmpresa = "
-                INSERT INTO empresa (FK_idUsuario, RazonSocial, CUIT) 
+                INSERT INTO empresas (id_usuario, razon_social, cuit) 
                 VALUES (:idUsuario, :RazonSocial, :CUIT)
             ";
             
@@ -184,6 +186,15 @@ class UsuarioDAO {
             $stmtEmpresa->bindParam(':RazonSocial', $RazonSocial);
             $stmtEmpresa->bindParam(':CUIT', $CUIT);
             $stmtEmpresa->execute();
+
+            $queryRolesUsuario = "
+                INSERT INTO roles_usuario (id_rol, id_usuario) 
+                VALUES (3, :idUsuario)
+            ";
+            
+            $stmtRolesUsuario = $this->conn->prepare($queryRolesUsuario);
+            $stmtRolesUsuario->bindParam(':idUsuario', $idUsuario);
+            $stmtRolesUsuario->execute();
     
             $this->conn->commit();
     

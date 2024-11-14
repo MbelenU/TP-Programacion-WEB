@@ -27,8 +27,8 @@
                     <label for="tipoUsuario" class="input-group-text">Tipo de usuario</label>
                     <select id="tipoUsuario" class="form-select rounded-end">
                         <option value="" disabled selected hidden>Seleccione una opción...</option>
-                        <option value="alumno">Alumno</option>
-                        <option value="empresa">Empresa</option>
+                        <option value="2">Alumno</option>
+                        <option value="3">Empresa</option>
                     </select>
                 </div>
 
