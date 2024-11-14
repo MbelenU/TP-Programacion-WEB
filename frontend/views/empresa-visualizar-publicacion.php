@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . '/../../controllers/EmpresaController.php';
+$empresaController = new EmpresaController();
 if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
@@ -9,6 +10,12 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
 }
+elseif(!isset($_GET['id'])) {
+    echo "Publicacion no encontrada";
+    exit();
+}
+$publicacion = $empresaController->obtenerPublicacion($_GET['id']);
+$publicacion = $publicacion['body'];
 ?>
 
 <!DOCTYPE html>
@@ -30,8 +37,8 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 			</div>
 		    <div class="puesto-header d-flex justify-content-between">
 				<div class="puesto-content">
-					<h3 class="">Desarrollador de Software</h3>
-					<p>Responsable del diseño, desarrollo y mantenimiento de aplicaciones web y móviles.</p>
+					<h3 class=""><?php echo $publicacion['titulo'] ?></h3>
+					<p><?php echo $publicacion['descripcion'] ?></p>
 				</div>
 				<div>
 					<a href="<?php echo BASE_URL ?>views/empresa-editar-empleo.php" class="btn btn-reporte">Editar publicación</a>

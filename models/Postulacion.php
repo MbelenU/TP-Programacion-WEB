@@ -3,9 +3,14 @@ class Postulacion {
     private int $id;
     private DateTime $fechaPostulacion;
     private EstadoPostulacion $estadoPostulacion;
-    private Alumno $postulante;
-    private PublicacionEmpleo $publicacionEmpleo;
+    private Usuario $postulante;
 
+    public function __construct(int $id, DateTime $fechaPostulacion, EstadoPostulacion $estadoPostulacion, Usuario $postulante) {
+        $this->setId($id);
+        $this->setFechaPostulacion($fechaPostulacion);
+        $this->setEstadoPostulacion($estadoPostulacion);
+        $this->setPostulante($postulante);
+    }
     public function getId(): int {
         return $this->id;
     }
@@ -30,20 +35,12 @@ class Postulacion {
         $this->estadoPostulacion = $estadoPostulacion;
     }
 
-    public function getPostulante(): Alumno {
+    public function getPostulante(): Usuario {
         return $this->postulante;
     }
 
-    public function setPostulante(Alumno $postulante): void {
+    public function setPostulante(Usuario $postulante): void {
         $this->postulante = $postulante;
-    }
-
-    public function getPublicacionEmpleo(): PublicacionEmpleo {
-        return $this->publicacionEmpleo;
-    }
-
-    public function setPublicacionEmpleo(PublicacionEmpleo $publicacionEmpleo): void {
-        $this->publicacionEmpleo = $publicacionEmpleo;
     }
 }
 

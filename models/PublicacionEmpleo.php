@@ -5,13 +5,22 @@ class PublicacionEmpleo {
     private string $titulo;
     private string $descripcion;
     private Modalidad $modalidad;
-    private estadoEmpleo $estadoEmpleo;
-    private string $carreraRequerida;
+    private EstadoEmpleo $estadoEmpleo;
     private Jornada $jornada;
     private string $ubicacion;
     private array $postulacion; // Lista de postulaciones
     private array $materiasRequeridas; // Lista de materias requeridas
 
+    /*public function __construct(int $id, string $titulo, string $descripcion, Modalidad $modalidad, EstadoEmpleo $estadoEmpleo, Jornada $jornada, string $ubicacion, array $postulacion) {
+        $this->setId($id);
+        $this->setTitulo($titulo);
+        $this->setDescripcion($descripcion);
+        $this->setModalidad($modalidad);
+        $this->setEstadoEmpleo($estadoEmpleo);
+        $this->setJornada($jornada);
+        $this->setUbicacion($ubicacion);
+        $this->setPostulacion($postulacion);
+    }*/
     public function getId(): int {
         return $this->id;
     }
@@ -51,15 +60,6 @@ class PublicacionEmpleo {
     public function setEstadoEmpleo(estadoEmpleo $estadoEmpleo): void {
         $this->estadoEmpleo = $estadoEmpleo;
     }
-
-    public function getCarreraRequerida(): string {
-        return $this->carreraRequerida;
-    }
-
-    public function setCarreraRequerida(string $carreraRequerida): void {
-        $this->carreraRequerida = $carreraRequerida;
-    }
-
     public function getJornada(): Jornada {
         return $this->jornada;
     }
@@ -90,6 +90,14 @@ class PublicacionEmpleo {
 
     public function setMateriasRequeridas(array $materiasRequeridas): void {
         $this->materiasRequeridas = $materiasRequeridas;
+    }
+    public function toArray(): array {
+        return [
+            'id' => $this->id,
+            'titulo' => $this->titulo,
+            'descripcion' => $this->descripcion,
+            'postulacion' => $this->postulacion
+        ];
     }
 }
 

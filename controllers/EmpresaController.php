@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/../dal/UsuarioDAO.php';
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../dal/EmpresaDAO.php';
@@ -18,7 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['modalidades'])) {
     $resultado = $empresaController->listarModalidades();
     return $resultado;
     exit;
-}elseif($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['jornadas'])) {
+}elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['publicarEmpleo'])) {
+    $resultado = $empresaController->publicarEmpleo();
+    return $resultado;
+    exit;
+}
+elseif($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['jornadas'])) {
     $resultado = $empresaController->listarJornadas();
     return $resultado;
     exit;
@@ -39,8 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['modalidades'])) {
     return $resultado;
     exit;
 }
-   
-
 
 class EmpresaController {
     private EmpresaDAO $empresaDAO;
@@ -48,8 +52,44 @@ class EmpresaController {
         $this->empresaDAO = new EmpresaDAO();
     }
     public function publicarEmpleo(){
-        $result = $this->empresaDAO->publicarEmpleo();
-        return $result;
+
+        $idUsuario = $_SESSION['user']['user_id'];
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        $titulo = htmlspecialchars($input['titulo'] ?? null);
+        $modalidad = htmlspecialchars($input['modalidad'] ?? null);
+        $ubicacion = htmlspecialchars($input['ubicacion'] ?? null);
+        $jornada = htmlspecialchars($input['jornada'] ?? null);
+        $descripcion = htmlspecialchars($input['descripcion'] ?? null);
+        $habilidad = htmlspecialchars($input['habilidad'] ?? null);
+        $materia = htmlspecialchars($input['materia'] ?? null);
+
+        if (empty($idUsuario) || empty($titulo) || empty($modalidad) || empty($ubicacion) || empty($jornada) || empty($descripcion)) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error: Faltan atributos',
+            ]);
+            return;
+        } 
+        
+        $result = $this->empresaDAO->publicarEmpleo($titulo, $modalidad, $ubicacion, $jornada, $descripcion, $habilidad, $materia, $idUsuario);
+        if($result) {
+            http_response_code(200);
+            echo json_encode([
+                "success" => true,
+                "body" => $result
+            ]);
+            return;
+        }else {
+            http_response_code(500);
+            echo json_encode([
+                "success" => false,
+                "error" => "Error no se pudo publicar el empleo"
+            ]);
+            return;
+        }
+
     }
     public function listarCarreras(){
         $carreras = $this->empresaDAO->listarCarreras();
@@ -158,6 +198,21 @@ class EmpresaController {
                 'message' => 'Error: No se encontro la habilidad',
             ]);
             return;
+        }
+    }
+    public function obtenerPublicacion($idPublicacion)
+    {
+        $publicacion = $this->empresaDAO->obtenerPublicacion($idPublicacion);
+        if($publicacion) {
+            return [
+                'success' => true,
+                'body' => $publicacion
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Error: No se encontro la publicacion',
+            ];
         }
     }
 }
