@@ -293,11 +293,11 @@ class AlumnoDAO
                 $jornada = $stmtJornada->fetch(PDO::FETCH_ASSOC)['nombre'];
     
                 // estado de la postulación
-                $queryEstado = "SELECT nombre FROM estados_postulacion WHERE id = :estadoId";
+                $queryEstado = "SELECT * FROM estados_postulacion WHERE id = :estadoId";
                 $stmtEstado = $this->conn->prepare($queryEstado);
                 $stmtEstado->bindParam(':estadoId', $estadoId);
                 $stmtEstado->execute();
-                $estado = $stmtEstado->fetch(PDO::FETCH_ASSOC)['nombre'];
+                $estado = $stmtEstado->fetch(PDO::FETCH_ASSOC);
     
                 // detalles del postulante (usuario)
                 $usuario = $this->obtenerUsuarioPorId($postulanteId);
