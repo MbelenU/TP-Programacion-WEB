@@ -298,7 +298,9 @@ class AlumnoDAO
                 $stmtEstado->bindParam(':estadoId', $estadoId);
                 $stmtEstado->execute();
                 $estado = $stmtEstado->fetch(PDO::FETCH_ASSOC);
-    
+                $estadoPostulacion = new EstadoPostulacion();
+                $estadoPostulacion->setEstado($estado['nombre']);
+                $estadoPostulacion->setEstado($estado['id']);
                 // detalles del postulante (usuario)
                 $usuario = $this->obtenerUsuarioPorId($postulanteId);
     
@@ -312,7 +314,7 @@ class AlumnoDAO
                 $postulacionOBJ->setHabilidades($habilidades);
                 $postulacionOBJ->setModalidad($modalidad);
                 $postulacionOBJ->setJornada($jornada);
-                $postulacionOBJ->setEstadoPostulacion($estado);
+                $postulacionOBJ->setEstadoPostulacion($estadoPostulacion);
                 $postulacionOBJ->setPostulante($usuario);
     
                 $postulacionesArray[] = $postulacionOBJ;
