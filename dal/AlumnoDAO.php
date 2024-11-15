@@ -5,7 +5,7 @@ require_once __DIR__ . '/../models/Alumno.php';
 require_once __DIR__ . '/../models/Habilidad.php';
 require_once __DIR__ . '/../models/Evento.php';
 require_once __DIR__ . '/../models/Postulacion.php';
-
+require_once __DIR__ . '/../models/EstadoPostulacion.php';
 class AlumnoDAO
 {
 
