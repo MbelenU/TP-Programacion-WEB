@@ -88,6 +88,27 @@ class AlumnoController {
             return $response;
         }
     }
+
+
+    public function listarPostulaciones(){
+        $postulaciones = $this->alumnoDao->getPostulaciones();
+        if($postulaciones){
+            
+            $response = [
+                "success" => true,
+                "body" => $postulaciones
+            ];
+            return $response;
+        }
+        else {
+            
+            $response = [
+                'success' => false,
+                'message' => 'Error: No se encontraron solicitudes',
+            ];
+            return $response;
+        }
+    }
     
 }
 ?>

@@ -4,6 +4,7 @@ require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../models/Alumno.php';
 require_once __DIR__ . '/../models/Habilidad.php';
 require_once __DIR__ . '/../models/Evento.php';
+require_once __DIR__ . '/../models/Postulacion.php';
 
 class AlumnoDAO
 {
@@ -169,6 +170,26 @@ class AlumnoDAO
         return null;
     }
 
+
+    private function obtenerUsuarioPorId($id): ?Usuario 
+    {
+        
+        $query = "SELECT * FROM usuario WHERE id = :idUsuario LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':idUsuario', $id);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            $rowUsuario = $stmt->fetch(PDO::FETCH_ASSOC);
+            $usuario  = new Alumno();
+            $usuario->setId($rowUsuario['id']);
+            $usuario->setEmail($rowUsuario['mail']);
+            return $usuario;
+        }
+
+        return null;
+    }
+
     public function getHabilidades()
     {
         $query = "SELECT * FROM habilidades";
@@ -222,4 +243,86 @@ class AlumnoDAO
         }
         return null;
     }
+
+
+    public function getPostulaciones() {
+        $queryPostulaciones = "SELECT * FROM postulaciones";
+        $stmt = $this->conn->prepare($queryPostulaciones);
+        $stmt->execute();
+    
+        $postulacionesArray = [];
+    
+        if ($stmt->rowCount() > 0) {
+            // todas las postulaciones
+            $postulaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+            foreach ($postulaciones as $postulacion) {
+                $id = $postulacion['id'];
+                $puestoId = $postulacion['id_publicacionesempleos'];
+                $postulanteId = $postulacion['id_usuario'];
+                $estadoId = $postulacion['id_estadopostulacion'];
+    
+                // detalles de la publicación de empleo
+                $queryPuesto = "SELECT * FROM publicaciones_empleos WHERE id = :puestoId";
+                $stmtPuesto = $this->conn->prepare($queryPuesto);
+                $stmtPuesto->bindParam(':puestoId', $puestoId);
+                $stmtPuesto->execute();
+                $puesto = $stmtPuesto->fetch(PDO::FETCH_ASSOC);
+    
+                // habilidades asociadas al puesto
+                $queryHabilidades = "SELECT HD.descripcion FROM habilidades_publicaciones HP 
+                                     JOIN habilidades HD ON HP.id_habilidad = HD.id
+                                     WHERE HP.id_publicacion = :puestoId";
+                $stmtHabilidades = $this->conn->prepare($queryHabilidades);
+                $stmtHabilidades->bindParam(':puestoId', $puestoId);
+                $stmtHabilidades->execute();
+                $habilidades = $stmtHabilidades->fetchAll(PDO::FETCH_COLUMN);
+    
+                // modalidad asociada al puesto
+                $queryModalidad = "SELECT descripcion FROM modalidades WHERE id = :modalidadId";
+                $stmtModalidad = $this->conn->prepare($queryModalidad);
+                $stmtModalidad->bindParam(':modalidadId', $puesto['id_modalidad']);
+                $stmtModalidad->execute();
+                $modalidad = $stmtModalidad->fetch(PDO::FETCH_ASSOC)['descripcion'];
+    
+                // jornada asociada al puesto
+                $queryJornada = "SELECT nombre FROM jornadas WHERE id = :jornadaId";
+                $stmtJornada = $this->conn->prepare($queryJornada);
+                $stmtJornada->bindParam(':jornadaId', $puesto['id_jornada']);
+                $stmtJornada->execute();
+                $jornada = $stmtJornada->fetch(PDO::FETCH_ASSOC)['nombre'];
+    
+                // estado de la postulación
+                $queryEstado = "SELECT nombre FROM estados_postulacion WHERE id = :estadoId";
+                $stmtEstado = $this->conn->prepare($queryEstado);
+                $stmtEstado->bindParam(':estadoId', $estadoId);
+                $stmtEstado->execute();
+                $estado = $stmtEstado->fetch(PDO::FETCH_ASSOC)['nombre'];
+    
+                // detalles del postulante (usuario)
+                $usuario = $this->obtenerUsuarioPorId($postulanteId);
+    
+                
+                $postulacionOBJ = new Postulacion(
+                    $id, 
+                    $puesto['puesto_ofrecido'], 
+                    $puesto['descripcion'], 
+                    $puesto['ubicacion'], 
+                    $habilidades, 
+                    $modalidad, 
+                    $jornada, 
+                    $estado, 
+                    $usuario
+                );
+    
+                $postulacionesArray[] = $postulacionOBJ;
+            }
+    
+            return $postulacionesArray;
+        }
+    
+        return null;
+    }
+    
+
 }
