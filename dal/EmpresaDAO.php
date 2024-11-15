@@ -238,7 +238,7 @@ class EmpresaDAO {
             $jornadasArray = [];
             foreach($jornadas as $jornada){
                 $id = $jornada['id'];
-                $descripcion = $jornada['descripcion'];
+                $descripcion = $jornada['nombre'];
                 $jornadaOBJ = new Jornada($id, $descripcion);
                 $jornadasArray[] = $jornadaOBJ->toArray();
             }
