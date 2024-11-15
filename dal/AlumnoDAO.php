@@ -303,17 +303,17 @@ class AlumnoDAO
                 $usuario = $this->obtenerUsuarioPorId($postulanteId);
     
                 
-                $postulacionOBJ = new Postulacion(
-                    $id, 
-                    $puesto['puesto_ofrecido'], 
-                    $puesto['descripcion'], 
-                    $puesto['ubicacion'], 
-                    $habilidades, 
-                    $modalidad, 
-                    $jornada, 
-                    $estado, 
-                    $usuario
-                );
+                $postulacionOBJ = new Postulacion();
+
+                $postulacionOBJ->setId($id); 
+                $postulacionOBJ->setPuestoOfrecido($puesto['puesto_ofrecido']);
+                $postulacionOBJ->setDescripcion($puesto['descripcion']);
+                $postulacionOBJ->setUbicacion($puesto['ubicacion']);
+                $postulacionOBJ->setHabilidades($habilidades);
+                $postulacionOBJ->setModalidad($modalidad);
+                $postulacionOBJ->setJornada($jornada);
+                $postulacionOBJ->setEstadoPostulacion($estado);
+                $postulacionOBJ->setPostulante($usuario);
     
                 $postulacionesArray[] = $postulacionOBJ;
             }

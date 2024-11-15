@@ -11,16 +11,6 @@ class PublicacionEmpleo {
     private array $postulacion; // Lista de postulaciones
     private array $materiasRequeridas; // Lista de materias requeridas
 
-    /*public function __construct(int $id, string $titulo, string $descripcion, Modalidad $modalidad, EstadoEmpleo $estadoEmpleo, Jornada $jornada, string $ubicacion, array $postulacion) {
-        $this->setId($id);
-        $this->setTitulo($titulo);
-        $this->setDescripcion($descripcion);
-        $this->setModalidad($modalidad);
-        $this->setEstadoEmpleo($estadoEmpleo);
-        $this->setJornada($jornada);
-        $this->setUbicacion($ubicacion);
-        $this->setPostulacion($postulacion);
-    }*/
     public function getId(): int {
         return $this->id;
     }

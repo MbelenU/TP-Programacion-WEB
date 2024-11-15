@@ -1,36 +1,15 @@
 <?php
 class Postulacion {
     private int $id;
+    private DateTime $fechaPostulacion;
     private string $puestoOfrecido;
     private string $descripcion;
     private string $ubicacion;
     private array  $habilidades;
     private string $modalidad;
     private string $jornada;
-    private string $estadoPostulacion;
+    private EstadoPostulacion $estadoPostulacion;
     private Usuario $postulante;
-
-    public function __construct(
-        int $id, 
-        string $puestoOfrecido, 
-        string $descripcion, 
-        string $ubicacion, 
-        array  $habilidades, 
-        string $modalidad, 
-        string $jornada,        
-        string $estadoPostulacion, 
-        Usuario $postulante) {
-            $this->setId($id);
-            $this->setPuestoOfrecido($puestoOfrecido);
-            $this->setDescripcion($descripcion);
-            $this->setUbicacion($ubicacion);
-            $this->setHabilidades($habilidades);
-            $this->setModalidad($modalidad);
-            $this->setJornada($jornada);            
-            $this->setEstadoPostulacion($estadoPostulacion);
-            $this->setPostulante($postulante);
-    }
-
     public function getId(): int {
         return $this->id;
     }
@@ -46,12 +25,19 @@ class Postulacion {
     public function setPuestoOfrecido(string $puestoOfrecido): void {
         $this->puestoOfrecido = $puestoOfrecido;
     }
+    public function getFechaPostulacion(): DateTime {
+        return $this->fechaPostulacion;
+    }
 
-    public function getEstadoPostulacion(): string  {
+    public function setFechaPostulacion(DateTime $fechaPostulacion): void {
+        $this->fechaPostulacion = $fechaPostulacion;
+    }
+
+    public function getEstadoPostulacion(): EstadoPostulacion  {
         return $this->estadoPostulacion;
     }
 
-    public function setEstadoPostulacion(string  $estadoPostulacion): void {
+    public function setEstadoPostulacion(EstadoPostulacion  $estadoPostulacion): void {
         $this->estadoPostulacion = $estadoPostulacion;
     }
 

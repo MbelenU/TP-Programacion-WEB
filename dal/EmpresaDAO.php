@@ -36,13 +36,14 @@ class EmpresaDAO {
                 
                 $postulante = $this->obtenerPostulante($postulacion['id_usuario']);
                 
-                $postulacionObj = new Postulacion(
-                    $postulacion['id'], 
-                    $fechaPostulacion, 
-                    $estadoPostulacion, 
-                    $postulante
-                );
-                
+
+                $postulacionObj = new Postulacion();
+
+                $postulacionObj->setId($postulacion['id']);
+                $postulacionObj->setFechaPostulacion($fechaPostulacion);
+                $postulacionObj->setEstadoPostulacion($estadoPostulacion);
+                $postulacionObj->setPostulante($postulante);
+
                 $postulaciones[] = $postulacionObj;
             }
         }
