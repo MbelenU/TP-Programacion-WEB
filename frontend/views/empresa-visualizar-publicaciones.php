@@ -4,7 +4,7 @@ if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
-$allowedRoles = ['Empresa'];
+$allowedRoles = ['3'];
 if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
@@ -30,7 +30,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 				<h1>Mis publicaciones</h1>
 			</div>
 		    <div class="puesto-header mb-5">
-				<a href="#" class="btn">Reporte</a>
+				<a href="#" class="btn btn-secondary">Reporte</a>
 			</div>
 			<div class="row mb-5">
 				<div class="list-group col-12 p-0">

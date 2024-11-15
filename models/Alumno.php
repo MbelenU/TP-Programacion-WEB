@@ -1,6 +1,8 @@
 <?php
 
 class Alumno extends Usuario {
+    private int $id;
+    private string $nombreAlumno;
     private string $apellidoAlumno;
     private string $fotoDePerfil;
     // private Carrera $carrera;
@@ -10,6 +12,23 @@ class Alumno extends Usuario {
     private array $suscripciones;
     private array $empleosPostulados;
 
+
+    public function getId(): int {
+        return $this->id;
+    }
+
+    public function setId(int $id): void {
+        $this->id = $id;
+    }
+
+    public function getNombreAlumno(): string {
+        return $this->nombreAlumno;
+    }
+
+    public function setNombreAlumno(string $nombreAlumno): void {
+        $this->nombreAlumno = $nombreAlumno;
+    }
+
     public function getApellidoAlumno(): string {
         return $this->apellidoAlumno;
     }
@@ -17,15 +36,6 @@ class Alumno extends Usuario {
     public function setApellidoAlumno(string $apellidoAlumno): void {
         $this->apellidoAlumno = $apellidoAlumno;
     }
-
-    public function getContraseña(): string {
-        return $this->contraseña;
-    }
-
-    public function setContraseña(string $contraseña): void {
-        $this->contraseña = $contraseña;
-    }
-
     public function getFotoDePerfil(): string {
         return $this->fotoDePerfil;
     }
@@ -81,7 +91,13 @@ class Alumno extends Usuario {
     public function setEmpleosPostulados(array $empleosPostulados): void {
         $this->empleosPostulados = $empleosPostulados;
     }
-
+    public function toArray(): array {
+        return [
+            'id' => $this->id,
+            'nombre' => $this->nombreAlumno,
+            'apellido' => $this->apellidoAlumno
+        ];
+    }
     public function __toString(): string {
         $usuarioString = parent::__toString(); // Llama al método __toString() de la clase padre
         return "$usuarioString, Apellido: $this->apellidoAlumno";
