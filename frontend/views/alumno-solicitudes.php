@@ -50,7 +50,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                             <div class="titulo-solic"><?php echo htmlspecialchars($postulacion->getPuestoOfrecido()); ?></div>
                             <i class="bi bi-geo-alt"><?php echo htmlspecialchars($postulacion->getUbicacion()); ?></i>
                         </div>
-                        <div class="estado-empleo"><?php echo htmlspecialchars($postulacion->getEstadoPostulacion()); ?></div>
+                        <div class="estado-empleo"><?php echo htmlspecialchars($postulacion->getEstadoPostulacion()->getEstado()); ?></div>
                         <i class="arrowIcon fas fa-chevron-left "></i>
                     </button>
                 </div>
