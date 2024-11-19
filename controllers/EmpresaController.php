@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once __DIR__ . '/../dal/UsuarioDAO.php';
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../dal/EmpresaDAO.php';
@@ -107,6 +106,21 @@ class EmpresaController {
                 'success' => false,
                 'message' => 'Error: No se encontraron carreras',
             ]);
+        }
+    }
+    public function listarAlumnos(){
+        $alumnos = $this->empresaDAO->listarAlumnos();
+        if($alumnos){
+            return[
+                "success" => true,
+                "body" => $alumnos
+            ];
+        }
+        else {
+            return[
+                'success' => false,
+                'message' => 'Error: No se encontraron alumnos',
+            ];
         }
     }
     public function obtenerMaterias() {

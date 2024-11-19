@@ -11,6 +11,7 @@ require_once __DIR__ . '/../models/Habilidad.php';
 require_once __DIR__ . '/../models/PublicacionEmpleo.php';
 require_once __DIR__ . '/../models/Postulacion.php';
 require_once __DIR__ . '/../models/EstadoPostulacion.php';
+require_once __DIR__ . '/../models/EstadoEmpleo.php';
 require_once __DIR__ . '/../models/Alumno.php';
 
 
@@ -31,12 +32,8 @@ class EmpresaDAO {
             $postulacionesArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ($postulacionesArray as $postulacion) {
                 $fechaPostulacion = DateTime::createFromFormat('Y-m-d', $postulacion['fecha']);
-                
                 $estadoPostulacion = $this->obtenerEstadoPostulacion($postulacion['id_estadopublicacion']);
-                
                 $postulante = $this->obtenerPostulante($postulacion['id_usuario']);
-                
-
                 $postulacionObj = new Postulacion();
 
                 $postulacionObj->setId($postulacion['id']);
@@ -48,6 +45,32 @@ class EmpresaDAO {
             }
         }
         return $postulaciones;
+    }
+    public function listarAlumnos() {
+        $queryAlumnos = "SELECT a.id, a.nombre, a.apellido, u.foto_perfil FROM alumno a JOIN usuario u ON a.id_usuario = u.id";
+        $stmt = $this->conn->prepare($queryAlumnos);
+        $stmt->execute();
+        
+        $alumnosArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if (count($alumnosArray) > 0) {
+            $alumnos = [];
+            foreach ($alumnosArray as $alumno) {
+                $alumnoOBJ = new Alumno();
+                $alumnoOBJ->setId($alumno['id']);
+                $alumnoOBJ->setNombreAlumno($alumno['nombre']);
+                $alumnoOBJ->setApellidoAlumno($alumno['apellido']);
+                if($alumno['foto_perfil']){
+                    $alumnoOBJ->setFotoDePerfil($alumno['foto_perfil']);
+                }else {
+                    $alumnoOBJ->setFotoDePerfil('');
+                }
+                $alumnos[] = $alumnoOBJ;
+            }
+            return $alumnos;
+        } else {
+            return null;
+        }
     }
     public function obtenerPostulante($idUsuario) {
         $query = "SELECT id, nombre, apellido FROM alumno WHERE id_usuario = :id";
@@ -229,6 +252,23 @@ class EmpresaDAO {
         }
         return null;
     }
+    
+    public function obtenerEstadoEmpleo($id_estadopublicacion) {
+        $query = "SELECT * FROM estados_publicacion WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id_estadopublicacion, PDO::PARAM_INT);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $estadoPublicacion = new EstadoEmpleo();
+            $estadoPublicacion->setId($row['id']);
+            $estadoPublicacion->setEstado($row['nombre']);
+            
+            return $estadoPublicacion;
+        } else {
+            return null;
+        }
+    }
     public function listarPublicaciones($idUsuario) {
         $queryPublicaciones = "SELECT * FROM publicaciones_empleos WHERE id_usuario = :id";
         $stmt = $this->conn->prepare($queryPublicaciones);
@@ -239,12 +279,14 @@ class EmpresaDAO {
             $publicacionesArray = [];
             foreach($publicaciones as $publicacion){
                 $publicacionOBJ = new PublicacionEmpleo();
+                $estadoEmpleo = $this->obtenerEstadoEmpleo($publicacion['id_estadopublicacion']);
                 $fechaPostulacion = DateTime::createFromFormat('Y-m-d', $publicacion['fecha']);
-                $publicacionOBJ->setId($publicacion['id_estadopublicacion']);
+                $publicacionOBJ->setId($publicacion['id']);
                 $publicacionOBJ->setTitulo($publicacion['puesto_ofrecido']);
                 $publicacionOBJ->setDescripcion($publicacion['descripcion']);
                 $publicacionOBJ->setFecha($fechaPostulacion);
                 $publicacionOBJ->setUbicacion($publicacion['ubicacion']);
+                $publicacionOBJ->setEstadoEmpleo($estadoEmpleo);
                 $publicacionesArray[] = $publicacionOBJ;
             }
             if($publicacionesArray){
