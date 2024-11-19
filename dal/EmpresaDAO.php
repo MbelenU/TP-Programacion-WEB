@@ -229,6 +229,30 @@ class EmpresaDAO {
         }
         return null;
     }
+    public function listarPublicaciones($idUsuario) {
+        $queryPublicaciones = "SELECT * FROM publicaciones_empleos WHERE id_usuario = :id";
+        $stmt = $this->conn->prepare($queryPublicaciones);
+        $stmt->bindParam(":id", $idUsuario);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $publicaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $publicacionesArray = [];
+            foreach($publicaciones as $publicacion){
+                $publicacionOBJ = new PublicacionEmpleo();
+                $fechaPostulacion = DateTime::createFromFormat('Y-m-d', $publicacion['fecha']);
+                $publicacionOBJ->setId($publicacion['id_estadopublicacion']);
+                $publicacionOBJ->setTitulo($publicacion['puesto_ofrecido']);
+                $publicacionOBJ->setDescripcion($publicacion['descripcion']);
+                $publicacionOBJ->setFecha($fechaPostulacion);
+                $publicacionOBJ->setUbicacion($publicacion['ubicacion']);
+                $publicacionesArray[] = $publicacionOBJ;
+            }
+            if($publicacionesArray){
+                return $publicacionesArray;
+            }
+        }
+        return null;
+    }
     public function listarJornadas() {
         $queryJornadas = "SELECT * FROM jornadas";
         $stmt = $this->conn->prepare($queryJornadas);

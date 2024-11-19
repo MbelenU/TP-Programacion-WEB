@@ -215,4 +215,20 @@ class EmpresaController {
             ];
         }
     }
+    public function listarPublicaciones()
+    {
+        $idUsuario = $_SESSION['user']['user_id'];
+        $publicaciones = $this->empresaDAO->listarPublicaciones($idUsuario);
+        if($publicaciones) {
+            return [
+                'success' => true,
+                'body' => $publicaciones
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Error: No se encontraron publicaciones',
+            ];
+        }
+    }
 }
