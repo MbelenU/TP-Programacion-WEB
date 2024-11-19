@@ -41,6 +41,7 @@ $publicaciones = $publicaciones['body'];
 				foreach ($publicaciones as $publicacion) {
 					$fechaPublicacion = $publicacion->getFecha();
 					$hace = $fechaPublicacion->diff(new DateTime());
+
 					if ($hace->y > 0) {
 						$tiempoTranscurrido = $hace->y . ' años';
 					} elseif ($hace->m > 0) {
@@ -48,23 +49,16 @@ $publicaciones = $publicaciones['body'];
 					} elseif ($hace->d > 0) {
 						$tiempoTranscurrido = $hace->d . ' días';
 					} elseif ($hace->h > 0) {
-						$tiempoTranscurrido = $hce->h . ' horas';
+						$tiempoTranscurrido = $hace->h . ' horas';
 					} elseif ($hace->i > 0) {
 						$tiempoTranscurrido = $hace->i . ' minutos';
 					} else {
 						$tiempoTranscurrido = 'hace menos de un minuto';
 					}
 
-					$estado = $publicacion->getEstadoEmpleo()->getEstado();
-					$estadoId = $publicacion->getEstadoEmpleo()->getId();
-
-					$estados = [
-						'Abierta' => 1,
-						'Cerrada' => 2,
-						'Finalizada' => 3,
-						'Deshabilitada' => 4
-					];
-
+					$estado = $publicacion->getEstadoEmpleo();
+					$estadoId = $estado->getId();
+					$estadoNombre = $estado->getEstado();
 					echo '<div class="list-group-item list-group-item-action">
             <div class="d-flex w-100 justify-content-between">
                 <a href="' . BASE_URL . 'views/empresa-visualizar-publicacion.php?id=' . $publicacion->getId() . '" class="text-body text-decoration-none">
@@ -79,12 +73,12 @@ $publicaciones = $publicaciones['body'];
                 <div class="d-flex align-items-center">
                     <div class="btn-group btn-group-sm" role="group" aria-label="Estado de la publicacion" data-publicacion-id="' . $publicacion->getId() . '">';
 
-					foreach ($estados as $estadoNombre => $estadoId) {
-						$estadoClase = ($estadoId == $estado) ? 'btn-success' : 'btn-secondary';
-						echo '<button type="button" class="btn ' . $estadoClase . ' btn-sm" data-estado-id="' . $estadoId . '">' . $estadoNombre . '</button>';
-					}
+					echo '<button type="button" class="btn ' . ($estadoNombre == 'Abierta' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="1">Abierta</button>';
+					echo '<button type="button" class="btn ' . ($estadoNombre == 'Cerrada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="2">Cerrada</button>';
+					echo '<button type="button" class="btn ' . ($estadoNombre == 'Finalizada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="3">Finalizada</button>';
+					echo '<button type="button" class="btn ' . ($estadoNombre == 'Deshabilitada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="4">Deshabilitada</button>';
 
-					echo '      </div>
+					echo '  </div>
                 </div>
             </div>
         </div>';
@@ -92,10 +86,11 @@ $publicaciones = $publicaciones['body'];
 				?>
 
 
+
 			</div>
 		</div>
 	</div>
-	
+
 	<script src="../scripts/empresa/cambiar-estado-publicacion.js"></script>
 </body>
 

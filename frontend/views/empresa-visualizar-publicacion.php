@@ -56,6 +56,7 @@ $publicacion = $publicacion['body'];
 							$postulante = $postulacion->getPostulante();
 							$nombrePostulante = $postulante->getNombreAlumno() . ' ' . $postulante->getApellidoAlumno();
 							$estadoPostulacion = $postulacion->getEstadoPostulacion()->getEstado();
+							$estadoPostulacionId = $postulacion->getEstadoPostulacion()->getId();
 							$fechaPostulacion = $postulacion->getFechaPostulacion();
 							$fechaPostulacionFormatted = $fechaPostulacion->format('d/m/Y');
 
@@ -71,9 +72,18 @@ $publicacion = $publicacion['body'];
 								</div>
 								<div class="d-flex align-items-center">
 									<div class="btn-group btn-group-sm" role="group" aria-label="Estado de la postulación" data-postulacion-id="<?php echo $postulacion->getId(); ?>">
-										<button type="button" class="btn <?php echo ($estadoPostulacion == 'Recibido' ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="1">Recibido</button>
-										<button type="button" class="btn <?php echo ($estadoPostulacion == 'En proceso' ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="2">En proceso</button>
-										<button type="button" class="btn <?php echo ($estadoPostulacion == 'Rechazado' ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="3">Rechazado</button>
+										
+										<button type="button" class="btn <?php echo ($estadoPostulacionId == 1 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="1">Recibido</button>
+							
+										<button type="button" class="btn <?php echo ($estadoPostulacionId == 2 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="2">En proceso</button>
+								
+										<button type="button" class="btn <?php echo ($estadoPostulacionId == 3 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="3">En contacto</button>
+									
+										<button type="button" class="btn <?php echo ($estadoPostulacionId == 4 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="4">Rechazado</button>
+									
+										<button type="button" class="btn <?php echo ($estadoPostulacionId == 5 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="5">Finalizado</button>
+								
+										<button type="button" class="btn <?php echo ($estadoPostulacionId == 6 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="6">Pendiente</button>
 									</div>
 								</div>
 							</div>
@@ -81,6 +91,7 @@ $publicacion = $publicacion['body'];
 						}
 					}
 					?>
+
 				</li>
 
 			</ul>
