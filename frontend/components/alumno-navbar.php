@@ -3,13 +3,6 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#"><img src="<?php echo BASE_URL ?>img/logo.png" alt="logo"></a>
         
-        <form class="d-none d-sm-flex" role="search">
-            <input class="form-control me-2 border-success-subtle" type="search" placeholder="Search " aria-label="Search">
-            <button class="btn btn-outline-success d-grid align-content-center" type="submit">
-                <i class="bi bi-search"></i>
-            </button>
-        </form>
-        
         <button class="navbar-toggler shadow-sm" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
