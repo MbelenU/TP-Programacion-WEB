@@ -208,7 +208,32 @@ class UsuarioDAO {
             return false;
         }
     }
-    
+    public function listarAlumnos() {
+        $queryAlumnos = "SELECT a.id, a.nombre, a.apellido, u.foto_perfil FROM alumno a JOIN usuario u ON a.id_usuario = u.id";
+        $stmt = $this->conn->prepare($queryAlumnos);
+        $stmt->execute();
+        
+        $alumnosArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if (count($alumnosArray) > 0) {
+            $alumnos = [];
+            foreach ($alumnosArray as $alumno) {
+                $alumnoOBJ = new Alumno();
+                $alumnoOBJ->setId($alumno['id']);
+                $alumnoOBJ->setNombreAlumno($alumno['nombre']);
+                $alumnoOBJ->setApellidoAlumno($alumno['apellido']);
+                if($alumno['foto_perfil']){
+                    $alumnoOBJ->setFotoDePerfil($alumno['foto_perfil']);
+                }else {
+                    $alumnoOBJ->setFotoDePerfil('');
+                }
+                $alumnos[] = $alumnoOBJ;
+            }
+            return $alumnos;
+        } else {
+            return null;
+        }
+    }
 
 }
 

@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../controllers/EmpresaController.php';
-$empresaController = new EmpresaController();
+require_once __DIR__ . '/../../controllers/UsuarioController.php';
+$usuarioController = new UsuarioController();
 
 if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
@@ -12,7 +12,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
 }
-$alumnos = $empresaController->listarAlumnos();
+$alumnos = $usuarioController->listarAlumnos();
 $alumnos = $alumnos['body']; 
 ?>
 
@@ -32,7 +32,7 @@ $alumnos = $alumnos['body'];
             <div class="d-flex justify-content-between pb-5">
                 <h1>Reclutar alumnos</h1>
                 <form class="d-sm-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Reclutar alumnos" aria-label="Search">
+                    <input class="form-control me-2" type="search" placeholder="Buscar alumnos" aria-label="Search">
                     <button class="btn btn-outline-success d-grid align-content-center" type="submit">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              class="bi bi-search" viewBox="0 0 16 16">

@@ -122,7 +122,22 @@ class UsuarioController {
             echo json_encode($respose);
             return;
         }
+        
     }
-    
+    public function listarAlumnos(){
+        $alumnos = $this->usuarioDao->listarAlumnos();
+        if($alumnos){
+            return[
+                "success" => true,
+                "body" => $alumnos
+            ];
+        }
+        else {
+            return[
+                'success' => false,
+                'message' => 'Error: No se encontraron alumnos',
+            ];
+        }
+    }  
 
 }

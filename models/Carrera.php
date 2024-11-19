@@ -3,11 +3,8 @@ class Carrera {
     private int $id;
     private string $nombreCarrera;
     private array $planEstudios; 
-    public function __construct(int $id, string $nombreCarrera, array $planEstudios) {
-        $this->setId($id);
-        $this->setNombreCarrera($nombreCarrera);
-        $this->setPlanEstudios($planEstudios);
-    }
+    
+
     public function getId(): int {
         return $this->id;
     }

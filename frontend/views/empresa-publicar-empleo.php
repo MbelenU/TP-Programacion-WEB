@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/../../controllers/EmpresaController.php';
 $empresaController = new EmpresaController();
 if (!isset($_SESSION['user'])) {

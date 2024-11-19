@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/../../controllers/EmpresaController.php';
 $empresaController = new EmpresaController();
 if (!isset($_SESSION['user'])) {
@@ -40,7 +41,7 @@ $publicacion = $publicacion['body'];
 					<p><?php echo $publicacion->getDescripcion() ?></p>
 				</div>
 				<div>
-					<a href="<?php echo BASE_URL ?>views/empresa-editar-empleo.php" class="btn btn-reporte">Editar publicación</a>
+					<a href="<?php echo BASE_URL ?>views/empresa-editar-empleo.php" class="btn btn-success">Editar publicación</a>
 				</div>
 			</div>
 			<ul class="list-group">
@@ -64,7 +65,7 @@ $publicacion = $publicacion['body'];
 
 									echo '<span>' . $nombrePostulante . '</span>
                     				<p class="mb-1" style="margin-top: 10px;">Postulación enviada <strong>Hace ' . $diasTranscurridos . ' días</strong></p>
-                    				<a href="' . BASE_URL . 'views/empresa-visualizar-alumno.php?id=' . $postulante->getId() . '" class="btn btn-sm">Ver perfil</a>';
+                    				<a href="' . BASE_URL . 'views/empresa-visualizar-alumno.php?id=' . $postulante->getId() . '" class="btn btn-success btn-sm">Ver perfil</a>';
 								}
 							}
 							?>

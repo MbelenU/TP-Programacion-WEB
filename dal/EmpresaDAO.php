@@ -46,32 +46,109 @@ class EmpresaDAO {
         }
         return $postulaciones;
     }
-    public function listarAlumnos() {
-        $queryAlumnos = "SELECT a.id, a.nombre, a.apellido, u.foto_perfil FROM alumno a JOIN usuario u ON a.id_usuario = u.id";
-        $stmt = $this->conn->prepare($queryAlumnos);
+
+    public function obtenerAlumno($id) {
+        $query = "SELECT u.id AS usuario_id, u.mail, u.telefono, u.direccion, u.foto_perfil,
+                         a.id AS alumno_id, a.nombre AS alumno_nombre, a.apellido, a.descripcion, a.id_usuario,
+                         ca.id_carrera,
+                         ma.id_materia AS materia_id, m.nombre AS materia_nombre
+                  FROM alumno AS a
+                  JOIN usuario AS u ON u.id = a.id_usuario
+                  LEFT JOIN carreras_alumnos AS ca ON ca.id_usuario = u.id
+                  LEFT JOIN materias_aprobadas AS ma ON ma.id_alumno = a.id
+                  LEFT JOIN materias AS m ON m.id = ma.id_materia
+                  WHERE a.id = :id";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         
-        $alumnosArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        if (count($alumnosArray) > 0) {
-            $alumnos = [];
-            foreach ($alumnosArray as $alumno) {
-                $alumnoOBJ = new Alumno();
-                $alumnoOBJ->setId($alumno['id']);
-                $alumnoOBJ->setNombreAlumno($alumno['nombre']);
-                $alumnoOBJ->setApellidoAlumno($alumno['apellido']);
-                if($alumno['foto_perfil']){
-                    $alumnoOBJ->setFotoDePerfil($alumno['foto_perfil']);
-                }else {
-                    $alumnoOBJ->setFotoDePerfil('');
-                }
-                $alumnos[] = $alumnoOBJ;
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            $alumno = new Alumno();
+            $alumno->setId($row['alumno_id']);
+            $alumno->setNombreAlumno($row['alumno_nombre']);
+            $alumno->setApellidoAlumno($row['apellido']);
+            $alumno->setEmail($row['mail']);
+            $alumno->setTelefono($row['telefono']);
+            $alumno->setDireccion($row['direccion']);
+            if ($row['descripcion']) {
+                $alumno->setDescripcion($row['descripcion']);
+            } else {
+                $alumno->setDescripcion('');
             }
-            return $alumnos;
+    
+            if ($row['foto_perfil']) {
+                $alumno->setFotoDePerfil($row['foto_perfil']);
+            } else {
+                $alumno->setFotoDePerfil('');
+            }
+            $habilidades = $this->obtenerHabilidadesDelAlumno($id);
+            $alumno->setHabilidades($habilidades);
+    
+            $carrera = $this->obtenerCarreraPorId($row['id_carrera']);
+            if ($carrera) {
+                $alumno->setCarrera($carrera);
+            }
+            $materiasAprobadas = [];
+            do {
+                if ($row['materia_id']) {
+                    $materiasAprobadas[] = $row['materia_nombre'];
+                }
+            } while ($row = $stmt->fetch(PDO::FETCH_ASSOC));
+    
+            $alumno->setMateriasAprobadas($materiasAprobadas);
+    
+            return $alumno;
         } else {
             return null;
         }
     }
+    
+    public function obtenerCarreraPorId($idCarrera) {
+        $query = "SELECT * FROM carreras WHERE id = :id_carrera";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id_carrera', $idCarrera, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $carrera = new Carrera();
+            $carrera->setId($row['id']);
+            $carrera->setNombreCarrera($row['nombre_carrera']);
+            
+            return $carrera;
+        }
+        return null;
+    }
+    
+    public function obtenerHabilidadesDelAlumno($idAlumno) {
+        $query = "SELECT h.id, h.descripcion, ha.nivel_grado
+                  FROM habilidades AS h
+                  JOIN habilidades_alumnos AS ha ON h.id = ha.id_habilidad
+                  WHERE ha.id_usuario = :id_usuario";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id_usuario', $idAlumno, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $habilidades = [];
+        if ($stmt->rowCount() > 0) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $habilidad = new Habilidad();
+                $habilidad->setId($row['id']);
+                $habilidad->setNombreHabilidad($row['descripcion']);
+                $habilidad->setNivelHabilidad($row['nivel_grado']);
+
+                $habilidades[] = $habilidad;
+            }
+        }
+        
+        return $habilidades;
+    }
+    
     public function obtenerPostulante($idUsuario) {
         $query = "SELECT id, nombre, apellido FROM alumno WHERE id_usuario = :id";
         $stmt = $this->conn->prepare($query);
@@ -176,7 +253,10 @@ class EmpresaDAO {
                 $id = $carrera['id'];
                 $nombreCarrera = $carrera['nombre_carrera'];
                 $planEstudios = $this->obtenerPlanesEstudio($id);
-                $carreraOBJ = new Carrera($id, $nombreCarrera, $planEstudios);
+                $carreraOBJ = new Carrera();
+                $carreraOBJ->setId($id);
+                $carreraOBJ->setNombreCarrera($nombreCarrera);
+                $carreraOBJ->setPlanEstudios($planEstudios);
                 $carrerasArray[] = $carreraOBJ->toArray();
             }
             if($carrerasArray){

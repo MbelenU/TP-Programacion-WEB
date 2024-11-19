@@ -108,21 +108,7 @@ class EmpresaController {
             ]);
         }
     }
-    public function listarAlumnos(){
-        $alumnos = $this->empresaDAO->listarAlumnos();
-        if($alumnos){
-            return[
-                "success" => true,
-                "body" => $alumnos
-            ];
-        }
-        else {
-            return[
-                'success' => false,
-                'message' => 'Error: No se encontraron alumnos',
-            ];
-        }
-    }
+
     public function obtenerMaterias() {
         $id = $_GET['idPlanEstudio'];
         $materias = $this->empresaDAO->obtenerMaterias($id);
@@ -159,6 +145,21 @@ class EmpresaController {
                 'success' => false,
                 'message' => 'Error: No se encontraron planes estudio para esta carrera',
             ]);
+        }
+    }
+    public function obtenerAlumno($id) {
+        $alumno = $this->empresaDAO->obtenerAlumno($id);
+        if($alumno){
+            return [
+                "success" => true,
+                "body" => $alumno
+            ];
+        }
+        else {
+            return [
+                'success' => false,
+                'message' => 'Error: No se encontro alumno',
+            ];
         }
     }
     public function listarJornadas(){

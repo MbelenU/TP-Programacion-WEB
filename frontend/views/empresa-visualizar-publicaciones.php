@@ -34,7 +34,7 @@ $publicaciones = $publicaciones['body'];
                 <h1>Mis publicaciones</h1>
             </div>
             <div class="puesto-header mb-5">
-                <a href="#" class="btn btn-secondary">Reporte</a>
+                <a href="#" class="btn btn-success">Reporte</a>
             </div>
             <div class="row mb-5">
                 <?php
