@@ -77,13 +77,7 @@ $publicacion = $publicacion['body'];
 							
 										<button type="button" class="btn <?php echo ($estadoPostulacionId == 2 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="2">En proceso</button>
 								
-										<button type="button" class="btn <?php echo ($estadoPostulacionId == 3 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="3">En contacto</button>
-									
-										<button type="button" class="btn <?php echo ($estadoPostulacionId == 4 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="4">Rechazado</button>
-									
-										<button type="button" class="btn <?php echo ($estadoPostulacionId == 5 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="5">Finalizado</button>
-								
-										<button type="button" class="btn <?php echo ($estadoPostulacionId == 6 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="6">Pendiente</button>
+										<button type="button" class="btn <?php echo ($estadoPostulacionId == 3 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="3">Finalizado</button>
 									</div>
 								</div>
 							</div>

@@ -31,7 +31,7 @@ class Habilidad {
     public function toArray(): array {
         return [
             'id' => $this->id,
-            'descripcion' => $this->nombreHabilidad
+            'nombre' => $this->nombreHabilidad
         ];
     }
 }

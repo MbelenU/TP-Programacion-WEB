@@ -1,4 +1,10 @@
-<?php require_once __DIR__ . '/../includes/base-url.php' ?>
+<?php
+require_once __DIR__ . '/../includes/base-url.php';
+require_once __DIR__ . '/../../controllers/UsuarioController.php';
+$empresa = $usuarioController->obtenerEmpresa(); 
+$empresa = $empresa['body'];
+?>
+
 <header>
     <nav class="navbar sticky-top bg-navbar">
         <div class="container-fluid">
@@ -15,10 +21,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
+                    <ul class="navbar-nav justify-content-start flex-grow-1">
                         <li class="nav-item">
-                        <a href="<?php echo BASE_URL ?>views/empresa-perfil.php"><img src="<?php echo BASE_URL ?>img/perfil.jpg"
-                                    alt="foto-perfil" class="rounded-circle w-25 pb-2" id="foto-perfil-navbar"></a>
+                        <a href="<?php echo BASE_URL ?>views/empresa-visualizar-perfil.php"><img src="<?php echo ($empresa->getFotoPerfil()) ? BASE_URL . 'img/' . htmlspecialchars($empresa->getFotoPerfil()) : BASE_URL . 'img/perfil.jpg'; ?>"
+                                    alt="foto-perfil" class="rounded-circle m-2" style="width: 120px; height: 120px; object-fit: cover; margin-right: 20px;" id="foto-perfil-navbar"></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo BASE_URL ?>views/empresa-visualizar-perfil.php">Mi perfil</a>

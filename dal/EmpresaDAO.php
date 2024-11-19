@@ -285,7 +285,7 @@ class EmpresaDAO {
                 $carreraOBJ->setId($id);
                 $carreraOBJ->setNombreCarrera($nombreCarrera);
                 $carreraOBJ->setPlanEstudios($planEstudios);
-                $carrerasArray[] = $carreraOBJ->toArray();
+                $carrerasArray[] = $carreraOBJ;
             }
             if($carrerasArray){
                 return $carrerasArray;
@@ -412,9 +412,9 @@ class EmpresaDAO {
             $jornadasArray = [];
             foreach($jornadas as $jornada){
                 $id = $jornada['id'];
-                $descripcion = $jornada['nombre'];
+                $descripcion = $jornada['descripcion'];
                 $jornadaOBJ = new Jornada($id, $descripcion);
-                $jornadasArray[] = $jornadaOBJ->toArray();
+                $jornadasArray[] = $jornadaOBJ;
             }
             if($jornadasArray){
                 return $jornadasArray;
@@ -434,7 +434,7 @@ class EmpresaDAO {
                 $id = $modalidad['id'];
                 $descripcion = $modalidad['descripcion'];
                 $modalidadOBJ = new Modalidad($id, $descripcion);
-                $modalidadesArray[] = $modalidadOBJ->toArray();
+                $modalidadesArray[] = $modalidadOBJ;
             }
             if($modalidadesArray){
                 return $modalidadesArray;

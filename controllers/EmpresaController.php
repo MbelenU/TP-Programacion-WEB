@@ -14,21 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $empresaController = new EmpresaController();
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['modalidades'])) {
-    $resultado = $empresaController->listarModalidades();
-    return $resultado;
-    exit;
-}elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['publicarEmpleo'])) {
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['publicarEmpleo'])) {
     $resultado = $empresaController->publicarEmpleo();
-    return $resultado;
-    exit;
-}
-elseif($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['jornadas'])) {
-    $resultado = $empresaController->listarJornadas();
-    return $resultado;
-    exit;
-}elseif($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['carreras'])) {
-    $resultado = $empresaController->listarCarreras();
     return $resultado;
     exit;
 }elseif($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id_carrera'])) {
@@ -59,7 +46,7 @@ class EmpresaController {
         $this->empresaDAO = new EmpresaDAO();
     }
     public function publicarEmpleo(){
-
+        session_start();
         $idUsuario = $_SESSION['user']['user_id'];
         $input = json_decode(file_get_contents('php://input'), true);
 
@@ -101,19 +88,16 @@ class EmpresaController {
     public function listarCarreras(){
         $carreras = $this->empresaDAO->listarCarreras();
         if($carreras){
-            http_response_code(200);
-            echo json_encode([
+            return [
                 "success" => true,
                 "body" => $carreras
-            ]);
-            return;
+            ];
         }
         else {
-            http_response_code(500);
-            echo json_encode([
+            return [
                 'success' => false,
                 'message' => 'Error: No se encontraron carreras',
-            ]);
+            ];
         }
     }
     public function cambiarEstadoPostulacion() {
@@ -210,37 +194,31 @@ class EmpresaController {
     public function listarJornadas(){
         $jornadas = $this->empresaDAO->listarJornadas();
         if($jornadas){
-            http_response_code(200);
-            echo json_encode([
+            return [
                 "success" => true,
                 "body" => $jornadas
-            ]);
-            return;
+            ];
         }
         else {
-            http_response_code(500);
-            echo json_encode([
+            return [
                 'success' => false,
                 'message' => 'Error: No se encontraron jornadas',
-            ]);
+            ];
         }
     }
     public function listarModalidades(){
         $modalidades = $this->empresaDAO->listarModalidades();
         if($modalidades){
-            http_response_code(200);
-            echo json_encode([
+            return [
                 "success" => true,
                 "body" => $modalidades
-            ]);
-            return;
+            ];
         }
         else {
-            http_response_code(500);
-            echo json_encode([
+            return [
                 'success' => false,
                 'message' => 'Error: No se encontraron modalidades',
-            ]);
+            ];
         }
     }
     public function obtenerHabilidad($nombreHabilidad)

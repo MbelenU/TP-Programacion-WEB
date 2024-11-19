@@ -43,7 +43,7 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
         <div class="container mt-5">
             <div class="perfil-header d-flex align-items-center mb-4">
                 <?php
-                $fotoPerfil = $alumno->getFotoPerfil() ? BASE_URL . htmlspecialchars($alumno->getFotoPerfil()) : 'ruta-a-imagen-default.jpg';
+                $fotoPerfil = ($alumno->getFotoPerfil()) ? BASE_URL . 'img/' . htmlspecialchars($alumno->getFotoPerfil()) : BASE_URL . 'img/perfil.jpg';
                 ?>
                 <img src="<?php echo $fotoPerfil; ?>" alt="Foto de perfil" id="foto-perfil" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; margin-right: 20px;">
                 
@@ -92,8 +92,6 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
                             $nombreHabilidad = htmlspecialchars($habilidad->getNombreHabilidad());
                             $nivelHabilidad = (int) $habilidad->getNivelHabilidad();
                             
-
-                            // Generar estrellas
                             $estrellas = '';
                             for ($i = 0; $i < 5; $i++) {
                                 if ($i < $nivelHabilidad) {
@@ -106,7 +104,7 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
                             echo '<li class="mb-3">' . $nombreHabilidad . ' ' . $estrellas . '</li>';
                         }
                     } else {
-                        echo '<li class="mb-3">No tiene habilidades registradas</li>';
+                        echo '<p class="mb-3">-</p>';
                     }
                 ?>
                 </ul>
@@ -122,7 +120,7 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
                             echo '<li class="mb-3">' . htmlspecialchars($materia) . '</li>';
                         }
                     } else {
-                        echo '<li class="mb-3">No tiene materias aprobadas registradas</li>';
+                        echo '<p class="mb-3">-</p>';
                     }
                     ?>
                 </ul>

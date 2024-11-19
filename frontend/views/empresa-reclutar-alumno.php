@@ -47,16 +47,14 @@ $alumnos = $alumnos['body'];
                 <?php
                 foreach ($alumnos as $alumno) {
                     $nombreCompleto = htmlspecialchars($alumno->getNombreAlumno() . ' ' . $alumno->getApellidoAlumno());
-                    $fotoPerfil = $alumno->getFotoPerfil();
+					$fotoPerfil = ($alumno->getFotoPerfil()) ? BASE_URL . 'img/' . htmlspecialchars($alumno->getFotoPerfil()) : BASE_URL . 'img/perfil.jpg';
 
-                    if (empty($fotoPerfil)) {
-                        $fotoPerfil = '';
-                    }
+        
 
                     echo '<div class="col-12 list-group-item list-group-item-action">
                             <div class="d-flex justify-content-between align-items-center p-3 rounded w-100">
                                 <div class="d-flex align-items-center w-100">
-                                    <img src="' . BASE_URL . htmlspecialchars($fotoPerfil) . '" alt="Foto de perfil de ' . $nombreCompleto . '" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover; margin-right: 10px;">
+                                    <img src="' . htmlspecialchars($fotoPerfil) . '" alt="Foto de perfil de ' . $nombreCompleto . '" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover; margin-right: 10px;">
                                     <span class="fw-bold w-100">' . $nombreCompleto . '</span>
                                 </div>
                                 <a href="' . BASE_URL . 'views/empresa-visualizar-alumno.php?id=' . $alumno->getId() . '" class="btn btn-success">Perfil</a>

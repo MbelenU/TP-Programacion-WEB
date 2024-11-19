@@ -11,6 +11,13 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
 }
+
+$modalidades = $empresaController->listarModalidades();
+$modalidades = $modalidades['body'];
+$jornadas = $empresaController->listarJornadas();
+$jornadas = $jornadas['body'];
+$carreras = $empresaController->listarCarreras(); 
+$carreras = $carreras['body'];
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +53,9 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                             <label for="modalidad" class="form-label">Modalidad</label>
                             <select class="form-select" id="modalidad">
                                 <option value="" disabled selected>Seleccione una modalidad</option>
+                                <?php foreach ($modalidades as $modalidad) : ?>
+                                    <option value="<?php echo $modalidad->getId(); ?>"><?php echo $modalidad->getDescripcionModalidad(); ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
@@ -64,6 +74,9 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                             <label for="jornada" class="form-label">Jornada</label>
                             <select class="form-select" id="jornada">
                                 <option value="" disabled selected>Seleccione un tipo de jornada</option>
+                                <?php foreach ($jornadas as $jornada) : ?>
+                                    <option value="<?php echo $jornada->getId(); ?>"><?php echo $jornada->getDescripcionJornada(); ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
@@ -76,20 +89,23 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                 </div>
                 <div class="col-md-12 mb-3">
                     <div>
-                        <h2 class="datospersonales-header">Habilidades requeridas</h2>
+                        <h3 class="datospersonales-header">Habilidades deseadas (opcional)</h3>
                         <div id="habilidaderror" class="text-danger"></div>
                         <input class="form-control" id="habilidad" placeholder="Buscar">
-                        <button type="button" class="btn btn-secondary my-2" id="agregarHabilidad">Agregar
+                        <button type="button" class="btn btn-success my-2" id="agregarHabilidad">Agregar
                             Habilidad</button>
                         <ul id="listaHabilidades" class="p-0 mb-3 d-flex gap-2"></ul>
                     </div>
                     <div class="row justify-content-between">
-                        <h2 class="datospersonales-header">Materias requeridas</h2>
+                        <h3 class="datospersonales-header">Materias requeridas (opcional)</h3>
                         <div class="col-md-6">
                             <div id="carreraerror" class="text-danger"></div>
                             <label for="carrera" class="form-label">Carrera</label>
                             <select class="form-select" id="carrera">
                                 <option value="" disabled selected>Seleccione una opción</option>
+                                <?php foreach ($carreras as $carrera) : ?>
+                                    <option value="<?php echo $carrera->getId(); ?>"><?php echo $carrera->getNombreCarrera(); ?></option>
+                                <?php endforeach; ?>
                             </select>
 
                             <label for="planEstudios" class="form-label mt-3 d-none" id="planEstudiosLabel">Plan de Estudios</label>
@@ -109,7 +125,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                             <ul id="materiasAprobadasList" class="mb-3 p-0"></ul>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-secondary mt-2" id='guardarPublicacion'>Guardar</button>
+                    <button type="submit" class="btn btn-success mt-2" id='guardarPublicacion'>Guardar</button>
                 </div>
             </form>
         </div>

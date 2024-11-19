@@ -13,7 +13,6 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
 }
-
 $empresa = $usuarioController->obtenerEmpresa();
 $empresa = $empresa['body']; 
 ?>
@@ -32,17 +31,17 @@ $empresa = $empresa['body'];
 
     <div class="container p-sm-4 bg-secondary-subtle">
         <div class="container mt-5">
-            <div class="pb-5">
+            <div class="mb-4">
                 <h1>Mi Perfil</h1>
             </div>
-			<div class="perfil-header">
-				<img src="<?php echo BASE_URL . ($empresa->getFotoPerfil() ? $empresa->getFotoPerfil() : ''); ?>" alt="Foto de perfil" id="foto-perfil" class="img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+			<div class="perfil-header d-flex align-items-center mb-4">
+				<img src="<?php echo ($empresa->getFotoPerfil()) ? BASE_URL . 'img/' . htmlspecialchars($empresa->getFotoPerfil()) : BASE_URL . 'img/perfil.jpg'; ?>" alt="Foto de perfil" id="foto-perfil" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; margin-right: 20px;">
 				<div class="info">
 					<div class="nombre">
 						<h3><?php echo $empresa->getNombre(); ?></h3>
 					</div>
 					<div class="descripcion">
-						<p><?php echo $empresa->getDescripcion(); ?></p>
+						<p><strong>Empresa:</strong>  <?php echo $empresa->getDescripcion(); ?></p>
 					</div>
 					<a href="<?php echo BASE_URL ?>views/empresa-editar-perfil.php" class="btn btn-outline-success">Editar perfil</a>
 				</div>

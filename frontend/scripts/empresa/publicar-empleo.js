@@ -19,27 +19,30 @@ const listaHabilidades = document.getElementById('listaHabilidades');
 const agregarHabilidadBtn = document.getElementById('agregarHabilidad');
 const publicarForm = document.getElementById('publicarForm')
 const guardarPublicacion = document.getElementById('guardarPublicacion')
-
 document.addEventListener('DOMContentLoaded', async function() {
-    let response = await cargarModalidades()
-    response = await cargarJornadas()
-    response = await cargarCarreras()
     guardarPublicacion.addEventListener('click', async function (event) {
         event.preventDefault();
+        const existingError = document.querySelector('.alert.alert-danger');
+        if (existingError) {
+            existingError.remove();
+        }
+
         let habilidades = listaHabilidades.querySelectorAll('li')
         habilidades = Array.from(habilidades).map(habilidad => habilidad.value)
         
         let materias = materiasAprobadasList.querySelectorAll('li')
         materias = Array.from(materias).map(materia => materia.value)
+
         const publicacionData = {
-                titulo: tituloInput.value,
-                modalidad: modalidadSelect.value,
-                ubicacion: ubicacion.value,
-                jornada: jornadaSelect.value,
-                descripcion: descripcion.value,
-                habilidades: habilidades,
-                materias: materias
+            titulo: tituloInput.value,
+            modalidad: modalidadSelect.value,
+            ubicacion: ubicacion.value,
+            jornada: jornadaSelect.value,
+            descripcion: descripcion.value,
+            habilidades: habilidades,
+            materias: materias
         }
+
         let response = await fetch(`http://localhost:80/TP-Programacion-WEB/controllers/EmpresaController.php?publicarEmpleo`, {
             method: 'POST',
             headers: {
@@ -47,16 +50,26 @@ document.addEventListener('DOMContentLoaded', async function() {
             },
             body: JSON.stringify(publicacionData)
         });
+
         response = await response.json();
+
         if(response.success) {
             window.location.href = `http://localhost:80/TP-Programacion-WEB/frontend/views/empresa-visualizar-publicacion.php?id=${response.body}`;
- 
-        }else {
-            //logica en caso de que falle publicar empleo
+        } else {
+            const errorDiv = document.createElement('div');
+            errorDiv.classList.add('alert', 'alert-danger', 'mt-3');
+            errorDiv.setAttribute('role', 'alert');
+            errorDiv.textContent = response.message;
+
+            const formulario = document.getElementById('publicarForm');
+            formulario.insertBefore(errorDiv, formulario.firstChild);
         }
-        console.log(response)
+
+        console.log(response);
     });
-})
+});
+
+
 
 async function agregarHabilidad() {
     let habilidadText = habilidadInput.value;
@@ -75,7 +88,7 @@ async function agregarHabilidad() {
     const json = await response.json()
     if(json.success){
         const option = document.createElement('li');
-        option.textContent = json.body.nombreHabilidad
+        option.textContent = json.body.nombre
         option.value = json.body.id
         const deleteIcon = document.createElement('i');
         deleteIcon.classList.add('fas', 'fa-trash', 'ms-2'); 
@@ -92,15 +105,6 @@ async function agregarHabilidad() {
     }
 }
 function carreraChange() {
-
-    planEstudiosSelect.innerHTML = '';
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.disabled = true;
-    defaultOption.selected = true;
-    defaultOption.textContent = 'Seleccione un plan de estudios';
-    planEstudiosSelect.appendChild(defaultOption);
-
     const selectedCarrera = carreraSelect.value;
     materiaSelect.classList.add('d-none');
     agregarMateriaBtn.classList.add('d-none');
@@ -136,28 +140,8 @@ function planEstudioChange() {
         materiaLabel.classList.add('d-none');
     }
 }
-async function cargarModalidades() {
-    let response = await fetch('http://localhost/TP-Programacion-WEB/controllers/EmpresaController.php?modalidades')
-    response = await response.json()
-    response.body.forEach(option => {
-        const newOption = document.createElement('option')
-        newOption.value = option.id
-        newOption.textContent = option.descripcionModalidad
-        modalidadSelect.appendChild(newOption)
-    });
-    return response 
-}
-async function cargarJornadas() {
-    let response = await fetch('http://localhost/TP-Programacion-WEB/controllers/EmpresaController.php?jornadas')
-    response = await response.json()
-    response.body.forEach(option => {
-        const newOption = document.createElement('option')
-        newOption.value = option.id
-        newOption.textContent = option.descripcionJornada
-        jornadaSelect.appendChild(newOption)
-    });
-    return response 
-}
+
+
 async function cargarMaterias(idPlanEstudio) {
     let response = await fetch(`http://localhost/TP-Programacion-WEB/controllers/EmpresaController.php?idPlanEstudio=${idPlanEstudio}`)
     response = await response.json()
@@ -180,19 +164,6 @@ async function cargarPlanesEstudio(idCarrera) {
         newOption.textContent = planEstudio.nombrePlanEstudio
         select.appendChild(newOption)
     });
-}
-async function cargarCarreras() {
-    const select = document.getElementById('carrera');
-    let response = await fetch('http://localhost/TP-Programacion-WEB/controllers/EmpresaController.php?carreras')
-    response = await response.json()
-    carreras = response.body
-    carreras.forEach(async carrera => {
-        const newOption = document.createElement('option')
-        newOption.value = carrera.id
-        newOption.textContent = carrera.nombreCarrera
-        select.appendChild(newOption)
-    });
-    return response 
 }
 function agregarMateria() {
     let materias = materiasAprobadasList.querySelectorAll('li');
@@ -220,7 +191,7 @@ function agregarMateria() {
     textMateria.appendChild(deleteIcon);
     materiasAprobadasList.appendChild(textMateria);
 
-    materiaSelect.selectedIndex = 0; // Resetear el select al valor por defecto
+    materiaSelect.selectedIndex = 0;
 }
 
 carreraSelect.addEventListener('change', carreraChange);
