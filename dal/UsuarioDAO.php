@@ -274,11 +274,13 @@ class UsuarioDAO {
     
             $empresa->setId($row['id']);
             $empresa->setTelefono($row['telefono']);
-            $empresa->setDescripcion($row['razon_social']);
+            $empresa->setNombreEmpresa($row['razon_social']);
             $empresa->setUbicacion($row['direccion']);
             $empresa->setNombre($row['nombre']);
+            $empresa->setSitioWeb($row['sitio_web']);
             $empresa->setMailCorporativo($row['mail_corporativo']);
             $empresa->setFotoPerfil($row['foto_perfil']);
+            $empresa->setDescripcion($row['descripcion']);
             $empleos = $this->listarPublicaciones($idUsuario);
             $empresa->setEmpleosPublicados($empleos);
             return $empresa;

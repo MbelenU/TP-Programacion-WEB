@@ -41,26 +41,27 @@ $empresa = $empresa['body'];
 						<h3><?php echo $empresa->getNombre(); ?></h3>
 					</div>
 					<div class="descripcion">
-						<p><strong>Empresa:</strong>  <?php echo $empresa->getDescripcion(); ?></p>
+						<p><strong>Empresa:</strong>  <?php echo $empresa->getNombreEmpresa(); ?></p>
 					</div>
 					<a href="<?php echo BASE_URL ?>views/empresa-editar-perfil.php" class="btn btn-outline-success">Editar perfil</a>
 				</div>
 			</div>
-
-
+            <div class="mt-4">
+                <h3>Descripcion</h3>
+                <p><?php echo $empresa->getDescripcion(); ?></p>
+            </div>
             <div class="mt-4">
                 <h3>Información de Contacto</h3>
                 <ul class="list-unstyled">
-                    <li><strong>Email:</strong> <?php echo $empresa->getMailCorporativo(); ?></li>
-                    <li><strong>Teléfono:</strong> <?php echo $empresa->getTelefono(); ?></li>
+                    <li><strong>Email corporativo:</strong> <?php echo $empresa->getMailCorporativo(); ?></li>
+                    <li><strong>Teléfono corporativo:</strong> <?php echo $empresa->getTelefono(); ?></li>
+					<li><strong>Sitio Web:</strong><a href="<?php echo $empresa->getSitioWeb(); ?>" target="_blank"> <?php echo $empresa->getSitioWeb(); ?></a></li>
                 </ul>
             </div>
-
             <div class="mt-4">
                 <h3>Dirección</h3>
                 <p><?php echo $empresa->getUbicacion(); ?></p>
             </div>
-
             <div class="mt-4">
                 <h3>Publicaciones Recientes</h3>
                 <div class="list-group col-12 p-0">

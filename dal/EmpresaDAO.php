@@ -22,6 +22,38 @@ class EmpresaDAO {
     public function __construct() {
         $this->conn = (new Database())->getConnection();
     }
+    public function editarPerfilEmpresa($id, $email, $nombreEmpresa, $telefono, $descripcion, $sitio_web, $foto_perfil)
+    {
+        try {
+            $this->conn->beginTransaction();
+    
+            $queryEmpresa = "UPDATE empresas SET razon_social = :nombreEmpresa, mail_corporativo = :email, 
+                             descripcion = :descripcion, sitio_web = :sitio_web WHERE id_usuario = :id";
+            $stmt = $this->conn->prepare($queryEmpresa);
+            $stmt->bindParam(':nombreEmpresa', $nombreEmpresa);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':descripcion', $descripcion);
+            $stmt->bindParam(':sitio_web', $sitio_web);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+    
+            $queryUsuario = "UPDATE usuario SET telefono = :telefono, foto_perfil = :foto_perfil WHERE id = :id";
+            $stmt = $this->conn->prepare($queryUsuario);
+            $stmt->bindParam(':telefono', $telefono);
+            $stmt->bindParam(':foto_perfil', $foto_perfil);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+    
+            $this->conn->commit();
+    
+            return true;
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            echo "Error al editar perfil: " . $e->getMessage();
+            return false;
+        }
+    }
+    
     public function listarPostulaciones($idPublicacion) {
         $queryPostulacion = "SELECT * FROM postulaciones WHERE id_publicacionesempleos = :id";
         $stmt = $this->conn->prepare($queryPostulacion);

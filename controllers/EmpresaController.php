@@ -45,6 +45,48 @@ class EmpresaController {
     public function __construct() {
         $this->empresaDAO = new EmpresaDAO();
     }
+    public function editarPerfilEmpresa($id) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarPerfil'])) {
+     
+            $email = $_POST['email'];
+            $nombreEmpresa = $_POST['nombreEmpresa'];
+            $telefono = $_POST['phone'];
+            $descripcion = $_POST['descripcion'];
+            $sitio_web = $_POST['website'];
+    
+            $foto_perfil = null;
+    
+            if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === UPLOAD_ERR_OK) {
+                
+                $fileTmpPath = $_FILES['fotoPerfil']['tmp_name'];
+                $fileName = $_FILES['fotoPerfil']['name'];
+                $newFileName = uniqid('profile_', true) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
+                $uploadDir = 'img/';
+                $uploadPath = $uploadDir . $newFileName;
+        
+               
+                if (move_uploaded_file($fileTmpPath, $uploadPath)) {
+                    $foto_perfil = $newFileName;
+                }
+            } else {
+                $foto_perfil = null; 
+            }
+            $result = $this->empresaDAO->editarPerfilEmpresa($id, $email, $nombreEmpresa, $telefono, $descripcion, $sitio_web, $foto_perfil);
+    
+            if ($result) {
+                return [
+                    'success' => true,
+                    'message' => 'Perfil editado exitosamente',
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'Error al editar perfil',
+                ];
+            }
+        }
+    }
+    
     public function publicarEmpleo(){
         session_start();
         $idUsuario = $_SESSION['user']['user_id'];

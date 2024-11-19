@@ -10,7 +10,7 @@ class Empresa extends Usuario{
         return $this->empleosPubilcados;
     }
 
-    public function setEmpleosPubilcados(string $empleosPubilcados): string {
+    public function setEmpleosPubilcados(string $empleosPubilcados): void {
         $this->empleosPubilcados = $empleosPubilcados;
     }
 
@@ -18,7 +18,7 @@ class Empresa extends Usuario{
         return $this->eventos;
     }
 
-    public function setEventos(string $eventos): string {
+    public function setEventos(string $eventos): void {
         $this->eventos = $eventos;
     }
 }

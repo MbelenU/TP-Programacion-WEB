@@ -1,5 +1,9 @@
 <?php
 session_start();
+require_once __DIR__ . '/../../controllers/UsuarioController.php';
+require_once __DIR__ . '/../../controllers/EmpresaController.php';
+$usuarioController = new UsuarioController();
+$empresaController = new EmpresaController();
 if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
@@ -9,8 +13,12 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
 }
+$empresa = $usuarioController->obtenerEmpresa();
+$empresa = $empresa['body']; 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarPerfil'])) {
+    $empresaController->editarPerfilEmpresa($_SESSION['user']['user_id']);
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -23,55 +31,55 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     <?php require __DIR__ . '/../components/empresa-navbar.php' ?>
     <div class="container p-sm-4 bg-secondary-subtle">
         <div class="container mt-5">
-            <h1 class="mb-4">Editar Perfil de Empresa</h1>
-            <form id="form-perfil-empresa">
+            <h1 class="mb-4">Editar Perfil</h1>
+            <form id="form-perfil-empresa" method="POST" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="profilePhoto" class="form-label">Foto de perfil</label>
                         <div class="mb-3">
-                            <img src="../Nav-bar/perfil.jpg" class="img-thumbnail" alt="Foto de perfil">
+                            <img src="<?php echo ($empresa->getFotoPerfil()) ? BASE_URL . 'img/' . htmlspecialchars($empresa->getFotoPerfil()) : BASE_URL . 'img/perfil.jpg'; ?>" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; margin-right: 20px;" alt="Foto de perfil">
                         </div>
-                        <input class="form-control" type="file" id="profilePhoto">
+                        <input class="form-control" type="file" id="fotoPerfil" name="fotoPerfil">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="companyName" class="form-label">Nombre de la Empresa</label>
-                        <input type="text" class="form-control" id="companyName" placeholder="Nombre de la Empresa" value="Empresa S.A.">
+                        <label for="nombreEmpresa" class="form-label">Nombre de la Empresa</label>
+                        <input type="text" class="form-control" id="nombreEmpresa" name="nombreEmpresa" placeholder="Nombre de la Empresa" value="<?php echo htmlspecialchars($empresa->getNombreEmpresa()); ?>">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="Email" value="contacto@empresa.com">
+                        <input class="form-control" id="email" name="email" placeholder="Email" value="<?php echo htmlspecialchars($empresa->getMailCorporativo()); ?>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="phone" class="form-label">Teléfono</label>
-                        <input type="tel" class="form-control" id="phone" placeholder="Teléfono" value="+11 111 111 111">
+                        <input class="form-control" id="phone" name="phone" placeholder="Teléfono" value="<?php echo htmlspecialchars($empresa->getTelefono()); ?>">
                     </div>
 
                     <div class="col-md-6 mb-3">
                         <label for="website" class="form-label">Sitio web</label>
-                        <input type="url" class="form-control" id="website" placeholder="Sitio web" value="https://www.empresa.com">
+                        <input class="form-control" id="website" name="website" placeholder="Sitio web" value="<?php echo htmlspecialchars($empresa->getSitioWeb() ?: ''); ?>">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12 mb-3">
-                        <label for="description" class="form-label">Descripción de la Empresa</label>
-                        <textarea class="form-control" id="description" rows="3" placeholder="Descripción de la Empresa">Descripción de empresa</textarea>
+                        <label for="descripcion" class="form-label">Descripción de la Empresa</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="Descripción de la Empresa"><?php echo htmlspecialchars($empresa->getDescripcion()); ?></textarea>
                     </div>
                 </div>
 
                 <div class="text-end">
-                    <button type="submit" class="btn btn-light border border-dark">Guardar</button>
+                    <button type="submit" class="btn btn-success border border-dark" name="guardarPerfil">Guardar</button>
                 </div>
             </form>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script src='editar-perfil-empresa.js' defer></script>
 </body>
