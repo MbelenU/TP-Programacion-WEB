@@ -43,7 +43,7 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
         <div class="container mt-5">
             <div class="perfil-header d-flex align-items-center mb-4">
                 <?php
-                $fotoPerfil = $alumno->getFotoDePerfil() ? BASE_URL . htmlspecialchars($alumno->getFotoDePerfil()) : 'ruta-a-imagen-default.jpg';
+                $fotoPerfil = $alumno->getFotoPerfil() ? BASE_URL . htmlspecialchars($alumno->getFotoPerfil()) : 'ruta-a-imagen-default.jpg';
                 ?>
                 <img src="<?php echo $fotoPerfil; ?>" alt="Foto de perfil" id="foto-perfil" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; margin-right: 20px;">
                 
@@ -61,7 +61,7 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
             <div class="contact-info mb-5">
                 <div class="info-item mb-4">
                     <i class="bi bi-geo-alt"></i>
-                    <span><?php echo mostrarValor($alumno->getDireccion()); ?></span>
+                    <span><?php echo mostrarValor($alumno->getUbicacion()); ?></span>
                 </div>
                 <div class="info-item mb-4">
                     <i class="bi bi-phone"></i>

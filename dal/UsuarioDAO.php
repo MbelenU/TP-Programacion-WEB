@@ -2,7 +2,7 @@
 require_once 'Database.php';
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../models/Alumno.php';
-
+require_once __DIR__ . '/../models/PublicacionEmpleo.php';
 class UsuarioDAO {
 
     private PDO $conn;
@@ -223,9 +223,9 @@ class UsuarioDAO {
                 $alumnoOBJ->setNombreAlumno($alumno['nombre']);
                 $alumnoOBJ->setApellidoAlumno($alumno['apellido']);
                 if($alumno['foto_perfil']){
-                    $alumnoOBJ->setFotoDePerfil($alumno['foto_perfil']);
+                    $alumnoOBJ->setFotoPerfil($alumno['foto_perfil']);
                 }else {
-                    $alumnoOBJ->setFotoDePerfil('');
+                    $alumnoOBJ->setFotoPerfil('');
                 }
                 $alumnos[] = $alumnoOBJ;
             }
@@ -234,7 +234,59 @@ class UsuarioDAO {
             return null;
         }
     }
-
+    public function listarPublicaciones($idUsuario) {
+        $queryPublicaciones = "SELECT * FROM publicaciones_empleos WHERE id_usuario = :id";
+        $stmt = $this->conn->prepare($queryPublicaciones);
+        $stmt->bindParam(":id", $idUsuario);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $publicaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $publicacionesArray = [];
+            foreach($publicaciones as $publicacion){
+                $publicacionOBJ = new PublicacionEmpleo();
+                $fechaPostulacion = DateTime::createFromFormat('Y-m-d', $publicacion['fecha']);
+                $publicacionOBJ->setId($publicacion['id']);
+                $publicacionOBJ->setTitulo($publicacion['puesto_ofrecido']);
+                $publicacionOBJ->setDescripcion($publicacion['descripcion']);
+                $publicacionOBJ->setUbicacion($publicacion['ubicacion']);
+                $publicacionOBJ->setFecha($fechaPostulacion);
+                $publicacionesArray[] = $publicacionOBJ;
+            }
+            if($publicacionesArray){
+                return $publicacionesArray;
+            }
+        }
+        return null;
+    }
+    public function obtenerEmpresa($idUsuario){
+        $queryEmpresa = "SELECT e.*, u.nombre, u.mail, u.telefono, u.direccion, u.foto_perfil 
+                         FROM empresas e
+                         INNER JOIN usuario u ON e.id_usuario = u.id
+                         WHERE e.id_usuario = :id";
+        
+        $stmt = $this->conn->prepare($queryEmpresa);
+        $stmt->bindParam(':id', $idUsuario, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $empresa = new Empresa();
+    
+            $empresa->setId($row['id']);
+            $empresa->setTelefono($row['telefono']);
+            $empresa->setDescripcion($row['razon_social']);
+            $empresa->setUbicacion($row['direccion']);
+            $empresa->setNombre($row['nombre']);
+            $empresa->setMailCorporativo($row['mail_corporativo']);
+            $empresa->setFotoPerfil($row['foto_perfil']);
+            $empleos = $this->listarPublicaciones($idUsuario);
+            $empresa->setEmpleosPublicados($empleos);
+            return $empresa;
+        }
+        
+        return null;
+    }
+   
 }
 
 ?>

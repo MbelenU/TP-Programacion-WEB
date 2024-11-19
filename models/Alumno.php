@@ -5,10 +5,6 @@ class Alumno extends Usuario {
     private string $nombreAlumno;
     private string $apellidoAlumno;
     private string $descripcion;
-    private string $fotoDePerfil;
-    private string $direccion;
-    private string $telefono;
-    private string $email;
     private array $habilidades;
     private array $actividadExtraCurricular;
     private array $experienciasLaborales;
@@ -57,39 +53,6 @@ class Alumno extends Usuario {
     public function setApellidoAlumno(string $apellidoAlumno): void {
         $this->apellidoAlumno = $apellidoAlumno;
     }
-
-    public function getFotoDePerfil(): string {
-        return $this->fotoDePerfil;
-    }
-
-    public function setFotoDePerfil(string $fotoDePerfil): void {
-        $this->fotoDePerfil = $fotoDePerfil;
-    }
-
-    public function getDireccion(): string {
-        return $this->direccion;
-    }
-
-    public function setDireccion(string $direccion): void {
-        $this->direccion = $direccion;
-    }
-
-    public function getTelefono(): string {
-        return $this->telefono;
-    }
-
-    public function setTelefono(string $telefono): void {
-        $this->telefono = $telefono;
-    }
-
-    public function getEmail(): string {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): void {
-        $this->email = $email;
-    }
-
     public function getHabilidades(): array {
         return $this->habilidades;
     }

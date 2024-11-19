@@ -43,23 +43,23 @@ $alumnos = $alumnos['body'];
                 </form>
             </div>
 
-            <div class="row">
+            <div class="row mb-5 list-group col-12 p-0">
                 <?php
                 foreach ($alumnos as $alumno) {
                     $nombreCompleto = htmlspecialchars($alumno->getNombreAlumno() . ' ' . $alumno->getApellidoAlumno());
-                    $fotoPerfil = $alumno->getFotoDePerfil();
+                    $fotoPerfil = $alumno->getFotoPerfil();
 
                     if (empty($fotoPerfil)) {
                         $fotoPerfil = '';
                     }
 
-                    echo '<div class="col-12 mb-3">
-                            <div class="d-flex justify-content-between align-items-center p-3 border rounded w-100">
+                    echo '<div class="col-12 list-group-item list-group-item-action">
+                            <div class="d-flex justify-content-between align-items-center p-3 rounded w-100">
                                 <div class="d-flex align-items-center w-100">
                                     <img src="' . BASE_URL . htmlspecialchars($fotoPerfil) . '" alt="Foto de perfil de ' . $nombreCompleto . '" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover; margin-right: 10px;">
                                     <span class="fw-bold w-100">' . $nombreCompleto . '</span>
                                 </div>
-                                <a href="' . BASE_URL . 'views/empresa-visualizar-alumno.php?id=' . $alumno->getId() . '" class="btn btn-primary">Perfil</a>
+                                <a href="' . BASE_URL . 'views/empresa-visualizar-alumno.php?id=' . $alumno->getId() . '" class="btn btn-success">Perfil</a>
                             </div>
                         </div>';
                 }

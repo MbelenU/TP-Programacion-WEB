@@ -32,7 +32,7 @@ class EmpresaDAO {
             $postulacionesArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach ($postulacionesArray as $postulacion) {
                 $fechaPostulacion = DateTime::createFromFormat('Y-m-d', $postulacion['fecha']);
-                $estadoPostulacion = $this->obtenerEstadoPostulacion($postulacion['id_estadopublicacion']);
+                $estadoPostulacion = $this->obtenerEstadoPostulacion($postulacion['id_estadopostulacion']);
                 $postulante = $this->obtenerPostulante($postulacion['id_usuario']);
                 $postulacionObj = new Postulacion();
 
@@ -46,7 +46,35 @@ class EmpresaDAO {
         }
         return $postulaciones;
     }
-
+    public function cambiarEstadoPostulacion($postulacion_id, $nuevo_estado_id) {
+        $sql = "UPDATE postulaciones SET id_estadopostulacion = :nuevo_estado_id WHERE id = :postulacion_id";
+    
+        $stmt = $this->conn->prepare($sql);
+    
+        $stmt->bindParam(':nuevo_estado_id', $nuevo_estado_id, PDO::PARAM_INT);
+        $stmt->bindParam(':postulacion_id', $postulacion_id, PDO::PARAM_INT);
+    
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return null;
+        }
+    }
+    public function cambiarEstadoPublicacion($publicacion_id, $nuevo_estado_id) {
+        $sql = "UPDATE publicaciones_empleos SET id_estadopublicacion = :nuevo_estado_id WHERE id = :postulacion_id";
+    
+        $stmt = $this->conn->prepare($sql);
+    
+        $stmt->bindParam(':nuevo_estado_id', $nuevo_estado_id, PDO::PARAM_INT);
+        $stmt->bindParam(':postulacion_id', $publicacion_id, PDO::PARAM_INT);
+    
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return null;
+        }
+    }
+    
     public function obtenerAlumno($id) {
         $query = "SELECT u.id AS usuario_id, u.mail, u.telefono, u.direccion, u.foto_perfil,
                          a.id AS alumno_id, a.nombre AS alumno_nombre, a.apellido, a.descripcion, a.id_usuario,
@@ -72,7 +100,7 @@ class EmpresaDAO {
             $alumno->setApellidoAlumno($row['apellido']);
             $alumno->setEmail($row['mail']);
             $alumno->setTelefono($row['telefono']);
-            $alumno->setDireccion($row['direccion']);
+            $alumno->setUbicacion($row['direccion']);
             if ($row['descripcion']) {
                 $alumno->setDescripcion($row['descripcion']);
             } else {
@@ -80,9 +108,9 @@ class EmpresaDAO {
             }
     
             if ($row['foto_perfil']) {
-                $alumno->setFotoDePerfil($row['foto_perfil']);
+                $alumno->setFotoPerfil($row['foto_perfil']);
             } else {
-                $alumno->setFotoDePerfil('');
+                $alumno->setFotoPerfil('');
             }
             $habilidades = $this->obtenerHabilidadesDelAlumno($id);
             $alumno->setHabilidades($habilidades);

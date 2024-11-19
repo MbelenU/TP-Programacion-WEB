@@ -43,6 +43,14 @@ elseif($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['jornadas'])) {
     $resultado = $empresaController->obtenerHabilidad($_GET['habilidad']);
     return $resultado;
     exit;
+}elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['cambiarEstadoPostulacion'])) {
+    $resultado = $empresaController->cambiarEstadoPostulacion();
+    return $resultado;
+    exit;
+}elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['cambiarEstadoPublicacion'])) {
+    $resultado = $empresaController->cambiarEstadoPublicacion();
+    return $resultado;
+    exit;
 }
 
 class EmpresaController {
@@ -108,7 +116,44 @@ class EmpresaController {
             ]);
         }
     }
-
+    public function cambiarEstadoPostulacion() {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $result = $this->empresaDAO->cambiarEstadoPostulacion($input['postulacion_id'], $input['estado_id']);
+        if($result){
+            http_response_code(200);
+            echo json_encode([
+                "success" => true,
+                "body" => $result
+            ]);
+            return;
+        }
+        else {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error: No se pudo cambiar el estado de la postulacion',
+            ]);
+        }
+    }
+    public function cambiarEstadoPublicacion() {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $result = $this->empresaDAO->cambiarEstadoPublicacion($input['publicacion_id'], $input['estado_id']);
+        if($result){
+            http_response_code(200);
+            echo json_encode([
+                "success" => true,
+                "body" => $result
+            ]);
+            return;
+        }
+        else {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error: No se pudo cambiar el estado de la publicacion',
+            ]);
+        }
+    }
     public function obtenerMaterias() {
         $id = $_GET['idPlanEstudio'];
         $materias = $this->empresaDAO->obtenerMaterias($id);
