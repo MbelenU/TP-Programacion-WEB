@@ -89,6 +89,69 @@ class AlumnoController {
         }
     }
 
+    public function listarEmpleos(){
+        $empleos = $this->alumnoDao->getEmpleos();
+        if($empleos){
+            $habilidadesDisponibles = $this->alumnoDao->getHabilidades(); 
+
+            // Asociar las habilidades a cada empleo
+            foreach ($empleos as &$empleo) {
+                // Verifica que el array 'habilidades' exista, si no lo inicializa como un array vacío
+                if (!isset($empleo['habilidades']) || !is_array($empleo['habilidades'])) {
+                    $empleo['habilidades'] = []; // Asegúrate de que 'habilidades' sea un array
+                }
+        
+                // Asociar habilidades a cada empleo
+                $habilidadesEmpleo = [];
+                foreach ($empleo['habilidades'] as $idHabilidad) {
+                    foreach ($habilidadesDisponibles as $habilidad) {
+                        if ($habilidad->getId() == $idHabilidad) {
+                            $habilidadesEmpleo[] = $habilidad->getHabilidades();
+                            break;
+                        }
+                    }
+                }
+        
+                // Añadir las habilidades al empleo
+                $empleo['habilidades'] = $habilidadesEmpleo;
+            }
+
+            $response = [
+                "success" => true,
+                "body" => $empleos
+            ];
+            return $response;
+        }
+        else {
+            
+            $response = [
+                'success' => false,
+                'message' => 'Error: No se encontraron empleos',
+            ];
+            return $response;
+        }
+    }
+
+    public function buscarEmpleos(){
+        $empleos = $this->alumnoDao->getBusquedaEmpleo();
+        if($empleos){
+            
+            $response = [
+                "success" => true,
+                "body" => $empleos
+            ];
+            return $response;
+        }
+        else {
+            
+            $response = [
+                'success' => false,
+                'message' => 'Error: No se encontraron empleos',
+            ];
+            return $response;
+        }
+    }
+
 
     public function listarPostulaciones(){
         $postulaciones = $this->alumnoDao->getPostulaciones();

@@ -3,10 +3,12 @@
 class Modalidad {
     private int $id;
     private string $descripcionModalidad;
-    public function __construct(int $id, string $descripcion) {
-        $this->setId($id);
-        $this->setDescripcionModalidad($descripcion);
+
+    public function __construct(int $id, string $descripcionModalidad) {
+        $this->id = $id;  // Valor por defecto
+        $this->descripcionModalidad = $descripcionModalidad;  // Valor por defecto
     }
+
     public function getId(): int {
         return $this->id;
     }
@@ -25,7 +27,7 @@ class Modalidad {
     public function toArray(): array {
         return [
             'id' => $this->id,
-            'descripcionModalidad' => $this->descripcionModalidad
+            'descripcion' => $this->descripcionModalidad
         ];
     }
 }
