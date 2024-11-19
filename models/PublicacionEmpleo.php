@@ -10,15 +10,20 @@ class PublicacionEmpleo {
     private string $ubicacion;
     private array $postulacion; // Lista de postulaciones
     private array $materiasRequeridas; // Lista de materias requeridas
-
+    private DateTime $fecha;
     public function getId(): int {
         return $this->id;
     }
-
     public function setId(int $id): void {
         $this->id = $id;
     }
-
+    public function getFecha(): DateTime {
+        return $this->fecha;
+    }
+    
+    public function setFecha(DateTime $fecha): void {
+        $this->fecha = $fecha;
+    }
     public function getTitulo(): string {
         return $this->titulo;
     }
