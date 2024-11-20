@@ -75,7 +75,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarPerfil'])) {
                 </div>
 
                 <div class="text-end">
-                    <button type="submit" class="btn btn-success border border-dark" name="guardarPerfil">Guardar</button>
+                    <button type="submit" class="btn btn-success border border-dark mt-2" name="guardarPerfil">Guardar</button>
+                    <a href="<?php echo BASE_URL ?>views/empresa-visualizar-perfil.php">
+                                <button type="button" class="btn btn-danger mt-2"> Cancelar</button>
+                    </a>
                 </div>
             </form>
         </div>

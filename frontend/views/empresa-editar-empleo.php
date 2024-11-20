@@ -129,7 +129,10 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                             <ul id="materiasAprobadasList" class="mb-3"></ul>
                         </div>
                     </div>
-                    <button type="submit" class="btn mt-2">Guardar</button>
+                    <button type="submit" class="btn btn-success mt-2">Guardar</button>
+                    <a href="<?php echo BASE_URL ?>views/empresa-visualizar-publicaciones.php">
+                                <button type="button" class="btn btn-danger mt-2"> Cancelar</button>
+                    </a>
                 </div>
             </form>
         </div>

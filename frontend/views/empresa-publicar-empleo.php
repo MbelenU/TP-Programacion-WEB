@@ -126,6 +126,10 @@ $carreras = $carreras['body'];
                         </div>
                     </div>
                     <button type="submit" class="btn btn-success mt-2" id='guardarPublicacion'>Guardar</button>
+                    <a href="<?php echo BASE_URL ?>views/empresa-visualizar-publicaciones.php">
+                                <button type="button" class="btn btn-danger mt-2"> Cancelar</button>
+                    </a>
+                   
                 </div>
             </form>
         </div>
