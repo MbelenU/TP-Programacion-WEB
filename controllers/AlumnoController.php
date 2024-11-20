@@ -36,33 +36,68 @@ class AlumnoController {
 
     public function editarPerfilAlumno($id) {
         $email = $_POST['email'] ? $_POST['email'] : NULL;
-        $password = $_POST['contraseña'] ? $_POST['contraseña'] : NULL;
+        // $password = $_POST['contraseña'] ? $_POST['contraseña'] : NULL;
         $nombre = $_POST['nombre'] ? $_POST['nombre'] : NULL ;
         $apellido = $_POST['apellido'] ? $_POST['apellido'] : NULL ;
         $telefono = $_POST['telefono'] ? $_POST['telefono'] : NULL;
-        $username = $_POST['username'] ? $_POST['username'] : NULL;
-        $habilidades = $_POST['habilidadesSeleccionadas'] ? $_POST['habilidadesSeleccionadas'] : NULL;
-        $carrera = /* $_POST['carrera'] ? $_POST['carrera'] : */ NULL;
+        // $username = $_POST['username'] ? $_POST['username'] : NULL;
+        // $habilidades = $_POST['habilidadesSeleccionadas'] ? $_POST['habilidadesSeleccionadas'] : NULL;
+        $habilidadesIds =$_POST['habilidadesSeleccionadas'] ? explode(",", $_POST['habilidadesSeleccionadas']) : [];
+        $carrera = $_POST['carrera'] ? $_POST['carrera'] : NULL;
         $planEstudios = /*$_POST['planEstudios'] ? $_POST['planEstudios'] : */NULL;
         $materias = /*$_POST['materia'] ? $_POST['materia'] : */NULL;
-        $direccion = $_POST['direccion'] ? $_POST['username'] : NULL;
+        $direccion = $_POST['direccion'] ? $_POST['direccion'] : NULL;
         $deBaja = NULL;
-        $fotoPerfil = NULL;
+        $foto_perfil = null;
+        if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === UPLOAD_ERR_OK) {
+            
+            $fileTmpPath = $_FILES['fotoPerfil']['tmp_name'];
+            $fileName = $_FILES['fotoPerfil']['name'];
+            $newFileName = uniqid('profile_', true) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
+            $uploadDir = './../img/';
+            $uploadPath = $uploadDir . $newFileName;
+    
+            
+            if (move_uploaded_file($fileTmpPath, $uploadPath)) {
+                $foto_perfil = $newFileName;
+            }
+        } else {
+            $foto_perfil = null; 
+        }
 
-        $check = $this->alumnoDao->editarPerfilAlumno($id, $email, $username,$password, $nombre, $apellido, $telefono, $direccion, $fotoPerfil, $deBaja, $habilidades, $planEstudios, $materias);
+        $check = $this->alumnoDao->editarPerfilAlumno($id, $email, $nombre, $apellido, $telefono, $direccion, $foto_perfil, $deBaja, $habilidadesIds, $planEstudios, $materias);
 
         if ($check) {
             return [
                 'success' => true,
-                'message' => 'Usuario Editado Correctamente',
+                'body' => $check,
             ];
         } else {
             return [
                 'success' => false,
-                'message' => 'Error',
+                'body' => 'Error',
             ];
         }
 
+    }
+    public function obtenerPlanesEstudio() {
+        $id = $_GET['id_carrera'];
+        $planesEstudio = $this->alumnoDao->obtenerPlanesEstudio($id);
+        if($planesEstudio){
+            http_response_code(200);
+            echo json_encode([
+                "success" => true,
+                "body" => $planesEstudio
+            ]);
+            return;
+        }
+        else {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error: No se encontraron planes estudio para esta carrera',
+            ]);
+        }
     }
 
     public function getHabilidades(){
@@ -166,6 +201,43 @@ class AlumnoController {
                 'message' => 'Error: No se encontraron suscripciones',
             ];
             return $response;
+        }
+    }
+    
+
+    public function obtenerAlumnoPorId($id){
+        $usuario = $this->alumnoDao->obtenerAlumno($id);
+        if($usuario){
+            
+            $response = [
+                "success" => true,
+                "body" => $usuario
+            ];
+            return $response;
+        }
+        else {
+            
+            $response = [
+                'success' => false,
+                'message' => 'Error: No se encontraron solicitudes',
+            ];
+            return $response;
+        }
+    }
+
+    public function listarCarreras(){
+        $carreras = $this->alumnoDao->listarCarreras();
+        if($carreras){
+            return [
+                "success" => true,
+                "body" => $carreras
+            ];
+        }
+        else {
+            return [
+                'success' => false,
+                'message' => 'Error: No se encontraron carreras',
+            ];
         }
     }
     
