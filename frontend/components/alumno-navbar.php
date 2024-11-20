@@ -46,12 +46,6 @@
                         </a>
                     </li>
                 </ul>
-                <form class="d-flex d-sm-none mt-3" role="search">
-                    <input class="form-control me-2 border-success-subtle" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success d-grid align-content-center" type="submit">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </form>
             </div>
         </div>
     </div>
