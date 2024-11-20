@@ -38,7 +38,7 @@
     <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center">
         <div class="col-sm-4 rounded-5 p-4 bg-opacity-75 w-auto shadow-lg bg-navbar">
             <div class="text-center mb-3 p-3">
-                <img src="../img/logo.png" alt="logo" class="img-fluid">
+                <img src="../img/logo.png" alt="logo" class="img-fluid ">
             </div>
             <form method="POST" id="form-inicio" class="g-3" novalidate>
                 <h2 class="text-center mb-4 mx-sm-5 px-sm-5">Iniciar Sesión</h2>
