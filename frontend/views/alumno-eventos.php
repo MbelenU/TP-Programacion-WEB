@@ -28,6 +28,7 @@ function estaSuscripto($eventoId, $userId) {
 }
 ?> 
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -37,71 +38,60 @@ function estaSuscripto($eventoId, $userId) {
 </head>
 <body class="bg-inicio">
     <?php require __DIR__ . '/../components/alumno-navbar.php' ?>
-    <div class="container p-sm-4 bg-white">
-        <div class="row mb-3">
-            <h1>Eventos</h1>
-            <form class="filtro d-flex mb-sm-3" role="search">
-                <input class="form-control me-2 border-success-subtle" type="search" id="form-control"
-                    placeholder="Carreras | Nombre del evento | Fecha | Ubicación | Modalidad" aria-label="Search">
-                <button class="botonFiltro btn btn-light border border-success-subtle " type="submit">Filtrar</button>
+    <div class="container p-sm-4 bg-secondary-subtle">
+        <div class="container mt-5">
+            <div class="pb-5">
+                <h1>Eventos</h1>
+            </div>
+
+            <!-- Formulario de búsqueda -->
+            <form class="filtro d-flex mb-5" role="search">
+                <input class="form-control me-2 border-success-subtle" type="search"
+                    id="form-control" placeholder="Carreras | Nombre del evento | Fecha | Ubicación | Modalidad" 
+                    aria-label="Search">
+                <button class="botonFiltro btn btn-light border border-success-subtle" type="submit">Filtrar</button>
             </form>
-        </div>
-        
-        <?php if (!empty($eventos)): ?>
-           
-            <?php
-// Dentro del ciclo que recorre los eventos
-foreach ($eventos as $evento):
-    // Verificar si el usuario está suscrito al evento
-    $suscripcion = estaSuscripto($eventos, $userId); 
-   // var_dump($suscripcion);
-  //  exit();
-?>
-              
-                <div class="container-evento bg-navbar border border-success-subtle">
-                    <div class="evento-item mb-6">
-                        <div class="row px-2">
-                            <button class="toggleButton btn border-0 d-flex justify-content-between align-items-center w-100">
-                                <div class="evento-titulo"><?php echo htmlspecialchars($evento['nombreEvento']); ?></div>
-                                <i class="arrowIcon fas fa-chevron-left"></i>
-                            </button>
-                        </div>
-                        <div class="evento-details d-none">
-                            <div>
-                                <i class="bi bi-calendar3"></i>
-                                <strong>Fecha:</strong>
-                                <ul>
-                                    <li><?php echo htmlspecialchars($evento['fechaEvento']); ?></li>
-                                  
-                                </ul>
+
+            <?php if (!empty($eventos)): ?>
+                <div class="row mb-5 list-group col-12 p-0">
+                    <?php foreach ($eventos as $evento): 
+                        $suscripcion = estaSuscripto($eventos, $userId); 
+                    ?>
+                        <div class="list-group-item list-group-item-action bg-white border border-success-subtle">
+                            <div class="w-100 justify-content-between">
+                                <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
+                                    <h5 class="mb-1">
+                                        <div class="evento-titulo"><?php echo htmlspecialchars($evento['nombreEvento']); ?></div>
+                                    </h5>
+                                    <small class="mb-1"><i class="bi bi-calendar3"></i> <?php echo htmlspecialchars($evento['fechaEvento']); ?></small>
+                                    <div class="mt-4"><?php echo htmlspecialchars($evento['tipoEvento']); ?></div>
+                                </button>
                             </div>
-                            <div class="mt-4">
-                                <p><strong>Descripción:</strong></p>
-                                <p><?php echo htmlspecialchars($evento['descripcionEvento']); ?></p>
-                            </div>
-                            <div class="mt-4">
-                                <strong>Tipo:</strong>
-                                <div><?php echo htmlspecialchars($evento['tipoEvento']); ?></div>
-                            </div>
-                            <div class="mt-4">
-                                <strong>Créditos:</strong>
-                                <div><?php echo htmlspecialchars($evento['creditosEvento']); ?></div>
-                            </div>
-                            <div class="vstack gap-0 col-md-5 mx-auto">
-                                <?php if ($suscripcion !== null): ?>
-                                    <button class="btn btn-danger mt-3">DESUSCRIBIRME</button>
-                                <?php else: ?>
-                                    <button class="btn btn-success mt-3">SUSCRIBIRME</button>
-                                <?php endif; ?>
+                            <div class="evento-details d-none">
+                                <div class="mt-4">
+                                    <p><strong>Descripción:</strong></p>
+                                    <p><?php echo htmlspecialchars($evento['descripcionEvento']); ?></p>
+                                </div>
+                                <div class="mt-4">
+                                    <strong>Créditos:</strong>
+                                    <div><?php echo htmlspecialchars($evento['creditosEvento']); ?></div>
+                                </div>
+                                <div class="mt-4 d-flex justify-content-center align-items-center">
+                                    <?php if ($suscripcion !== null): ?>
+                                        <button class="btn btn-danger">Desuscribirme</button>
+                                    <?php else: ?>
+                                        <button class="btn btn-success">Suscribirme</button>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>No hay eventos disponibles en este momento.</p>
-        <?php endif; ?>
-        
+            <?php else: ?>
+                <p>No hay eventos disponibles en este momento.</p>
+            <?php endif; ?>
+        </div>
     </div>
 </body>
 </html>
+
