@@ -103,6 +103,7 @@ class AlumnoController {
     public function getHabilidades(){
         return $this->alumnoDao->getHabilidades();
     }
+    
 
     public function listarEventos(){
         $eventos = $this->alumnoDao->getEventos();

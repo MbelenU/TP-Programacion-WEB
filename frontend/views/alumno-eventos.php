@@ -80,14 +80,6 @@ foreach ($eventos as $evento):
                                 <p><?php echo htmlspecialchars($evento['descripcionEvento']); ?></p>
                             </div>
                             <div class="mt-4">
-                                <strong>Modalidad:</strong>
-                               <!-- <div><?php echo htmlspecialchars($evento['modalidad']); ?></div>-->
-                            </div>
-                            <!--<div class="mt-4">
-                                <strong>Ubicación:</strong>
-                                <div><?php echo htmlspecialchars($evento['ubicacion']); ?></div>
-                            </div>-->
-                            <div class="mt-4">
                                 <strong>Tipo:</strong>
                                 <div><?php echo htmlspecialchars($evento['tipoEvento']); ?></div>
                             </div>
@@ -96,7 +88,6 @@ foreach ($eventos as $evento):
                                 <div><?php echo htmlspecialchars($evento['creditosEvento']); ?></div>
                             </div>
                             <div class="vstack gap-0 col-md-5 mx-auto">
-                                <!-- Cambia el texto del botón según si el usuario está suscrito -->
                                 <?php if ($suscripcion !== null): ?>
                                     <button class="btn btn-danger mt-3">DESUSCRIBIRME</button>
                                 <?php else: ?>

@@ -18,6 +18,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -29,68 +30,82 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 
 <body class="bg-inicio">
     <?php require __DIR__ . '/../components/alumno-navbar.php' ?>
-    <div class="container p-sm-4 bg-white">
-        <div class="row mb-3">
-            <h1>Empleos</h1>
+
+    <div class="container p-sm-4 bg-secondary-subtle">
+        <div class="container mt-5">
+            <div class="pb-5">
+                <h1>Empleos</h1>
+            </div>
+
             <!-- Formulario de búsqueda -->
-            <form class="filtro d-flex" role="search" method="GET" action="buscar.php">
+            <form class="filtro d-flex mb-5" role="search" method="GET" action="buscar.php">
                 <input class="form-control me-2" type="search" name="buscar" id="form-control" placeholder="Buscar">
                 <button class="botonFiltro btn btn-light border border-success-subtle" type="submit">Filtrar</button>
             </form>
-        </div>
-        
-        <?php foreach ($empleos as $empleo): ?>
-            <div class="container-empleo bg-navbar border border-success-subtle">
-                <div class="empleo-item mb-6">
-                    <div class="row px-2">
-                        <button class="toggleButton btn border-0 d-flex justify-content-between align-items-center w-100">
-                            <div class="titulo-empleo"><?php echo htmlspecialchars($empleo->getTitulo()); ?></div>
-                            <i class="bi bi-geo-alt"><?php echo htmlspecialchars($empleo->getUbicacion()); ?></i>
-                            <i class="arrowIcon fas fa-chevron-left "></i>
+
+            <div class="row mb-5 list-group col-12 p-0">
+                <?php foreach ($empleos as $empleo): 
+                
+                ?>
+                    <div class="list-group-item list-group-item-action bg-white border border-success-subtle">
+                        <div class="w-100 justify-content-between">
+                        <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
+                        <h5 class="mb-1"><div class="titulo-empleo"><?php echo htmlspecialchars($empleo->getTitulo()); ?></div></h5>
+                            <p class="mb-1"><?php echo htmlspecialchars($empleo->getDescripcion()); ?></p>
+                            <small><?php echo htmlspecialchars($empleo->getUbicacion()); ?></small>
+                            <div class="mt-4">   
+                                    <?php echo htmlspecialchars($empleo->getEstadoEmpleo()->getEstado()); ?>
+                                
+                            </div>
                         </button>
+                        </div>
+                        <div class="empleo-details d-none">
+                        <div class="mt-4">
+                                <strong>Habilidades Necesarias:</strong>
+                                <ul>
+                                    <?php foreach ($empleo->getHabilidades() as $habilidad): ?>
+                                        <li><?php echo htmlspecialchars($habilidad->getNombreHabilidad()); ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                            
+
+                            <div class="mt-4">
+                                <strong>Disponibilidad Horaria:</strong>
+                                <ul>
+                                    <?php if ($empleo->getJornada()): ?>
+                                        <li><?php echo htmlspecialchars($empleo->getJornada()->getDescripcionJornada()); ?></li>
+                                    <?php else: ?>
+                                        <li>No disponible</li>
+                                    <?php endif; ?>
+                                </ul>
+                            </div>
+
+                            <div class="mt-4">
+                                <strong>Modalidad:</strong>
+                                <ul>
+                                    <?php if ($empleo->getModalidad()): ?>
+                                        <li><?php echo htmlspecialchars($empleo->getModalidad()->getDescripcionModalidad()); ?></li>
+                                    <?php else: ?>
+                                        <li>No disponible</li>
+                                    <?php endif; ?>
+                                </ul>
+                            </div>
+                            </div>
+                        <div class="mt-2">
+                            <div class="d-flex align-items-center">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de empleo">
+                                    <button type="button" class="btn btn-success btn-sm">Aplicar</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="empleo-details d-none">
-                        <div>
-                            <strong>Descripción:</strong>
-                            <p><?php echo htmlspecialchars($empleo->getDescripcion()); ?></p>
-                        </div>
-                        <div class="mt-4">
-                            <strong>Habilidades Necesarias:</strong>
-                            <ul>
-                                <?php foreach ($empleo->getHabilidades() as $habilidad): ?>
-                                    <li><?php echo htmlspecialchars($habilidad->getNombreHabilidad()); ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                        <div class="mt-4">
-                            <strong>Disponibilidad Horaria:</strong>
-                            <ul>
-                                <?php if ($empleo->getJornada()): ?>
-                                    <li><?php echo htmlspecialchars($empleo->getJornada()->getDescripcionJornada()); ?></li>
-                                <?php else: ?>
-                                    <li>No disponible</li>
-                                <?php endif; ?>
-                            </ul>
-                        </div>
-                        <div class="mt-4">
-                            <strong>Modalidad:</strong>
-                            <ul>
-                                <?php if ($empleo->getModalidad()): ?>
-                                    <li><?php echo htmlspecialchars($empleo->getModalidad()->getDescripcionModalidad()); ?></li>
-                                <?php else: ?>
-                                    <li>No disponible</li>
-                                <?php endif; ?>
-                            </ul>
-                        </div>
-                        <div class="vstack col-md-5 mx-auto">
-                            <button class="btn btn-light mt-3 border border-success-subtle">Enviar Solicitud</button>
-                        </div>
-                    </div>
-                </div>
+                    
+                <?php endforeach; ?>
             </div>
-        <?php endforeach; ?>
-        
+        </div>
     </div>
+
 </body>
 
 </html>

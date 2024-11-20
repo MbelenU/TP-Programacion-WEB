@@ -473,8 +473,8 @@ class AlumnoDAO
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             $estadoId = new EstadoEmpleo($row['id'], $row['nombre']);
             // $estadoId = new EstadoEmpleo();
-            // $estadoId->setId($row['id']);
-            // $estadoId->setEstado($row['nombre']);
+             $estadoId->setId($row['id']);
+             $estadoId->setEstado($row['nombre']);
             // $detalle = $estadoId->getEstado();
             return $estadoId;
         } else {
@@ -497,6 +497,23 @@ class AlumnoDAO
             return $modalidad;
         } else {
             return null; 
+        }
+    }
+
+    public function obtenerEstadoEmpleo($id_estadopublicacion) {
+        $query = "SELECT * FROM estados_publicacion WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id_estadopublicacion, PDO::PARAM_INT);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $estadoPublicacion = new EstadoEmpleo();
+            $estadoPublicacion->setId($row['id']);
+            $estadoPublicacion->setEstado($row['nombre']);
+            
+            return $estadoPublicacion;
+        } else {
+            return null;
         }
     }
 
@@ -545,8 +562,8 @@ class AlumnoDAO
                     $habilidad->setNombreHabilidad($habilidadData['descripcion']);
                     $habilidades[] = $habilidad;
                 }
-
-
+                
+          
                 $empleoOBJ = new PublicacionEmpleo();
                 $empleoOBJ->setId($id);  
                 $empleoOBJ->setTitulo($titulo);  
@@ -556,6 +573,7 @@ class AlumnoDAO
                 $empleoOBJ->setJornada($jornada);  
                 $empleoOBJ->setUbicacion($ubicacion); 
                 $empleoOBJ->setHabilidades($habilidades);
+                $empleoOBJ->setEstadoEmpleo($estadoEmpleo);
 
                 //$empleoOBJ = new PublicacionEmpleo($id, $titulo, $modalidad, $descripcion, $estadoEmpleo, $jornada, $ubicacion);
                 //$empleoOBJ = new PublicacionEmpleo($id, $titulo, $modalidad, $descripcion, $estadoEmpleo, $carreraRequerida, $jornada, $ubicacion, $postulacion, $materiasRequeridas, $habilidadesRequeridas);
@@ -649,6 +667,7 @@ class AlumnoDAO
             }
 
         }
+        
 
 
 }
