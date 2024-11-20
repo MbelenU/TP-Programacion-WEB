@@ -1,12 +1,11 @@
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', function() {
+    // Variables para formularios y selectores
     const tipoUsuario = document.getElementById('tipoUsuario');
     const formAlumno = document.getElementById('formAlumno');
     const formEmpresa = document.getElementById('formEmpresa');
-    const errorAlert = document.getElementById("errorAlert");
-    const successAlert = document.getElementById("successAlert");
 
-
+    // Escuchar el cambio en el tipo de usuario
     tipoUsuario.addEventListener('change', function() {
         const usuarioSeleccionado = tipoUsuario.value;
         formAlumno.classList.add('d-none');
@@ -21,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Prevenir el envío de los formularios y manejar la lógica de validación si es necesario
     formAlumno.addEventListener('submit', async function(event) {
         event.preventDefault();
         if (formAlumno.checkValidity() === false) {
@@ -30,18 +30,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 typeUser: tipoUsuario.value,
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
-                repeatPassword: document.getElementById('repeatPassword').value,
-                direccion: document.getElementById('direccion').value,
-                telefono: document.getElementById('telefono').value,
+                
                 nombreUsuario: document.getElementById('nombreUsuario').value,
                 nombre: document.getElementById('nombre').value,
                 apellido: document.getElementById('apellido').value,
-                dni: document.getElementById('dni').value,
+                
             };
             const data = await registrarse(alumnoData);
             mostrarMensaje(data);
         }
     });
+    /*
+    formAlumno.addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Aquí puedes agregar tu lógica de validación adicional
+        this.submit(); // Envía el formulario si todo está bien
+    }); */
 
     formEmpresa.addEventListener('submit', async function(event) {
         event.preventDefault();
@@ -54,16 +58,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 nombreEmpresa: document.getElementById('nombreEmpresa').value,
                 email: document.getElementById('emailEmpresa').value,
                 password: document.getElementById('passwordEmpresa').value,
-                repeatPassword: document.getElementById('repeatPasswordEmpresa').value,
-                direccion: document.getElementById('direccionEmpresa').value,
-                telefono: document.getElementById('telefonoEmpresa').value,
                 RazonSocial: document.getElementById('RazonSocial').value,
-                CUIT: document.getElementById('CUIT').value,
+                
             };
             const data = await registrarse(empresaData);
             mostrarMensaje(data);
         }
     });
+
+    /*
+    formEmpresa.addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Aquí puedes agregar tu lógica de validación adicional
+        this.submit(); // Envía el formulario si todo está bien
+    });*/
 
     async function registrarse(userData) {
         try {
@@ -94,5 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
             errorAlert.classList.remove("d-none");
         }
     }
+
+
 });
 

@@ -56,7 +56,7 @@
                     <label for="password">Password</label>
                 </div>
                 <div class="mb-3 text-end">
-                    <a href="forgot-password.html" class="text-secondary">Olvidé mi contraseña</a>
+                    <a href="forgot-password.php" class="text-secondary">Olvidé mi contraseña</a>
                 </div>
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary" name="login">Iniciar Sesión</button>

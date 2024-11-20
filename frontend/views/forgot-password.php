@@ -1,53 +1,50 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/global.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="../img/logo.png" type="image/x-icon">
-    <title>Recuperar Contraseña</title>
-</head>
-<body class="bg-dark bg-alt ">
-    <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center shadow">
-        <div class="col-md-4 bg-navbar rounded-5 p-4 bg-opacity-75 w-auto">
-            <div class="text-center mb-3 p-3">
-                <img src="../img/logo.png" alt="logo" class="img-fluid">
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="resetPasswordModalLabel">Restablecer Contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <h2 class="text-center mb-4">Recuperar Contraseña</h2>
-            <form id="forgot-password-form" novalidate>
-                <div class="mb-3 input-group">
-                    <label for="email" class="input-group-text">Ingrese su email</label>
-                    <input type="email" id="email" class="form-control" placeholder="Ej: usuario@gmail.com" required>
+            <form id="reset-password-form" method="POST" action="../controllers/UsuarioController.php?action=resetPassword">
+                <div class="modal-body">
+                    <input type="hidden" id="emailInput" name="email">
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label">Nueva Contraseña</label>
+                        <input type="password" id="newPassword" name="newPassword" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
+                    </div>
                 </div>
-                
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">Reestablecer contrañesa</button>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Guardar Contraseña</button>
                 </div>
             </form>
         </div>
     </div>
+</div>
 
-    <!-- Modal de Bootstrap -->
-    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-success" id="modalHeader">
-                    <h5 class="modal-title text-white" id="confirmationModalLabel"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="modalBody">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="modalButton" data-bs-dismiss="modal">Aceptar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<script>
+    // JavaScript para mostrar el modal si el correo es válido
+    document.querySelector('#forgot-password-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.querySelector('#email').value;
 
-    <!-- Bootstrap y JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Script para simular el envío de correo -->
-    <script src="forgot-password.js"></script>
-</body>
-</html>
+        fetch('../controllers/UsuarioController.php?action=verifyEmail', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `email=${email}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.querySelector('#emailInput').value = email;
+                const modal = new bootstrap.Modal(document.querySelector('#resetPasswordModal'));
+                modal.show();
+            } else {
+                alert(data.message);
+            }
+        });
+    });
+</script>
