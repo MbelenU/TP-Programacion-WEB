@@ -12,10 +12,10 @@
                     header("Location: ./alumno-perfil.php");
                     exit();
                 case '1':
-                    header("Location: ./admin-perfil.php");
+                    header("Location: ./alumno-empleos.php");
                     exit();
                 case '3':
-                    header("Location: ./empresa-visualizar-perfil.php");
+                    header("Location: ./empresa-visualizar-publicaciones.php");
                     exit();
             }
         } else {
