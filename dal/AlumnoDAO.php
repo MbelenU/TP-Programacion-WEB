@@ -434,7 +434,7 @@ class AlumnoDAO
                 $estado = $stmtEstado->fetch(PDO::FETCH_ASSOC);
                 $estadoPostulacion = new EstadoPostulacion();
                 $estadoPostulacion->setEstado($estado['nombre']);
-                $estadoPostulacion->setEstado($estado['id']);
+                $estadoPostulacion->setId($estado['id']);
                 // detalles del postulante (usuario)
                 $usuario = $this->obtenerUsuarioPorId($postulanteId);
     
