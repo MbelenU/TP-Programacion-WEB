@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <div class="mt-4">
                                     <strong>Habilidades Necesarias:</strong>
                                     <ul>
-                                        ${empleo.habilidades.map(habilidad => `<li>${habilidad}</li>`).join('')}
+                                        ${empleo.habilidades.map(habilidad => `<li>${habilidad.nombre}</li>`).join('')}
                                     </ul>
                                 </div>
 
