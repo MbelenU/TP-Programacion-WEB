@@ -22,24 +22,17 @@
                                 class="rounded-circle w-25 pb-2"></a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link active" aria-current="page"
-                            href="<?php echo BASE_URL ?>views/admin-perfil.php">Mi Perfil</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link"
-                            href="<?php echo BASE_URL ?>views/admin-editar-perfil.php">Editar Perfil</a>
-                    </li>
-                    <li class="nav-item ">
                         <a class="nav-link" href="<?php echo BASE_URL ?>views/admin-gestionar-usuarios.php">Usuarios</a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link"
                             href="<?php echo BASE_URL ?>views/admin-eventos.php">Eventos</a>
                     </li>
+                    <!--
                     <li class="nav-item ">
                         <a class="nav-link"
-                            href="<?php echo BASE_URL ?>views/admin-notificaciones.php">Notificaciones</a>
-                    </li>
+                            href="<?/*php echo BASE_URL */?>views/admin-notificaciones.php">Notificaciones</a>
+                    </li>-->
                     <li class="nav-item">
                         <a class="nav-link"
                             href="<?php echo BASE_URL ?>views/admin-visualizar-carreras.php">Carreras</a>

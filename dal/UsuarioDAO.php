@@ -270,21 +270,23 @@ class UsuarioDAO {
             $empresa = new Empresa();
     
             $empresa->setId($row['id']);
-            $empresa->setTelefono($row['telefono']);
-            $empresa->setNombreEmpresa($row['razon_social']);
-            $empresa->setUbicacion($row['direccion']);
-            $empresa->setNombre($row['nombre']);
-            $empresa->setSitioWeb($row['sitio_web']);
-            $empresa->setMailCorporativo($row['mail_corporativo']);
-            $empresa->setFotoPerfil($row['foto_perfil']);
-            $empresa->setDescripcion($row['descripcion']);
+            $empresa->setTelefono($row['telefono'] ? $row['telefono'] : '');  
+            $empresa->setNombreEmpresa($row['razon_social'] ? $row['razon_social'] : '');  
+            $empresa->setUbicacion($row['direccion'] ? $row['direccion'] : ''); 
+            $empresa->setNombre($row['nombre'] ? $row['nombre'] : '');  
+            $empresa->setSitioWeb($row['sitio_web'] ? $row['sitio_web'] : ''); 
+            $empresa->setMailCorporativo($row['mail_corporativo'] ? $row['mail_corporativo'] : '');  
+            $empresa->setFotoPerfil($row['foto_perfil'] ? $row['foto_perfil'] : '');
+            $empresa->setDescripcion($row['descripcion'] ? $row['descripcion'] : '');  
+    
             $empleos = $this->listarPublicaciones($idUsuario);
-            $empresa->setEmpleosPublicados($empleos);
+            $empresa->setEmpleosPublicados($empleos ? $empleos : []);
             return $empresa;
         }
-        
+    
         return null;
     }
+    
    
 }
 

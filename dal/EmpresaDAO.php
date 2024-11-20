@@ -500,7 +500,7 @@ class EmpresaDAO {
                 return $publicacionesArray;
             }
         }
-        return null;
+        return [];
     }
     public function listarJornadas() {
         $queryJornadas = "SELECT * FROM jornadas";

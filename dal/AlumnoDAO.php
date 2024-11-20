@@ -2,6 +2,8 @@
 require_once 'Database.php';
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../models/Alumno.php';
+require_once __DIR__ . '/../models/PlanEstudio.php';
+require_once __DIR__ . '/../models/Carrera.php';
 require_once __DIR__ . '/../models/Habilidad.php';
 require_once __DIR__ . '/../models/Evento.php';
 require_once __DIR__ . '/../models/PublicacionEmpleo.php';
@@ -21,7 +23,7 @@ class AlumnoDAO
     {
         $this->conn = (new Database())->getConnection();
     }
-    public function editarPerfilAlumno($id, $email, $username, $password, $nombre, $apellido, $telefono, $direccion, $fotoPerfil, $deBaja, $habilidades, $planEstudios, $materias): ?Alumno
+    public function editarPerfilAlumno($id, $email, $nombre, $apellido, $telefono, $direccion, $fotoPerfil, $deBaja, $habilidades, $planEstudios, $materias): ?Alumno
     {
         // Actualizar información del usuario
         $updateUserQuery = "UPDATE usuario SET ";
@@ -32,14 +34,7 @@ class AlumnoDAO
             $updateUserFields[] = "mail = :email";
             $paramsUser[':email'] = $email;
         }
-        if ($username !== null) {
-            $updateUserFields[] = "nombre = :username";
-            $paramsUser[':username'] = $username;
-        }
-        if ($password !== null) {
-            $updateUserFields[] = "clave = :password";
-            $paramsUser[':password'] = $password;
-        }
+        
         if ($telefono !== null) {
             $updateUserFields[] = "telefono = :telefono";
             $paramsUser[':telefono'] = $telefono;
@@ -100,10 +95,10 @@ class AlumnoDAO
         }
 
 
-        $habilidades = json_decode($habilidades, true); // Aseguramos que es un array
-        if (!is_array($habilidades)) {
-            $habilidades = [];  // En caso de que no sea un array, lo inicializamos como un array vacío
-        }
+        // $habilidades = json_decode($habilidades, true); // Aseguramos que es un array
+        // if (!is_array($habilidades)) {
+        //     $habilidades = [];  // En caso de que no sea un array, lo inicializamos como un array vacío
+        // }
 
         // Verificar las habilidades actuales del usuario
         $queryHabilidadesActuales = "
@@ -152,34 +147,152 @@ class AlumnoDAO
             }
         }
 
-        return $this->obtenerAlumnoPorId($id);
+        return $this->obtenerAlumno($id);
     }
 
-
-    private function obtenerAlumnoPorId($id): ?Alumno
-    {
-        // Implementación de consulta para obtener el Alumno por su ID (FK_idUsuario)
-        $query = "SELECT * FROM alumno WHERE id_usuario = :idUsuario LIMIT 1";
+    public function obtenerAlumno($id) {
+        $query = "SELECT u.id AS usuario_id, u.mail, u.telefono, u.direccion, u.foto_perfil,
+                         a.id AS alumno_id, a.nombre AS alumno_nombre, a.apellido, a.descripcion, a.id_usuario,
+                         ca.id_carrera,
+                         ma.id_materia AS materia_id, m.nombre AS materia_nombre
+                  FROM alumno AS a
+                  JOIN usuario AS u ON u.id = a.id_usuario
+                  LEFT JOIN carreras_alumnos AS ca ON ca.id_usuario = u.id
+                  LEFT JOIN materias_aprobadas AS ma ON ma.id_alumno = a.id
+                  LEFT JOIN materias AS m ON m.id = ma.id_materia
+                  WHERE u.id = :id";
+        
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':idUsuario', $id);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
-
+        
         if ($stmt->rowCount() > 0) {
-            $rowAlumno = $stmt->fetch(PDO::FETCH_ASSOC);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
             $alumno = new Alumno();
-            $alumno->setNombre($rowAlumno['nombre']);
-            $alumno->setApellidoAlumno($rowAlumno['apellido']);
-            // Añadir más propiedades según sea necesario
-            return $alumno;
-        }
+            $alumno->setId($row['alumno_id']);
+            $alumno->setNombreAlumno($row['alumno_nombre']);
+            $alumno->setApellidoAlumno($row['apellido']);
+            $alumno->setEmail($row['mail']);
+            $alumno->setTelefono($row['telefono']);
+            $alumno->setUbicacion($row['direccion']);
+            if ($row['descripcion']) {
+                $alumno->setDescripcion($row['descripcion']);
+            } else {
+                $alumno->setDescripcion('');
+            }
+    
+            if ($row['foto_perfil']) {
+                $alumno->setFotoPerfil($row['foto_perfil']);
+            } else {
+                $alumno->setFotoPerfil('');
+            }
+            $habilidades = $this->obtenerHabilidadesDelAlumno($id);
+            $alumno->setHabilidades($habilidades);
 
+            $carrera = $this->obtenerCarreraPorId($row['id_carrera']);
+            if ($carrera) {
+                $alumno->setCarrera($carrera);
+            }
+            $materiasAprobadas = [];
+            do {
+                if ($row['materia_id']) {
+                    $materiasAprobadas[] = $row['materia_nombre'];
+                }
+            } while ($row = $stmt->fetch(PDO::FETCH_ASSOC));
+    
+            $alumno->setMateriasAprobadas($materiasAprobadas);
+    
+            return $alumno;
+        } else {
+            return null;
+        }
+    }
+
+    public function obtenerCarreraPorId($idCarrera) {
+        $query = "SELECT * FROM carreras WHERE id = :id_carrera";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id_carrera', $idCarrera, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $carrera = new Carrera();
+            $carrera->setId($row['id']);
+            $carrera->setNombreCarrera($row['nombre_carrera']);
+            
+            return $carrera;
+        }
         return null;
     }
+
+    public function obtenerHabilidadesDelAlumno($idAlumno) {
+        $query = "SELECT h.id, h.descripcion, ha.nivel_grado
+                  FROM habilidades AS h
+                  JOIN habilidades_alumnos AS ha ON h.id = ha.id_habilidad
+                  WHERE ha.id_usuario = :id_usuario";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id_usuario', $idAlumno, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $habilidades = [];
+        if ($stmt->rowCount() > 0) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $habilidad = new Habilidad();
+                $habilidad->setId($row['id']);
+                $habilidad->setNombreHabilidad($row['descripcion']);
+                // $habilidad->setNivelHabilidad($row['nivel_grado']);
+
+                $habilidades[] = $habilidad;
+            }
+        }
+        
+        return $habilidades;
+    }
+
+//     public function obtenerAlumnoPorId($id): ?Alumno
+//     {
+//         // Implementación de consulta para obtener el Alumno por su ID (FK_idUsuario)
+//         $query = "
+//     SELECT 
+//         a.*, 
+//         h.*, 
+//         u.*, 
+//         ha.*
+//     FROM alumno a
+//     INNER JOIN usuario u ON a.id_usuario = u.id
+//     LEFT JOIN habilidades_alumnos ha ON a.id_usuario = ha.id_usuario
+//     LEFT JOIN habilidades h ON ha.id_habilidad = h.id
+//     WHERE a.id_usuario = :idUsuario;
+// ";
+
+//         $stmt = $this->conn->prepare($query);
+//         $stmt->bindParam(':idUsuario', $id);
+//         $stmt->execute();
+
+//         if ($stmt->rowCount() > 0) {
+//             $rowAlumno = $stmt->fetch(PDO::FETCH_ASSOC);
+
+//             echo "<pre>";
+//             print_r($rowAlumno);
+//             echo "</pre>";
+//             $alumno = new Alumno();
+//             $alumno->setNombreAlumno($rowAlumno['nombre']);
+//             $alumno->setApellidoAlumno($rowAlumno['apellido']);
+//             $alumno->setUbicacion($rowAlumno['direccion']);
+//             $alumno->setTelefono($rowAlumno['telefono']);
+//             $alumno->setEmail($rowAlumno['mail']);
+//             return $alumno;
+//         }
+
+//         return null;
+//     }
 
 
     private function obtenerUsuarioPorId($id): ?Usuario 
     {
-        
         $query = "SELECT * FROM usuario WHERE id = :idUsuario LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':idUsuario', $id);
@@ -473,6 +586,51 @@ class AlumnoDAO
     
         $empleos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $empleos;
+    }
+
+    public function listarCarreras() {
+        $queryCarreras = "SELECT * FROM carreras";
+        $stmt = $this->conn->prepare($queryCarreras);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $carreras = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $carrerasArray = [];
+            foreach($carreras as $carrera){
+                $id = $carrera['id'];
+                $nombreCarrera = $carrera['nombre_carrera'];
+                $planEstudios = $this->obtenerPlanesEstudio($id);
+                $carreraOBJ = new Carrera();
+                $carreraOBJ->setId($id);
+                $carreraOBJ->setNombreCarrera($nombreCarrera);
+                $carreraOBJ->setPlanEstudios($planEstudios);
+                $carrerasArray[] = $carreraOBJ;
+            }
+            if($carrerasArray){
+                return $carrerasArray;
+            }
+        }
+        return null;
+    }
+
+    public function obtenerPlanesEstudio($idCarrera) {
+        $queryPlanes = "SELECT * FROM plan_estudio WHERE id_carrera = :idCarrera";
+        $stmt = $this->conn->prepare($queryPlanes);
+        $stmt->bindParam(':idCarrera', $idCarrera, PDO::PARAM_INT);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            $planes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $planesArray = [];
+            foreach($planes as $plan){
+                $id = $plan['id'];
+                $nombrePlan = $plan['nombre'];
+                $planOBJ = new PlanEstudio($id, $nombrePlan);
+                $planesArray[] = $planOBJ->toArray();
+            }
+            if($planesArray){
+                return $planesArray;
+            }
+        }
+        return null;
     }
 
 

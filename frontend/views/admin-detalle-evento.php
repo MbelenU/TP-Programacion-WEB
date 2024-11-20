@@ -41,7 +41,7 @@
                         </div>
                         <div class="mt-4">
                             <strong>Créditos:</strong>
-                            <p>0.5</dpiv>
+                            <p>0.5</p>
                         </div>
 
                     </div>

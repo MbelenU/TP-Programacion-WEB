@@ -15,7 +15,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
     
 }
-
+$administradorController = new AdministradorController();
+$endpoint = $_GET['endpoint'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "register") {
+    $resultado = $administradorController->register();
+    return $resultado;
+    exit;
+}
 $administradorController = new AdministradorController();
 
 

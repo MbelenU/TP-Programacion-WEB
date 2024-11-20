@@ -54,11 +54,11 @@ $empresa = $empresa['body'];
                 <h3>Información de Contacto</h3>
                 <ul class="list-unstyled">
                     <li><strong>Email corporativo:</strong> <?php echo $empresa->getMailCorporativo(); ?></li>
-                    <li><strong>Teléfono corporativo:</strong> <?php echo $empresa->getTelefono(); ?></li>
+                    <li><strong>Teléfono corporativo:</strong> <?php echo $empresa->getTelefono() ? $empresa->getTelefono() : '' ; ?></li>
 					<li><strong>Sitio Web:</strong><a href="<?php echo $empresa->getSitioWeb(); ?>" target="_blank"> <?php echo $empresa->getSitioWeb(); ?></a></li>
                 </ul>
             </div>
-            <div class="mt-4">
+            <div class="mt-4"> 
                 <h3>Dirección</h3>
                 <p><?php echo $empresa->getUbicacion(); ?></p>
             </div>
