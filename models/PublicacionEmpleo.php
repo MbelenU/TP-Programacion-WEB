@@ -8,8 +8,8 @@ class PublicacionEmpleo {
     private EstadoEmpleo $estadoEmpleo;
     private Jornada $jornada;
     private string $ubicacion;
-    private array $postulacion; // Lista de postulaciones
-    private array $materiasRequeridas; // Lista de materias requeridas
+    private array $postulacion;
+    private array $materiasRequeridas;
     private DateTime $fecha;
     private array $habilidades;
     
@@ -109,21 +109,21 @@ class PublicacionEmpleo {
         return $this->habilidades;
     }
 
-
     public function toArray(): array {
         return [
             'id' => $this->id,
             'titulo' => $this->titulo,
             'descripcion' => $this->descripcion,
-            'estadoEmpleo' => $this->estadoEmpleo,
-            'jornada' => $this->jornada ? $this->jornada->getDescripcionJornada() : null,  // Asegúrate de que esté asignado
-            'modalidad' => $this->modalidad ? $this->modalidad->getDescripcionModalidad() : null,  // Asegúrate de que esté asignado
+            'estadoEmpleo' => $this->estadoEmpleo->toArray(),
+            'jornada' => $this->jornada->toArray(),
+            'modalidad' => $this->modalidad->toArray(),
             'ubicacion' => $this->ubicacion,
             'habilidades' => array_map(function($habilidad) {
-                return $habilidad->toArray(); // Convertimos cada objeto Habilidad a un array
+                return $habilidad->toArray(); 
             }, $this->habilidades),
         ];
     }
+    
 }
 
 ?>

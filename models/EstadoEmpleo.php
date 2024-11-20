@@ -19,6 +19,13 @@ class EstadoEmpleo extends PublicacionEmpleo {
     public function setEstado(string $estado): void {
         $this->estado = $estado;
     }
+
+    public function toArray(): array {
+        return [
+            'id' => $this->getId(),
+            'estado' => $this->getEstado(),
+        ];
+    }
 }
 
 ?>

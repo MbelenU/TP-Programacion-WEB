@@ -42,6 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['checkPostulacion'])) {
     $resultado = $alumnoController->darBaja();
     return $resultado;
     exit;
+}elseif(isset($_GET['buscarEmpleos'])) {
+    $resultado = $alumnoController->buscarEmpleos($_GET['buscarEmpleos']);
+    echo json_encode($resultado);
+    exit();
 }
 class AlumnoController {
     private AlumnoDAO $alumnoDao;
@@ -222,23 +226,19 @@ class AlumnoController {
         }
     }
 
-    public function buscarEmpleos(){
-        $empleos = $this->alumnoDao->getBusquedaEmpleo();
-        if($empleos){
-            
-            $response = [
+    public function buscarEmpleos($buscar) {
+    
+        $empleos = $this->alumnoDao->getBusquedaEmpleo($buscar);
+        if ($empleos) {
+            return [
                 "success" => true,
                 "body" => $empleos
             ];
-            return $response;
-        }
-        else {
-            
-            $response = [
+        } else {
+            return [
                 'success' => false,
                 'message' => 'Error: No se encontraron empleos',
             ];
-            return $response;
         }
     }
     public function listarPostulaciones(){

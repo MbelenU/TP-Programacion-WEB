@@ -1,13 +1,8 @@
 <?php
-require_once '../../controllers/AlumnoController.php';
-
-$alumnoController = new AlumnoController();
-$response = $alumnoController->listarEmpleos();
-$empleos = $response['body'];
-$response_buscar = $alumnoController->buscarEmpleos();
-$buscar = $response_buscar['body'];
-
 session_start();
+require_once '../../controllers/AlumnoController.php';
+$alumnoController = new AlumnoController();
+
 if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
@@ -17,6 +12,8 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
 }
+$response = $alumnoController->listarEmpleos();
+$empleos = $response['body'];
 ?>
 
 <!DOCTYPE html>
@@ -36,14 +33,13 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
             <div class="pb-5">
                 <h1>Empleos</h1>
             </div>
-            <form class="filtro d-flex mb-5" role="search" method="GET" action="buscar.php">
-                <input class="form-control me-2" type="search" name="buscar" id="form-control" placeholder="Buscar">
-                <button class="botonFiltro btn btn-light border border-success-subtle" type="submit">Filtrar</button>
+            <form class="filtro d-flex mb-5" role="search">
+                <input class="form-control me-2" type="search" id="buscarInput" placeholder="Buscar">
+                <button class="botonFiltro btn btn-light border border-success-subtle" id="buscarBoton">Buscar</button>
             </form>
-
-            <div class="row mb-5 list-group col-12 p-0">
+            <div class="mb-5 list-group col-12 p-0" id="resultadosBusqueda">
                 <?php foreach ($empleos as $empleo): ?>
-                    <div class="list-group-item list-group-item-action bg-white border border-success-subtle">
+                    <li class="list-group-item list-group-item-action bg-white border" >
                         <div class="w-100 justify-content-between">
                             <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
                                 <h5 class="mb-1">
@@ -95,12 +91,13 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </li>
                 <?php endforeach; ?>
 
             </div>
         </div>
     </div>
+    <script src="../scripts/alumno/buscarEmpleos.js"></script>
     <script src="../scripts/alumno/aplicarEmpleo.js"></script>
 </body>
 
