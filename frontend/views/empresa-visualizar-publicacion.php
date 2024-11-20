@@ -47,8 +47,9 @@ $publicacion = $publicacion['body'];
 				</div>
 			</div>
 			<ul class="list-group">
-				<li class="list-group-item disabled" aria-disabled="true">Postulaciones de Alumnos</li>
-				<li class="list-group-item">
+					
+			<li class="list-group-item disabled" aria-disabled="true">Postulaciones de Alumnos</li>
+				
 					<?php
 					$postulaciones = $publicacion->getPostulacion();
 					if ($postulaciones && count($postulaciones) > 0) {
@@ -64,7 +65,8 @@ $publicacion = $publicacion['body'];
 							$intervalo = $hoy->diff($fechaPostulacion);
 							$diasTranscurridos = $intervalo->days;
 					?>
-							<div class="d-flex justify-content-between">
+
+							<li class="list-group-item d-flex justify-content-between">
 								<div>
 									<span><?php echo $nombrePostulante; ?></span>
 									<p class="mb-1" style="margin-top: 10px;">Postulación enviada <strong>Hace <?php echo $diasTranscurridos; ?> días</strong></p>
@@ -80,7 +82,7 @@ $publicacion = $publicacion['body'];
 										<button type="button" class="btn <?php echo ($estadoPostulacionId == 3 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="3">Finalizado</button>
 									</div>
 								</div>
-							</div>
+							</li>
 					<?php
 						}
 					}
