@@ -287,6 +287,21 @@ class UsuarioDAO {
         return null;
     }
     
+    public function buscarPorEmail($email) {
+        $query = "SELECT * FROM usuario WHERE mail = :email";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public function actualizarClave($idUsuario, $nuevaClave) {
+        $query = "UPDATE usuario SET clave = :nuevaClave WHERE id = :idUsuario";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':nuevaClave', $nuevaClave);
+        $stmt->bindParam(':idUsuario', $idUsuario);
+        return $stmt->execute();
+    }
    
 }
 

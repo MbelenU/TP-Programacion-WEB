@@ -11,20 +11,6 @@ class Evento {
     private string $tipoEvento;//agregado
     private array $suscripciones; // Lista de suscripciones
     private EstadoEvento $estadoEvento; // Objeto de la clase EstadoEvento
-
-    //cambiar evento
-    //linea con ubicacion y modalidad que falta en la bbdd
-    //public function __construct(int $id, string $nombreEvento, string $fechaEvento, string $ubicacionEvento, string $modalidadEvento, string $descripcionEvento, string $tipoEvento)
-    public function __construct(int $id, string $nombreEvento, string $fechaEvento, string $descripcionEvento, float $creditos, string $tipoEvento) {
-        $this->setId($id);
-        $this->setNombreEvento($nombreEvento);
-        $this->setFechaEvento($fechaEvento);
-        //$this->setUbicacionEvento($ubicacionEvento); falta en bbdd
-        //$this->setModalidadEvento($modalidadEvento);
-        $this->setDescripcionEvento($descripcionEvento);
-        $this->setCreditos($creditos);
-        $this->setTipoEvento($tipoEvento);
-    }
     
     public function getId(): int {
         return $this->id;
