@@ -13,7 +13,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     exit();
 }
 
-$eventos = $administradorController->getEventos();
+$eventos = $administradorController->getEventosDeAdmin();
 
 ?>
 <!DOCTYPE html>

@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/../dal/AdministradorDAO.php';
-require_once __DIR__ . '/../models/Administrador.php';
 require_once __DIR__ . '/../models/Usuario.php';
 
 
@@ -8,13 +7,34 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-
+$endpoint = $_GET['endpoint'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
     exit;
-    
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "darDeBaja") {
+    $userId = $data['userId'];
+    $result = $administradorController->darDeBaja($userId);
+    echo json_encode(['success' => $result]);
+    exit;
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "habilitar") {
+    $userId = $data['userId'];
+    $result = $administradorController->habilitar($userId);
+    echo json_encode(['success' => $result]);
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "cambiarContraseña") {
+    $userId = $data['userId'];
+    $newPassword = $data['newPassword'];
+    $result = $administradorController->cambiarClave($userId, $newPassword);
+    echo json_encode(['success' => $result]);
+    exit;
+}
+
+
 $administradorController = new AdministradorController();
 $endpoint = $_GET['endpoint'] ?? '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "register") {
@@ -32,6 +52,33 @@ class AdministradorController
 
     public function __construct() {
         $this->administradorDAO = new AdministradorDAO();
+    }
+
+
+    public function crearEvento(){
+        $titulo = $_POST['titulo'] ? $_POST['titulo'] : NULL;
+        $fecha = $_POST['fecha'] ? $_POST['fecha'] : NULL ;
+        $hora = $_POST['hora'] ? $_POST['hora'] : NULL;
+        $tipo = $_POST['tipo'] ? $_POST['tipo'] : NULL;
+        $descripcion = $_POST['descripcion'] ? $_POST['descripcion'] : NULL;
+        
+
+        $evento = $this->administradorDAO->crearEvento($_SESSION['user']['user_id'], $titulo, $tipo ,$fecha, $hora, $descripcion);
+        if($evento){
+            $response = [
+                "success" => true,
+                "body" => $evento
+            ];
+            return $response;
+        }
+        else {
+            
+            $response = [
+                'success' => false,
+                'message' => 'Error: No se encontraron solicitudes',
+            ];
+            return $response;
+        }
     }
     
     // Método para obtener todos los usuarios
@@ -51,6 +98,12 @@ class AdministradorController
     }
     public function habilitar($userId) {
         return $this->administradorDAO->setUserStatushab($userId, 'N'); // 'N' para activo
+    }
+    public function getEventos() {
+        return $this->administradorDAO->getEventos();
+    }
+    public function getEventosDeAdmin() {
+        return $this->administradorDAO->getEventos($_SESSION['user']['user_id']);
     }
 
     public function register() {
@@ -121,35 +174,6 @@ class AdministradorController
 
 
 } 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = json_decode(file_get_contents('php://input'), true);
-    $action = $data['action'] ?? '';
-
-    switch ($action) {
-        
-        case 'cambiarContraseña':
-            $userId = $data['userId'];
-            $newPassword = $data['newPassword'];
-            $result = $administradorController->cambiarClave($userId, $newPassword);
-            echo json_encode(['success' => $result]);
-            break;
-        case 'darDeBaja':
-            $userId = $data['userId'];
-            $result = $administradorController->darDeBaja($userId);
-            echo json_encode(['success' => $result]);
-            break;        
-        case 'habilitar':
-            $userId = $data['userId'];
-            $result = $administradorController->habilitar($userId);
-            echo json_encode(['success' => $result]);
-            break;
-        default:
-            echo json_encode(['success' => false, 'message' => 'Acción no válida']);
-            break;
-    }
-    exit;
-}
 
 
 

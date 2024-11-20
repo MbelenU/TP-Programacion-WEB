@@ -1,7 +1,7 @@
 <?php
 require_once 'Database.php';
 require_once __DIR__ . '/../models/Usuario.php';
-require_once __DIR__ . '/../models/Administrador.php';
+require_once __DIR__ . '/../models/Evento.php';
 
 class AdministradorDAO
 {
@@ -186,6 +186,83 @@ class AdministradorDAO
             return false;
         }
     }
+
+
+    public function crearEvento($idUsuario, $titulo, $tipo, $fecha, $hora, $descripcion) {
+        $queryCrearEvento = "INSERT INTO eventos (
+                id_usuario, 
+                id_estadoeventos, 
+                nombre, 
+                descripcion, 
+                fecha, 
+                tipo
+            ) VALUES (
+                :id_usuario, 
+                :id_estadoeventos, 
+                :nombre, 
+                :descripcion, 
+                :fecha, 
+                :tipo
+            )";
+
+        $fechaHora = "$fecha $hora:00";
+
+        $estadoEventos = 1;
+        try {
+            $stmt = $this->conn->prepare($queryCrearEvento);
+
+            $stmt->bindParam(':id_usuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':id_estadoeventos', $estadoEventos, PDO::PARAM_INT);
+            $stmt->bindParam(':nombre', $titulo, PDO::PARAM_STR);
+            $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+            $stmt->bindParam(':fecha', $fechaHora, PDO::PARAM_STR);
+            $stmt->bindParam(':tipo', $tipo, PDO::PARAM_STR);
+            $stmt->execute();
+    
+            return [
+                'success' => true,
+                'message' => 'Registro exitoso.'
+            ];
+        } catch (PDOException $e) {
+            echo "Error en la consulta: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public function getEventos(?int $id = null): array {
+        $query = "SELECT id, nombre, fecha, descripcion, creditos, tipo FROM eventos";
+    
+        if ($id !== null) {
+            $query .= " WHERE id_usuario = :id";
+        }
+    
+        try {
+            $stmt = $this->conn->prepare($query);
+    
+            if ($id !== null) {
+                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            }
+
+            $stmt->execute();
+    
+            $eventos = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $evento = new Evento();
+                $evento->setId((int)$row['id']);
+                $evento->setNombreEvento($row['nombre']);
+                $evento->setFechaEvento($row['fecha']);
+                $evento->setDescripcionEvento($row['descripcion']);
+                $evento->setCreditos((float)($row['creditos'] ?? 0));
+                $evento->setTipoEvento($row['tipo'] ?? ''); 
+                $eventos[] = $evento;
+            }
+            return $eventos;
+        } catch (PDOException $e) {
+            echo "Error al obtener eventos: " . $e->getMessage();
+            return [];
+        }
+    }
+    
        
 }
 
