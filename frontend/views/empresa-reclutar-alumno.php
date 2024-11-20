@@ -27,7 +27,7 @@ $alumnos = $alumnos['body'];
 
 <body class="bg-inicio">
     <?php require __DIR__ . '/../components/empresa-navbar.php' ?>
-    <div class="container p-sm-4 bg-secondary-subtle">
+    <div class="container p-sm-4 bg-white">
         <div class="container mt-5">
             <div class="d-flex justify-content-between pb-5">
                 <h1>Reclutar alumnos</h1>

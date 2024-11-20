@@ -8,10 +8,10 @@
         if($resultado['success']) {
             $_SESSION['user'] = $resultado['usuario'];
             switch($resultado['usuario']['user_type']) {
-                case '2':
-                    header("Location: ./alumno-perfil.php");
-                    exit();
                 case '1':
+                    header("Location: ./admin-gestionar-usuarios.php");
+                    exit();
+                case '2':
                     header("Location: ./alumno-empleos.php");
                     exit();
                 case '3':

@@ -22,7 +22,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 
 <body class="bg-inicio">
     <?php require __DIR__ . '/../components/empresa-navbar.php' ?>
-    <div class="container p-sm-4 bg-secondary-subtle">
+    <div class="container p-sm-4 bg-white">
         <div class="container mt-5">
             <div class="pb-5">
                 <div class="editar-header">

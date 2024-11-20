@@ -38,7 +38,7 @@ function estaSuscripto($eventoId, $userId) {
 </head>
 <body class="bg-inicio">
     <?php require __DIR__ . '/../components/alumno-navbar.php' ?>
-    <div class="container p-sm-4 bg-secondary-subtle">
+    <div class="container p-sm-4 bg-white">
         <div class="container mt-5">
             <div class="pb-5">
                 <h1>Eventos</h1>

@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarPerfil'])) {
 
 <body class="bg-inicio">
     <?php require __DIR__ . '/../components/empresa-navbar.php' ?>
-    <div class="container p-sm-4 bg-secondary-subtle">
+    <div class="container p-sm-4 bg-white">
         <div class="container mt-5">
             <h1 class="mb-4">Editar Perfil</h1>
             <form id="form-perfil-empresa" method="POST" enctype="multipart/form-data">

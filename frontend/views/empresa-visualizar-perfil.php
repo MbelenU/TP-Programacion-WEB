@@ -29,7 +29,7 @@ $empresa = $empresa['body'];
 <body class="bg-inicio">
     <?php require __DIR__ . '/../components/empresa-navbar.php'; ?>
 
-    <div class="container p-sm-4 bg-secondary-subtle">
+    <div class="container p-sm-4 bg-white">
         <div class="container mt-5">
             <div class="mb-4">
                 <h1>Mi Perfil</h1>
