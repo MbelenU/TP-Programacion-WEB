@@ -38,12 +38,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['checkPostulacion'])) {
     $resultado = $alumnoController->checkPostulacion();
     return $resultado;
     exit;
+}elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['darBaja'])) {
+    $resultado = $alumnoController->darBaja();
+    return $resultado;
+    exit;
 }
 class AlumnoController {
     private AlumnoDAO $alumnoDao;
 
     public function __construct() {
         $this->alumnoDao = new AlumnoDAO();
+    }
+    public function darBaja() {
+        $solicitudId = $_POST['solicitud_id'] ?? null;
+        if (empty($solicitudId)) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error: El ID de la solicitud es obligatorio',
+            ]);
+            return;
+        }
+
+        
+        $result = $this->alumnoDao->darBaja($solicitudId);
+
+        if ($result) {
+            http_response_code(200);
+            echo json_encode([
+                'success' => true,
+                'message' => 'Solicitud dada de baja exitosamente',
+            ]);
+        } else {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error: No se pudo dar de baja la solicitud',
+            ]);
+        }
     }
     public function checkPostulacion(){
         $idUsuario = $_SESSION['user']['user_id'];
@@ -209,8 +241,6 @@ class AlumnoController {
             return $response;
         }
     }
-
-
     public function listarPostulaciones(){
         $postulaciones = $this->alumnoDao->getPostulaciones();
         if($postulaciones){

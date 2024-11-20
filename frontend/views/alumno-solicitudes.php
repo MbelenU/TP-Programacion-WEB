@@ -3,9 +3,11 @@ require_once '../../controllers/AlumnoController.php';
 
 $alumnoController = new AlumnoController();
 $response = $alumnoController->listarPostulaciones();
-$postulaciones = $response['body'];
-
-
+if ($response['success']) {
+	$postulaciones = $response['body'];
+} else {
+	$postulaciones = null;
+}
 session_start();
 if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
@@ -34,11 +36,11 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
             <div class="pb-5">
                 <h1>Mis solicitudes</h1>
             </div>
-
-            <?php if (!empty($postulaciones)): ?>
-                <ul class="row mb-5 list-group col-12 p-0">
+            <div id="message-container" class="container mt-3"></div>
+            <?php if ($postulaciones): ?>
+                <ul class="mb-5 list-group col-12 p-0">
                     <?php foreach ($postulaciones as $postulacion): ?>
-                        <li class="p-3 list-group-item list-group-item-action bg-white border">
+                        <li class="p-3 list-group-item list-group-item-action bg-white border" data-solicitud-id="<?php echo htmlspecialchars($postulacion->getId()); ?>">
                             <div class="w-100 justify-content-between">
                                 <button class="toggleButton btn border-0 p-0 w-100 d-flex flex-column text-start">
                                     <h5 class="mb-1">
@@ -68,8 +70,8 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                                     <?php echo htmlspecialchars($postulacion->getModalidad()); ?>
                                 </div>
                                 <div class="d-flex align-items-center mt-3">
-                                    <button class="btn btn-outline-danger">
-                                        Dar de baja <i class="bi bi-person-fill-down fs-5"></i>
+                                    <button class="btn btn-outline-danger"  id="darBaja">
+                                        Eliminar solicitud<i class="bi bi-person-fill-down fs-5"></i>
                                     </button>
                                 </div>
                             </div>
@@ -82,6 +84,8 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 
         </div>
     </div>
+    
+    <script src="../scripts/alumno/darBaja.js"></script>
 </body>
 
 </html>

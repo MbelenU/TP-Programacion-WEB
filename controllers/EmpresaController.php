@@ -44,11 +44,13 @@ elseif (isset($_GET['buscarAlumnos'])) {
     echo json_encode($resultados);
     exit();
 }
+
 class EmpresaController {
     private EmpresaDAO $empresaDAO;
     public function __construct() {
         $this->empresaDAO = new EmpresaDAO();
     }
+
     public function editarPerfilEmpresa($id) {
         $email = $_POST['email'];
         $nombreEmpresa = $_POST['nombreEmpresa'];

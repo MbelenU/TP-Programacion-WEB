@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
         checkPostulacion(empleoId).then(data => {
             if (data) {
                 button.disabled = true;
-                button.innerText = "Ya postulado";
+                button.innerText = "Postulado";
             }
         });
 
@@ -27,9 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(data => {
                 if (data.success) {
                     button.disabled = true;
-                    button.innerText = "Ya postulado";
-
-                    alert('¡Postulación exitosa!');
+                    button.innerText = "Postulado";
                 } else {
                     alert('Error al postularte: ' + data.message);
                 }

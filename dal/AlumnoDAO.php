@@ -23,7 +23,23 @@ class AlumnoDAO
     {
         $this->conn = (new Database())->getConnection();
     }
-    
+    public function darBaja($postulacion_id) {
+        try {
+            $sql = "DELETE FROM postulaciones WHERE id = :postulacion_id";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':postulacion_id', $postulacion_id, PDO::PARAM_INT);
+            
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            echo "Error al dar de baja la postulacion: " . $e->getMessage();
+            return false;
+        }
+    }
     public function checkPostulacion($idUsuario, $idPublicacion){
         $query = "SELECT * FROM postulaciones WHERE id_usuario = :idUsuario AND id_publicacionesempleos = :idPublicacion";
         $stmt = $this->conn->prepare($query);
@@ -383,9 +399,6 @@ class AlumnoDAO
         return null;
     }
 
-
-
-
     public function getPostulaciones() {
         $queryPostulaciones = "SELECT * FROM postulaciones";
         $stmt = $this->conn->prepare($queryPostulaciones);
@@ -460,11 +473,8 @@ class AlumnoDAO
     
                 $postulacionesArray[] = $postulacionOBJ;
             }
-    
-            return $postulacionesArray;
         }
-    
-        return null;
+        return $postulacionesArray;
     }
     public function aplicarEmpleo($idUsuario, $id_publicacion) {
         date_default_timezone_set('America/Argentina/Buenos_Aires');
