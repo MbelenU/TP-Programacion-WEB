@@ -209,5 +209,3 @@ if ($action === 'verifyEmail') {
 } elseif ($action === 'resetPassword') {
     $controller->resetPassword();
 }
-
-
