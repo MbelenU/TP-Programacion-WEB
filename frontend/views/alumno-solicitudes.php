@@ -36,52 +36,46 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
             </div>
 
             <?php if (!empty($postulaciones)): ?>
-                <div class="row mb-5 list-group col-12 p-0">
+                <ul class="row mb-5 list-group col-12 p-0">
                     <?php foreach ($postulaciones as $postulacion): ?>
-                        <div class="list-group-item list-group-item-action bg-white border border-success-subtle">
+                        <li class="p-3 list-group-item list-group-item-action bg-white border">
                             <div class="w-100 justify-content-between">
-                                <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
+                                <button class="toggleButton btn border-0 p-0 w-100 d-flex flex-column text-start">
                                     <h5 class="mb-1">
                                         <div class="titulo-solic"><?php echo htmlspecialchars($postulacion->getPuestoOfrecido()); ?></div>
                                     </h5>
                                     <small class="mb-1"><i class="bi bi-geo-alt"></i> <?php echo htmlspecialchars($postulacion->getUbicacion()); ?></small>
-                                    <div class="mt-4"><?php echo htmlspecialchars($postulacion->getEstadoPostulacion()->getEstado()) ?? null; ?></div>
+                                    <p class="my-4">Estado de la solicitud: <?php echo htmlspecialchars($postulacion->getEstadoPostulacion()->getEstado()) ?? null; ?></p>
                                 </button>
                             </div>
                             <div class="solicitud-details d-none">
-                                <div class="mt-4">
+                                <div>
                                     <strong>Descripción:</strong>
                                     <p><?php echo htmlspecialchars($postulacion->getDescripcion()); ?></p>
                                 </div>
                                 <div class="mt-4">
                                     <strong>Habilidades Necesarias:</strong>
-                                    <ul>
-                                        <?php foreach ($postulacion->getHabilidades() as $habilidad): ?>
-                                            <li><?php echo htmlspecialchars($habilidad); ?></li>
-                                        <?php endforeach; ?>
-                                    </ul>
+                                    <?php foreach ($postulacion->getHabilidades() as $habilidad): ?>
+                                        <?php echo htmlspecialchars($habilidad); ?>
+                                    <?php endforeach; ?>
                                 </div>
                                 <div class="mt-4">
                                     <strong>Disponibilidad Horaria:</strong>
-                                    <ul>
-                                        <li><?php echo htmlspecialchars($postulacion->getJornada()); ?></li>
-                                    </ul>
+                                    <?php echo htmlspecialchars($postulacion->getJornada()); ?>
                                 </div>
                                 <div class="mt-4">
                                     <strong>Modalidad:</strong>
-                                    <ul>
-                                        <li><?php echo htmlspecialchars($postulacion->getModalidad()); ?></li>
-                                    </ul>
+                                    <?php echo htmlspecialchars($postulacion->getModalidad()); ?>
                                 </div>
-                                <div class="d-flex justify-content-center align-items-center mt-3">
+                                <div class="d-flex align-items-center mt-3">
                                     <button class="btn btn-outline-danger">
                                         Dar de baja <i class="bi bi-person-fill-down fs-5"></i>
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </li>
                     <?php endforeach; ?>
-                </div>
+                </ul>
             <?php else: ?>
                 <p>No hay solicitudes disponibles en este momento.</p>
             <?php endif; ?>
