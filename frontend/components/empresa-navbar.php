@@ -40,14 +40,12 @@ $empresa = $empresa['body'];
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo BASE_URL ?>views/empresa-reclutar-alumno.php">Reclutar</a>
                         </li>
+                        <li class="nav-item align-self-center d-flex ">
+                            <a href="<?php echo BASE_URL ?>views/logout.php">
+                                <button type="button" class="btn btn-outline-danger"><i class="bi bi-box-arrow-left"></i> Cerrar sesión</button>
+                            </a>
+                        </li>
                     </ul>
-                    <form class="d-flex d-sm-none mt-3" role="search">
-                        <input class="form-control me-2 border-success-subtle" type="search" placeholder="Search"
-                            aria-label="Search">
-                        <button class="btn btn-outline-success d-grid align-content-center" type="submit">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </form>
                 </div>
             </div>
         </div>

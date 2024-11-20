@@ -2,7 +2,7 @@
 <nav class="navbar sticky-top bg-navbar p-0">
     <div class="container-fluid">
         <a class="navbar-brand" href="#"><img src="<?php echo BASE_URL ?>img/logo.png" alt="logo"></a>
-        
+
         <!--Menú-->
         <button class="navbar-toggler shadow-sm" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
@@ -41,12 +41,17 @@
                             href="<?php echo BASE_URL ?>views/admin-notificaciones.php">Notificaciones</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" 
+                        <a class="nav-link"
                             href="<?php echo BASE_URL ?>views/admin-visualizar-carreras.php">Carreras</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link"
                             href="<?php echo BASE_URL ?>views/admin-gestionar-habilidades.php">Habilidades</a>
+                    </li>
+                    <li class="nav-item align-self-center d-flex ">
+                        <a href="<?php echo BASE_URL ?>views/logout.php">
+                            <button type="button" class="btn btn-outline-danger"><i class="bi bi-box-arrow-left"></i> Cerrar sesión</button>
+                        </a>
                     </li>
                 </ul>
                 <form class="d-flex d-sm-none mt-3" role="search">

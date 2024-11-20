@@ -2,7 +2,7 @@
 <nav class="navbar sticky-top bg-navbar p-0">
     <div class="container-fluid">
         <a class="navbar-brand" href="#"><img src="<?php echo BASE_URL ?>img/logo.png" alt="logo"></a>
-        
+
         <button class="navbar-toggler shadow-sm" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -40,7 +40,11 @@
                         <a class="nav-link"
                             href="<?php echo BASE_URL ?>views/alumno-notificaciones.php">Notificaciones</a>
                     </li>
-                    
+                    <li class="nav-item align-self-center d-flex ">
+                        <a href="<?php echo BASE_URL ?>views/logout.php">
+                            <button type="button" class="btn btn-outline-danger"><i class="bi bi-box-arrow-left"></i> Cerrar sesión</button>
+                        </a>
+                    </li>
                 </ul>
                 <form class="d-flex d-sm-none mt-3" role="search">
                     <input class="form-control me-2 border-success-subtle" type="search" placeholder="Search" aria-label="Search">
