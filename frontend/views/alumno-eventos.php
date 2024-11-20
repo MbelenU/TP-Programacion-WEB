@@ -94,4 +94,3 @@ function estaSuscripto($eventoId, $userId) {
     </div>
 </body>
 </html>
-
