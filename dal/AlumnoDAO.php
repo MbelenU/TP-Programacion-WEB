@@ -365,7 +365,14 @@ class AlumnoDAO
                 //$ubicacion = $evento['ubicacion']; falta en la bbdd
                 //$modalidad = $evento['modalidad']; falta en la bbdd
                 
-                $eventoOBJ = new Evento($id, $nombre, $fecha, $descripcion, $creditos, $tipo);
+                $eventoOBJ = new Evento();
+
+                $eventoOBJ->setId($id);
+                $eventoOBJ->setNombreEvento($nombre);
+                $eventoOBJ->setFechaEvento($fecha);
+                $eventoOBJ->setDescripcionEvento($descripcion);
+                $eventoOBJ->setCreditos($creditos);
+                $eventoOBJ->setTipoEvento($tipo);
                 //$eventoOBJ = new Evento($id, $nombre, $fecha, $ubicacion, $modalidad, $descripcion, $creditos, $tipo); agregando $ubicacion, $modalidad que falta en la bbdd
                 $eventosArray[] = $eventoOBJ->toArray();
             }
