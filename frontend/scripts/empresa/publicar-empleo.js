@@ -17,8 +17,8 @@ const carreraerror = document.getElementById('carreraerror');
 const planerror = document.getElementById('planerror');
 const listaHabilidades = document.getElementById('listaHabilidades');
 const agregarHabilidadBtn = document.getElementById('agregarHabilidad');
-const publicarForm = document.getElementById('publicarForm')
-const guardarPublicacion = document.getElementById('guardarPublicacion')
+const publicarForm = document.getElementById('publicarForm');
+const guardarPublicacion = document.getElementById('guardarPublicacion');
 document.addEventListener('DOMContentLoaded', async function() {
     guardarPublicacion.addEventListener('click', async function (event) {
         event.preventDefault();

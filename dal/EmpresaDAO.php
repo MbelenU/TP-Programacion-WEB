@@ -25,24 +25,61 @@ class EmpresaDAO {
     public function editarPerfilEmpresa($id, $email, $nombreEmpresa, $telefono, $descripcion, $sitio_web, $foto_perfil)
     {
         try {
+
+
             $this->conn->beginTransaction();
+   
+            $queryEmpresa = "UPDATE empresas SET ";
+            if ($nombreEmpresa !== null && $nombreEmpresa !== '') {
+                $updateEmpresaFields[] = "razon_social = :nombreEmpresa";
+                $paramsEmpresa[':nombreEmpresa'] = $nombreEmpresa;
+            }
+            if ($email !== null && $email !== '') {
+                $updateEmpresaFields[] = "mail_corporativo = :email";
+                $paramsEmpresa[':email'] = $email;
+            }
+            if ($descripcion !== null) {
+                $updateEmpresaFields[] = "descripcion = :descripcion";
+                $paramsEmpresa[':descripcion'] = $descripcion;
+            }
+            if ($sitio_web !== null) {
+                $updateEmpresaFields[] = "sitio_web = :sitio_web";
+                $paramsEmpresa[':sitio_web'] = $sitio_web;
+            }
+            if (count($updateEmpresaFields) > 0) {
+                $queryEmpresa .= implode(", ", $updateEmpresaFields) . " WHERE id_usuario = :idUsuario";
+                $paramsEmpresa[':idUsuario'] = $id;
     
-            $queryEmpresa = "UPDATE empresas SET razon_social = :nombreEmpresa, mail_corporativo = :email, 
-                             descripcion = :descripcion, sitio_web = :sitio_web WHERE id_usuario = :id";
-            $stmt = $this->conn->prepare($queryEmpresa);
-            $stmt->bindParam(':nombreEmpresa', $nombreEmpresa);
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':descripcion', $descripcion);
-            $stmt->bindParam(':sitio_web', $sitio_web);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
+                $stmtEmpresaUpdate = $this->conn->prepare($queryEmpresa);
+                foreach ($paramsEmpresa as $key => $value) {
+                    $stmtEmpresaUpdate->bindValue($key, $value);
+                }
     
-            $queryUsuario = "UPDATE usuario SET telefono = :telefono, foto_perfil = :foto_perfil WHERE id = :id";
-            $stmt = $this->conn->prepare($queryUsuario);
-            $stmt->bindParam(':telefono', $telefono);
-            $stmt->bindParam(':foto_perfil', $foto_perfil);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
+                $stmtEmpresaUpdate->execute();
+            }
+
+            $updateUserQuery = "UPDATE usuario SET ";
+            $updateUserFields = [];
+            $paramsUser = [];
+            if ($foto_perfil !== null) {
+                $updateUserFields[] = "foto_perfil = :fotoPerfil";
+                $paramsUser[':fotoPerfil'] = $foto_perfil;
+            }
+            if ($telefono !== null && $telefono !== '') {
+                $updateUserFields[] = "telefono = :telefono";
+                $paramsUser[':telefono'] = $telefono;
+            }
+            if (count($updateUserFields) > 0) {
+                $updateUserQuery .= implode(", ", $updateUserFields) . " WHERE id = :idUsuario";
+                $paramsUser[':idUsuario'] = $id;
+    
+                $stmtUserUpdate = $this->conn->prepare($updateUserQuery);
+                foreach ($paramsUser as $key => $value) {
+                    $stmtUserUpdate->bindValue($key, $value);
+                }
+    
+                $stmtUserUpdate->execute();
+            }
     
             $this->conn->commit();
     
@@ -165,7 +202,37 @@ class EmpresaDAO {
             return null;
         }
     }
+    public function buscarAlumnos($query) {
+        try {
+            if ($query === '') {
+                $sql = "SELECT alumno.nombre AS nombre_alumno, alumno.apellido, alumno.descripcion, alumno.id, usuario.foto_perfil 
+                        FROM alumno 
+                        JOIN usuario ON alumno.id_usuario = usuario.id";
+            } else {
+                $sql = "SELECT alumno.nombre AS nombre_alumno, alumno.apellido, alumno.descripcion, alumno.id, usuario.foto_perfil 
+                        FROM alumno 
+                        JOIN usuario ON alumno.id_usuario = usuario.id
+                        WHERE alumno.nombre LIKE :query OR 
+                              alumno.apellido LIKE :query OR 
+                              alumno.descripcion LIKE :query";
+            }
     
+            $stmt = $this->conn->prepare($sql);
+    
+            if ($query !== '') {
+                $stmt->bindValue(':query', '%' . $query . '%');
+            }
+    
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+            return $result; 
+    
+        } catch (Exception $e) {
+            echo "Error en la búsqueda: " . $e->getMessage();
+            return false;
+        }
+    }
     public function obtenerCarreraPorId($idCarrera) {
         $query = "SELECT * FROM carreras WHERE id = :id_carrera";
         $stmt = $this->conn->prepare($query);

@@ -38,7 +38,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['publicarEmpleo'])) {
     return $resultado;
     exit;
 }
-
+elseif (isset($_GET['buscarAlumnos'])) {
+    $query = $_GET['buscarAlumnos'];
+    $resultados = $empresaController->buscarAlumnos($query);
+    echo json_encode($resultados);
+    exit();
+}
 class EmpresaController {
     private EmpresaDAO $empresaDAO;
     public function __construct() {
@@ -120,7 +125,21 @@ class EmpresaController {
             ]);
             return;
         }
-
+    }
+    public function buscarAlumnos($query){
+        $busqueda = $this->empresaDAO->buscarAlumnos($query);
+        if($busqueda){
+            return [
+                "success" => true,
+                "body" => $busqueda
+            ];
+        }
+        else {
+            return [
+                'success' => false,
+                'message' => 'Error: No se encontraron alumnos',
+            ];
+        }
     }
     public function listarCarreras(){
         $carreras = $this->empresaDAO->listarCarreras();
