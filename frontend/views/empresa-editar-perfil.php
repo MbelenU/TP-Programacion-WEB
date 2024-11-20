@@ -18,6 +18,7 @@ $empresa = $empresa['body'];
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarPerfil'])) {
     $empresaController->editarPerfilEmpresa($_SESSION['user']['user_id']);
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">

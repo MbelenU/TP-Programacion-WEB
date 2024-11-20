@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../dal/UsuarioDAO.php';
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../dal/EmpresaDAO.php';
-
+require_once __DIR__ . '/../frontend/includes/base-url.php';
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 $empresaController = new EmpresaController();
-
 
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['publicarEmpleo'])) {
     $resultado = $empresaController->publicarEmpleo();
@@ -46,44 +45,40 @@ class EmpresaController {
         $this->empresaDAO = new EmpresaDAO();
     }
     public function editarPerfilEmpresa($id) {
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarPerfil'])) {
-     
-            $email = $_POST['email'];
-            $nombreEmpresa = $_POST['nombreEmpresa'];
-            $telefono = $_POST['phone'];
-            $descripcion = $_POST['descripcion'];
-            $sitio_web = $_POST['website'];
+        $email = $_POST['email'];
+        $nombreEmpresa = $_POST['nombreEmpresa'];
+        $telefono = $_POST['phone'];
+        $descripcion = $_POST['descripcion'];
+        $sitio_web = $_POST['website'];
+
+        $foto_perfil = null;
+        if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === UPLOAD_ERR_OK) {
+            
+            $fileTmpPath = $_FILES['fotoPerfil']['tmp_name'];
+            $fileName = $_FILES['fotoPerfil']['name'];
+            $newFileName = uniqid('profile_', true) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
+            $uploadDir = './../img/';
+            $uploadPath = $uploadDir . $newFileName;
     
-            $foto_perfil = null;
-    
-            if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === UPLOAD_ERR_OK) {
-                
-                $fileTmpPath = $_FILES['fotoPerfil']['tmp_name'];
-                $fileName = $_FILES['fotoPerfil']['name'];
-                $newFileName = uniqid('profile_', true) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
-                $uploadDir = 'img/';
-                $uploadPath = $uploadDir . $newFileName;
-        
-               
-                if (move_uploaded_file($fileTmpPath, $uploadPath)) {
-                    $foto_perfil = $newFileName;
-                }
-            } else {
-                $foto_perfil = null; 
+            
+            if (move_uploaded_file($fileTmpPath, $uploadPath)) {
+                $foto_perfil = $newFileName;
             }
-            $result = $this->empresaDAO->editarPerfilEmpresa($id, $email, $nombreEmpresa, $telefono, $descripcion, $sitio_web, $foto_perfil);
-    
-            if ($result) {
-                return [
-                    'success' => true,
-                    'message' => 'Perfil editado exitosamente',
-                ];
-            } else {
-                return [
-                    'success' => false,
-                    'message' => 'Error al editar perfil',
-                ];
-            }
+        } else {
+            $foto_perfil = null; 
+        }
+        $result = $this->empresaDAO->editarPerfilEmpresa($id, $email, $nombreEmpresa, $telefono, $descripcion, $sitio_web, $foto_perfil);
+
+        if ($result) {
+            return [
+                'success' => true,
+                'message' => 'Perfil editado exitosamente',
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Error al editar perfil',
+            ];
         }
     }
     
