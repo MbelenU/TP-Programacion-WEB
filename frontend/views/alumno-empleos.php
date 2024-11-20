@@ -36,31 +36,28 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
             <div class="pb-5">
                 <h1>Empleos</h1>
             </div>
-
-            <!-- Formulario de búsqueda -->
             <form class="filtro d-flex mb-5" role="search" method="GET" action="buscar.php">
                 <input class="form-control me-2" type="search" name="buscar" id="form-control" placeholder="Buscar">
                 <button class="botonFiltro btn btn-light border border-success-subtle" type="submit">Filtrar</button>
             </form>
 
             <div class="row mb-5 list-group col-12 p-0">
-                <?php foreach ($empleos as $empleo): 
-                
-                ?>
+                <?php foreach ($empleos as $empleo): ?>
                     <div class="list-group-item list-group-item-action bg-white border border-success-subtle">
                         <div class="w-100 justify-content-between">
-                        <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
-                        <h5 class="mb-1"><div class="titulo-empleo"><?php echo htmlspecialchars($empleo->getTitulo()); ?></div></h5>
-                            <p class="mb-1"><?php echo htmlspecialchars($empleo->getDescripcion()); ?></p>
-                            <small><?php echo htmlspecialchars($empleo->getUbicacion()); ?></small>
-                            <div class="mt-4">   
+                            <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
+                                <h5 class="mb-1">
+                                    <div class="titulo-empleo"><?php echo htmlspecialchars($empleo->getTitulo()); ?></div>
+                                </h5>
+                                <p class="mb-1"><?php echo htmlspecialchars($empleo->getDescripcion()); ?></p>
+                                <small><?php echo htmlspecialchars($empleo->getUbicacion()); ?></small>
+                                <div class="mt-4">
                                     <?php echo htmlspecialchars($empleo->getEstadoEmpleo()->getEstado()); ?>
-                                
-                            </div>
-                        </button>
+                                </div>
+                            </button>
                         </div>
                         <div class="empleo-details d-none">
-                        <div class="mt-4">
+                            <div class="mt-4">
                                 <strong>Habilidades Necesarias:</strong>
                                 <ul>
                                     <?php foreach ($empleo->getHabilidades() as $habilidad): ?>
@@ -68,7 +65,6 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                                     <?php endforeach; ?>
                                 </ul>
                             </div>
-                            
 
                             <div class="mt-4">
                                 <strong>Disponibilidad Horaria:</strong>
@@ -91,21 +87,21 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                                     <?php endif; ?>
                                 </ul>
                             </div>
-                            </div>
+                        </div>
                         <div class="mt-2">
                             <div class="d-flex align-items-center">
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de empleo">
-                                    <button type="button" class="btn btn-success btn-sm">Aplicar</button>
+                                    <button type="button" class="btn btn-success btn-sm aplicar-empleo" data-empleo-id="<?php echo $empleo->getId(); ?>" data-alumno-id="<?php echo $_SESSION['user']['user_id']; ?>">Aplicar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
                 <?php endforeach; ?>
+
             </div>
         </div>
     </div>
-
+    <script src="../scripts/alumno/aplicarEmpleo.js"></script>
 </body>
 
 </html>

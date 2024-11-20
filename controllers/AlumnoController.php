@@ -27,13 +27,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "getHabilidades") {
     exit;
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['aplicarEmpleo'])) {
+    session_start();
+    $resultado = $alumnoController->aplicarEmpleo();
+    return $resultado;
+    exit;
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['checkPostulacion'])) {
+    session_start();
+    $resultado = $alumnoController->checkPostulacion();
+    return $resultado;
+    exit;
+}
 class AlumnoController {
     private AlumnoDAO $alumnoDao;
 
     public function __construct() {
         $this->alumnoDao = new AlumnoDAO();
     }
-
+    public function checkPostulacion(){
+        $idUsuario = $_SESSION['user']['user_id'];
+        $data = json_decode(file_get_contents("php://input"), true);
+        $id_publicacion = htmlspecialchars($data['empleoId'] ?? '');
+        $postulacion = $this->alumnoDao->checkPostulacion($idUsuario, $id_publicacion);
+        if($postulacion){
+            echo json_encode(true);
+        }
+        else {
+            echo json_encode(false);
+        }
+    }
     public function editarPerfilAlumno($id) {
         $email = $_POST['email'] ? $_POST['email'] : NULL;
         // $password = $_POST['contraseña'] ? $_POST['contraseña'] : NULL;
@@ -96,6 +119,29 @@ class AlumnoController {
             echo json_encode([
                 'success' => false,
                 'message' => 'Error: No se encontraron planes estudio para esta carrera',
+            ]);
+        }
+    }
+    public function aplicarEmpleo() {
+        $idUsuario = $_SESSION['user']['user_id'];
+
+        $input = json_decode(file_get_contents('php://input'), true);
+        $id_publicacion = htmlspecialchars($input['empleoId'] ?? '');
+
+        $empleo = $this->alumnoDao->aplicarEmpleo($idUsuario, $id_publicacion);
+        if($empleo){
+            http_response_code(200);
+            echo json_encode([
+                "success" => true,
+                "body" => $empleo
+            ]);
+            return;
+        }
+        else {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error: No se pudo aplicar al empleo',
             ]);
         }
     }

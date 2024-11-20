@@ -154,6 +154,6 @@ class UsuarioController {
                 'message' => 'Error: No se encontro la empresa',
             ];
         }
-    }  
-
+    } 
+    
 }

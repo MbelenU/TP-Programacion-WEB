@@ -23,6 +23,19 @@ class AlumnoDAO
     {
         $this->conn = (new Database())->getConnection();
     }
+    
+    public function checkPostulacion($idUsuario, $idPublicacion){
+        $query = "SELECT * FROM postulaciones WHERE id_usuario = :idUsuario AND id_publicacionesempleos = :idPublicacion";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+        $stmt->bindParam(':idPublicacion', $idPublicacion, PDO::PARAM_INT);
+        $stmt->execute();
+        if ($stmt->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function editarPerfilAlumno($id, $email, $nombre, $apellido, $telefono, $direccion, $fotoPerfil, $deBaja, $habilidades, $planEstudios, $materias): ?Alumno
     {
         // Actualizar información del usuario
@@ -446,11 +459,45 @@ class AlumnoDAO
     
         return null;
     }
+    public function aplicarEmpleo($idUsuario, $id_publicacion) {
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $fecha = date('Y-m-d H:i:s');
+        $id_estadopostulacion = '1';
     
+        $checkQuery = "SELECT COUNT(*) FROM postulaciones WHERE id_usuario = :idAlumno AND id_publicacionesempleos = :idPublicacionesEmpleos";
+        $stmtCheck = $this->conn->prepare($checkQuery);
+        $stmtCheck->bindParam(':idAlumno', $idUsuario, PDO::PARAM_INT);
+        $stmtCheck->bindParam(':idPublicacionesEmpleos', $id_publicacion, PDO::PARAM_INT);
+    
+        try {
+            $stmtCheck->execute();
+            $count = $stmtCheck->fetchColumn(); 
+    
+            if ($count > 0) {
+                return ['success' => false, 'message' => 'Ya has postulado a este empleo.'];
+            } else {
+                $query = "INSERT INTO postulaciones (id_usuario, id_publicacionesempleos, fecha, id_estadopostulacion) 
+                          VALUES (:idAlumno, :idPublicacionesEmpleos, :fecha, :idestadopostulacion)";
+                
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(':idAlumno', $idUsuario, PDO::PARAM_INT);
+                $stmt->bindParam(':idPublicacionesEmpleos', $id_publicacion, PDO::PARAM_INT);
+                $stmt->bindParam(':fecha', $fecha, PDO::PARAM_STR);
+                $stmt->bindParam(':idestadopostulacion', $id_estadopostulacion, PDO::PARAM_INT);
+    
+                $stmt->execute();
+    
+                return ['success' => true, 'message' => 'Postulación realizada con éxito.'];
+            }
+    
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Error al realizar la postulación: ' . $e->getMessage()];
+        }
+    }
     public function getJornadaById($jornadaId) {
         $query = "SELECT * FROM jornadas WHERE id = :jornadaId";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':jornadaId', $jornadaId);
+        $stmt->bindParam(':jornadaId', $jornadaId); 
         $stmt->execute();
     
         if ($stmt->rowCount() > 0) {
@@ -519,14 +566,13 @@ class AlumnoDAO
 
 
     public function getEmpleos() {
-        $queryEmpleos = "SELECT * FROM publicaciones_empleos";
+        // Modificar la consulta para excluir los empleos cuyo estado sea igual a 4
+        $queryEmpleos = "SELECT * FROM publicaciones_empleos WHERE id_estadopublicacion != 4";
         $stmt = $this->conn->prepare($queryEmpleos);
         $stmt->execute();
        
         if ($stmt->rowCount() > 0) {
             $empleos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            
             
             $empleosArray = [];
             foreach($empleos as $empleo){
@@ -541,14 +587,10 @@ class AlumnoDAO
                 $jornadaId =  $empleo['id_jornada'];
                 $jornada = $this->getJornadaById($jornadaId);
                 $ubicacion = $empleo['ubicacion']; 
-                //$materiasRequeridas = $empleo['materiasRequeridas']; //falta en la bbdd//
-                //$habilidadesRequeridas = $empleo['habilidadesRequeridas']; //falta en la bbdd//
-                //$postulacion = $empleo['postulacion']; //falta en la bbdd//
-                //$carreraRequerida = $empleo['carreraRequerida']; //falta en la bbdd//
-
+    
                 $queryHabilidades = "SELECT * FROM habilidades_publicaciones HP 
-                                 JOIN habilidades HD ON HP.id_habilidad = HD.id
-                                 WHERE HP.id_publicacion = :puestoId";
+                                     JOIN habilidades HD ON HP.id_habilidad = HD.id
+                                     WHERE HP.id_publicacion = :puestoId";
                 $stmtHabilidades = $this->conn->prepare($queryHabilidades);
                 $stmtHabilidades->bindParam(':puestoId', $id);
                 $stmtHabilidades->execute();
@@ -563,7 +605,7 @@ class AlumnoDAO
                     $habilidades[] = $habilidad;
                 }
                 
-          
+                // Crear el objeto PublicacionEmpleo
                 $empleoOBJ = new PublicacionEmpleo();
                 $empleoOBJ->setId($id);  
                 $empleoOBJ->setTitulo($titulo);  
@@ -573,19 +615,18 @@ class AlumnoDAO
                 $empleoOBJ->setJornada($jornada);  
                 $empleoOBJ->setUbicacion($ubicacion); 
                 $empleoOBJ->setHabilidades($habilidades);
-                $empleoOBJ->setEstadoEmpleo($estadoEmpleo);
-
-                //$empleoOBJ = new PublicacionEmpleo($id, $titulo, $modalidad, $descripcion, $estadoEmpleo, $jornada, $ubicacion);
-                //$empleoOBJ = new PublicacionEmpleo($id, $titulo, $modalidad, $descripcion, $estadoEmpleo, $carreraRequerida, $jornada, $ubicacion, $postulacion, $materiasRequeridas, $habilidadesRequeridas);
-                
+    
+                // Agregar el empleo a la lista
                 $empleosArray[] = $empleoOBJ;
             }
+            
             if($empleosArray){
                 return $empleosArray;
             }
         }
         return null;
     }
+    
 
 
     public function getBusquedaEmpleo($buscar = null) {
