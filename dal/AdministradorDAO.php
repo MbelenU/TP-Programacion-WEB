@@ -46,7 +46,7 @@ class AdministradorDAO
         return $stmt->execute([$status, $userId]);
     }
 
-    public function registerAlumno($nombreUsuario, $clave, $mail, $nombreAlumno, $apellidoAlumno,) {
+    public function registerAlumno($nombreUsuario, $clave, $mail, $nombreAlumno, $apellidoAlumno) {
         try {
             $queryCheckUser = "
                 SELECT COUNT(*) as count FROM usuario 

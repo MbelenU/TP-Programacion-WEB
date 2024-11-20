@@ -13,7 +13,11 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 	exit();
 }
 $publicaciones = $empresaController->listarPublicaciones();
-$publicaciones = $publicaciones['body'];
+if ($publicaciones['success']) {
+	$publicaciones = $publicaciones['body'];
+} else {
+	$publicaciones = null;
+}
 ?>
 
 <!DOCTYPE html>
@@ -38,28 +42,29 @@ $publicaciones = $publicaciones['body'];
 			</div>
 			<div class="row mb-5 list-group col-12 p-0">
 				<?php
-				foreach ($publicaciones as $publicacion) {
-					$fechaPublicacion = $publicacion->getFecha();
-					$hace = $fechaPublicacion->diff(new DateTime());
+				if ($publicaciones) {
+					foreach ($publicaciones as $publicacion) {
+						$fechaPublicacion = $publicacion->getFecha();
+						$hace = $fechaPublicacion->diff(new DateTime());
 
-					if ($hace->y > 0) {
-						$tiempoTranscurrido = $hace->y . ' años';
-					} elseif ($hace->m > 0) {
-						$tiempoTranscurrido = $hace->m . ' meses';
-					} elseif ($hace->d > 0) {
-						$tiempoTranscurrido = $hace->d . ' días';
-					} elseif ($hace->h > 0) {
-						$tiempoTranscurrido = $hace->h . ' horas';
-					} elseif ($hace->i > 0) {
-						$tiempoTranscurrido = $hace->i . ' minutos';
-					} else {
-						$tiempoTranscurrido = 'hace menos de un minuto';
-					}
+						if ($hace->y > 0) {
+							$tiempoTranscurrido = $hace->y . ' años';
+						} elseif ($hace->m > 0) {
+							$tiempoTranscurrido = $hace->m . ' meses';
+						} elseif ($hace->d > 0) {
+							$tiempoTranscurrido = $hace->d . ' días';
+						} elseif ($hace->h > 0) {
+							$tiempoTranscurrido = $hace->h . ' horas';
+						} elseif ($hace->i > 0) {
+							$tiempoTranscurrido = $hace->i . ' minutos';
+						} else {
+							$tiempoTranscurrido = 'hace menos de un minuto';
+						}
 
-					$estado = $publicacion->getEstadoEmpleo();
-					$estadoId = $estado->getId();
-					$estadoNombre = $estado->getEstado();
-					echo '<div class="list-group-item list-group-item-action">
+						$estado = $publicacion->getEstadoEmpleo();
+						$estadoId = $estado->getId();
+						$estadoNombre = $estado->getEstado();
+						echo '<div class="list-group-item list-group-item-action">
             <div class="d-flex w-100 justify-content-between">
                 <a href="' . BASE_URL . 'views/empresa-visualizar-publicacion.php?id=' . $publicacion->getId() . '" class="text-body text-decoration-none">
                     <h5 class="mb-1">' . htmlspecialchars($publicacion->getTitulo()) . '</h5>
@@ -73,15 +78,16 @@ $publicaciones = $publicaciones['body'];
                 <div class="d-flex align-items-center">
                     <div class="btn-group btn-group-sm" role="group" aria-label="Estado de la publicacion" data-publicacion-id="' . $publicacion->getId() . '">';
 
-					echo '<button type="button" class="btn ' . ($estadoNombre == 'Abierta' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="1">Abierta</button>';
-					echo '<button type="button" class="btn ' . ($estadoNombre == 'Cerrada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="2">Cerrada</button>';
-					echo '<button type="button" class="btn ' . ($estadoNombre == 'Finalizada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="3">Finalizada</button>';
-					echo '<button type="button" class="btn ' . ($estadoNombre == 'Deshabilitada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="4">Deshabilitada</button>';
+						echo '<button type="button" class="btn ' . ($estadoNombre == 'Abierta' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="1">Abierta</button>';
+						echo '<button type="button" class="btn ' . ($estadoNombre == 'Cerrada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="2">Cerrada</button>';
+						echo '<button type="button" class="btn ' . ($estadoNombre == 'Finalizada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="3">Finalizada</button>';
+						echo '<button type="button" class="btn ' . ($estadoNombre == 'Deshabilitada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="4">Deshabilitada</button>';
 
-					echo '  </div>
+						echo '  </div>
                 </div>
             </div>
         </div>';
+					}
 				}
 				?>
 
