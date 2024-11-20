@@ -32,7 +32,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="d-flex justify-content-between align-items-center p-3 rounded w-100">
                             <div class="d-flex align-items-center w-100">
                                 <img src="../img/${alumno.foto_perfil || '../img/perfil.jpg'}" alt="Foto de perfil de ${alumno.nombre_alumno} ${alumno.apellido}" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover; margin-right: 10px;">
-                                <span class="fw-bold w-100">${alumno.nombre_alumno} ${alumno.apellido}</span>
+                                <div class="w-100">
+										<span class="fw-bold w-100">${alumno.nombre_alumno} ${alumno.apellido}</span>
+										${alumno.descripcion ? `<span class="d-block">${alumno.descripcion}</span>` : ''}
+								</div>
                             </div>
                             <a href="empresa-visualizar-alumno.php?id=${alumno.id}" class="btn btn-success">Perfil</a>
                         </div>
