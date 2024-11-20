@@ -10,6 +10,7 @@ require_once __DIR__ . '/../models/EstadoEmpleo.php';
 require_once __DIR__ . '/../models/Jornada.php';
 require_once __DIR__ . '/../models/EstadoPostulacion.php';
 require_once __DIR__ . '/../models/Postulacion.php';
+require_once __DIR__ . '/../models/Suscripcion.php';
 
 class AlumnoDAO
 {
@@ -446,7 +447,7 @@ class AlumnoDAO
                 //$empleoOBJ = new PublicacionEmpleo($id, $titulo, $modalidad, $descripcion, $estadoEmpleo, $jornada, $ubicacion);
                 //$empleoOBJ = new PublicacionEmpleo($id, $titulo, $modalidad, $descripcion, $estadoEmpleo, $carreraRequerida, $jornada, $ubicacion, $postulacion, $materiasRequeridas, $habilidadesRequeridas);
                 
-                $empleosArray[] = $empleoOBJ->toArray();
+                $empleosArray[] = $empleoOBJ;
             }
             if($empleosArray){
                 return $empleosArray;
@@ -473,6 +474,23 @@ class AlumnoDAO
         $empleos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $empleos;
     }
+
+
+    public function getSuscripciones() {
+        
+            $query = "SELECT * FROM suscripciones";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                $suscripcion = new Suscripcion($row['id'], $row['id_usuario'],$row['id_evento']);
+                return $suscripcion;
+            } else {
+                return null; 
+            }
+
+        }
+
+
 }
-
-

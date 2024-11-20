@@ -18,6 +18,14 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
 }
+
+$userId = $_SESSION['user'];
+
+function estaSuscripto($eventoId, $userId) {
+    global $alumnoController;
+    $suscripcion = $alumnoController->verificarSuscripcion($eventoId, $userId);
+    return $suscripcion;  // Retorna el objeto Suscripcion si está suscrito, o null si no lo está
+}
 ?> 
 
 <!DOCTYPE html>
@@ -41,7 +49,14 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
         
         <?php if (!empty($eventos)): ?>
            
-            <?php foreach ($eventos as $evento): ?>
+            <?php
+// Dentro del ciclo que recorre los eventos
+foreach ($eventos as $evento):
+    // Verificar si el usuario está suscrito al evento
+    $suscripcion = estaSuscripto($eventos, $userId); 
+   // var_dump($suscripcion);
+  //  exit();
+?>
               
                 <div class="container-evento bg-navbar border border-success-subtle">
                     <div class="evento-item mb-6">
@@ -81,8 +96,12 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                                 <div><?php echo htmlspecialchars($evento['creditosEvento']); ?></div>
                             </div>
                             <div class="vstack gap-0 col-md-5 mx-auto">
-                                <button class="btn btn-success mt-3">SUSCRIBIRME</button>
-                                <button class="btn btn-danger mt-3">DESUSCRIBIRME</button>
+                                <!-- Cambia el texto del botón según si el usuario está suscrito -->
+                                <?php if ($suscripcion !== null): ?>
+                                    <button class="btn btn-danger mt-3">DESUSCRIBIRME</button>
+                                <?php else: ?>
+                                    <button class="btn btn-success mt-3">SUSCRIBIRME</button>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
