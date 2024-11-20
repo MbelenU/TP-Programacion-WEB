@@ -54,6 +54,7 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
                         <p><?php echo mostrarValor($alumno->getDescripcion()); ?></p>
                     </div>
                     <button class="btn btn-outline-success">Descargar CV</button>
+                    <a href="<?php echo BASE_URL ?>views/alumno-editar-perfil.php" class="btn btn-outline-success">Editar perfil</a>
                 </div>
             </div>
 

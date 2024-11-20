@@ -158,7 +158,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarPerfil'])) {
 
 
         <div class="text-end">
-            <button type="submit" class="btn btn-success border border-dark" name="guardarPerfil">Guardar</button>
+            <button type="submit" class="btn btn-success border border-dark mt-3" name="guardarPerfil">Guardar</button>
         </div>
         </form>
     </div>
