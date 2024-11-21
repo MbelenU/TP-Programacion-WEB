@@ -1,5 +1,4 @@
 <?php
-
 require_once __DIR__ . '/../../controllers/AdministradorController.php';
 
 session_start();
@@ -13,60 +12,72 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     exit();
 }
 
+$userId = $_SESSION['user'];
+
 $eventos = $administradorController->getEventos();
 
-?>
+?> 
+
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <?php require __DIR__ . '/../components/header.php' ?>
     <link rel="stylesheet" href="<?php echo BASE_URL ?>css/admin-eventos.css">
+    <script src="<?php echo BASE_URL ?>scripts/admin/eventos.js" defer></script>
+    <script src="<?php echo BASE_URL ?>scripts/admin/eventos-admin.js" defer></script>
 </head>
-
-<body class="bg-inicio p-0">
+<body class="bg-inicio">
     <?php require __DIR__ . '/../components/admin-navbar.php' ?>
     <div class="container p-sm-4 bg-white">
-        <div class="eventos-header">
-            <div class="evento d-flex justify-content-between align-items-center">
+        <div class="container mt-5">
+            <div class="evento mb-5 d-flex justify-content-between align-items-center">
                 <div class="nombre-evento">
                     <h1>Mis Eventos</h1>
                 </div>
                 <a href="<?php echo BASE_URL ?>views/admin-publicar-evento.php"><button class="btn btn-success">Publicar
                         evento</button></a>
             </div>
-            <form class="filtro d-flex mb-sm-3" role="search">
-                <input class="form-control me-2" type="search" id="form-control"
-                    placeholder="Tipo del evento | Nombre del evento | Fecha | Horario" aria-label="Search">
-                <button class="botonFiltro btn btn-light border border-success-subtle " type="submit">Filtrar</button>
-            </form>
-        </div>
 
-        <div class="container-evento">
-            <div class="evento-item mb-6">
-                <div class="row mb-5">
-                    <div class="list-group col-12 p-0">
-                        <?php foreach ($eventos as $evento): ?>
-                            <a href="<?php echo BASE_URL ?>views/admin-detalle-evento.php?id=<?php echo $evento->getId(); ?>" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1"><?php echo htmlspecialchars($evento->getNombreEvento()); ?></h5>
+            <!-- Formulario de búsqueda -->
+            <form class="filtro d-flex mb-4" role="search">
+                <input class="form-control me-2 border-success-subtle" type="search"
+                    id="form-control" placeholder="Buscar eventos" 
+                    aria-label="Search">
+                <button class="botonFiltro btn btn-light border border-success-subtle" type="submit">Filtrar</button>
+            </form>
+
+            <?php if (!empty($eventos)): ?>
+                <div class="mb-5 list-group col-12 p-0">
+                    <?php foreach ($eventos as $evento): 
+                    ?>
+                        <div class="list-group-item list-group-item-action bg-white border border-success-subtle">
+                            <div class="w-100 justify-content-between">
+                                <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
+                                    <h5 class="mb-1">
+                                        <div class="evento-titulo"><?php echo htmlspecialchars($evento->getNombreEvento()); ?></div>
+                                    </h5>
+                                    <small class="mb-1"><i class="bi bi-calendar3"></i> <?php echo htmlspecialchars($evento->getFechaEvento()); ?></small>
+                                    <div class="mt-4"><?php echo htmlspecialchars($evento->getTipoEvento()); ?></div>
+                                </button>
+                            </div>
+                            <div class="evento-details d-none">
+                                <div class="mt-4">
+                                    <p><strong>Descripción:</strong></p>
+                                    <p><?php echo htmlspecialchars($evento->getDescripcionEvento()); ?></p>
                                 </div>
                                 <div class="mt-4">
-                                    <strong>Tipo de evento:</strong>
-                                    <div><?php echo htmlspecialchars($evento->getTipoEvento()); ?></div>
+                                    <strong>Créditos:</strong>
+                                    <div><?php echo htmlspecialchars($evento->getCreditos()); ?></div>
                                 </div>
-                                <div class="mt-4">
-                                    <i class="bi bi-calendar3">
-                                        <strong> Fecha:</strong> <?php echo htmlspecialchars($evento->getFechaEvento()); ?>
-                                    </i>
-                                </div>
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            </div>
+            <?php else: ?>
+                <p>No hay eventos disponibles en este momento.</p>
+            <?php endif; ?>
         </div>
     </div>
 </body>
-
 </html>
