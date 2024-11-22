@@ -645,10 +645,15 @@ class AlumnoDAO
                 $sql = "SELECT * FROM publicaciones_empleos WHERE id_estadopublicacion != 3"; 
             } else {
                 $sql = "SELECT * FROM publicaciones_empleos
-                        WHERE (puesto_ofrecido LIKE :buscar OR 
-                               ubicacion LIKE :buscar OR 
-                               descripcion LIKE :buscar)
-                        AND id_estadopublicacion != 3";
+                        WHERE id_estadopublicacion != 3
+                        AND (puesto_ofrecido LIKE :buscar
+                             OR ubicacion LIKE :buscar
+                             OR descripcion LIKE :buscar
+                             OR id_modalidad IN (SELECT id FROM modalidades WHERE descripcion LIKE :buscar)
+                             OR id_jornada IN (SELECT id FROM jornadas WHERE descripcion LIKE :buscar)
+                             OR id IN (SELECT id_publicacion FROM habilidades_publicaciones HP
+                                       JOIN habilidades HD ON HP.id_habilidad = HD.id
+                                       WHERE HD.descripcion LIKE :buscar))";
             }
     
             $stmt = $this->conn->prepare($sql);
