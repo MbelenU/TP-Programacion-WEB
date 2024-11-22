@@ -47,7 +47,6 @@ $publicacion = $publicacion['body'];
 				</div>
 			</div>
 			<ul class="list-group">
-					
 			<li class="list-group-item disabled" aria-disabled="true">Postulaciones de Alumnos</li>
 				
 					<?php
@@ -87,10 +86,11 @@ $publicacion = $publicacion['body'];
 						}
 					}
 					?>
-
 				</li>
-
 			</ul>
+			<div class="puesto-header mt-3">
+				<a href="#" class="btn btn-success">Generar reporte</a>
+			</div>
 		</div>
 	</div>
 	<script src="../scripts/empresa/cambiar-estado-postulacion.js"></script>

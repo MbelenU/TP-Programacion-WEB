@@ -38,7 +38,7 @@ $alumnos = $alumnos['body'];
 					</button>
 				</form>
             </div>
-            <div class="row mb-5 list-group col-12 p-0" id="resultadosBusqueda">
+            <div class="mb-5 list-group col-12 p-0" id="resultadosBusqueda">
                 <?php
                 foreach ($alumnos as $alumno) {
                     $nombreCompleto = htmlspecialchars($alumno->getNombreAlumno() . ' ' . $alumno->getApellidoAlumno());

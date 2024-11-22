@@ -37,10 +37,7 @@ if ($publicaciones['success']) {
 			<div class="pb-5">
 				<h1>Mis publicaciones</h1>
 			</div>
-			<div class="puesto-header mb-5">
-				<a href="#" class="btn btn-success">Reporte</a>
-			</div>
-			<div class="row mb-5 list-group col-12 p-0">
+			<div class="mb-5 list-group col-12 p-0">
 				<?php
 				if ($publicaciones) {
 					foreach ($publicaciones as $publicacion) {
@@ -65,33 +62,30 @@ if ($publicaciones['success']) {
 						$estadoId = $estado->getId();
 						$estadoNombre = $estado->getEstado();
 						echo '<div class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <a href="' . BASE_URL . 'views/empresa-visualizar-publicacion.php?id=' . $publicacion->getId() . '" class="text-body text-decoration-none">
-                    <h5 class="mb-1">' . htmlspecialchars($publicacion->getTitulo()) . '</h5>
-                </a>
-                <small>' . $tiempoTranscurrido . '</small>
-            </div>
-            <p class="mb-1">' . htmlspecialchars($publicacion->getDescripcion()) . '</p>
-            <small>' . htmlspecialchars($publicacion->getUbicacion()) . '</small>
+				<div class="d-flex w-100 justify-content-between">
+					<a href="' . BASE_URL . 'views/empresa-visualizar-publicacion.php?id=' . $publicacion->getId() . '" class="text-body text-decoration-none">
+						<h5 class="mb-1">' . htmlspecialchars($publicacion->getTitulo()) . '</h5>
+					</a>
+					<small>' . $tiempoTranscurrido . '</small>
+				</div>
+				<p class="mb-1">' . htmlspecialchars($publicacion->getDescripcion()) . '</p>
+				<small>' . htmlspecialchars($publicacion->getUbicacion()) . '</small>
 
-            <div class="mt-2">
-                <div class="d-flex align-items-center">
-                    <div class="btn-group btn-group-sm" role="group" aria-label="Estado de la publicacion" data-publicacion-id="' . $publicacion->getId() . '">';
+				<div class="mt-2">
+					<div class="d-flex align-items-center">
+						<div class="btn-group btn-group-sm" role="group" aria-label="Estado de la publicacion" data-publicacion-id="' . $publicacion->getId() . '">';
 
-						echo '<button type="button" class="btn ' . ($estadoNombre == 'Abierta' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="1">Abierta</button>';
-						echo '<button type="button" class="btn ' . ($estadoNombre == 'Finalizada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="2">Finalizada</button>';
-						echo '<button type="button" class="btn ' . ($estadoNombre == 'Deshabilitada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="3">Deshabilitada</button>';
+							echo '<button type="button" class="btn ' . ($estadoNombre == 'Abierta' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="1">Abierta</button>';
+							echo '<button type="button" class="btn ' . ($estadoNombre == 'Finalizada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="2">Finalizada</button>';
+							echo '<button type="button" class="btn ' . ($estadoNombre == 'Deshabilitada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="3">Deshabilitada</button>';
 
-						echo '  </div>
-                </div>
-            </div>
-        </div>';
+							echo '  </div>
+						</div>
+					</div>
+				</div>';
 					}
 				}
 				?>
-
-
-
 			</div>
 		</div>
 	</div>
