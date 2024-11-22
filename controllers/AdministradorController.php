@@ -61,9 +61,10 @@ class AdministradorController
         $hora = $_POST['hora'] ? $_POST['hora'] : NULL;
         $tipo = $_POST['tipo'] ? $_POST['tipo'] : NULL;
         $descripcion = $_POST['descripcion'] ? $_POST['descripcion'] : NULL;
+        $creditos = $_POST['creditos'] ? $_POST['creditos'] : NULL;
         
 
-        $evento = $this->administradorDAO->crearEvento($_SESSION['user']['user_id'], $titulo, $tipo ,$fecha, $hora, $descripcion);
+        $evento = $this->administradorDAO->crearEvento($_SESSION['user']['user_id'], $titulo, $tipo ,$fecha, $hora, $descripcion, $creditos);
         if($evento){
             $response = [
                 "success" => true,
@@ -78,6 +79,52 @@ class AdministradorController
                 'message' => 'Error: No se encontraron solicitudes',
             ];
             return $response;
+        }
+    }
+
+    public function obtenerEventoPorId($eventoId) {
+        
+        if (!is_numeric($eventoId) || $eventoId <= 0) {
+            return [
+                "status" => "error",
+                "message" => "ID de evento inválido"
+            ];
+        }
+
+        $evento = $this->administradorDAO->obtenerEventoPorId($eventoId);
+
+        if ($evento) {
+            return [
+                "status" => "success",
+                "body" => $evento
+            ];
+        } else {
+            return [
+                "status" => "error",
+                "message" => "Evento no encontrado"
+            ];
+        }
+    }
+
+    public function editarEvento($id){
+        
+        $titulo = $_POST['nombre'] ? $_POST['nombre'] : NULL;
+        $fecha = $_POST['fecha'] ? $_POST['fecha'] : NULL ;
+        $tipo = $_POST['tipo'] ? $_POST['tipo'] : NULL;
+        $descripcion = $_POST['descripcion'] ? $_POST['descripcion'] : NULL;
+        $creditos = $_POST['creditos'] ? $_POST['creditos'] : NULL;
+
+        $check = $this->administradorDAO->editarEvento($id, $titulo, $fecha, $tipo, $descripcion, $creditos);
+        if ($check) {
+            return [
+                'success' => true,
+                'body' => $check,
+            ];
+        } else {
+            return [
+                'success' => false,
+                'body' => 'Error',
+            ];
         }
     }
     

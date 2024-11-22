@@ -35,6 +35,7 @@
                         <option value="2">Alumno</option>
                         <option value="3">Empresa</option>
                     </select>
+                    
                 </div>
                 <div id="successAlert" class="alert alert-success d-none"></div>
                 <div id="errorAlert" class="alert alert-danger d-none"></div>
@@ -66,6 +67,9 @@
                         <input name="email" id="email" class="form-control">
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Enviar Solicitud</button>
+                    <a href="<?php echo BASE_URL ?>views/admin-registro.php">
+                                <button type="button" class="btn btn-danger mt-2"> Cancelar</button>
+                    </a>
                 </form>
 
                 <!-- Formulario Empresa -->
@@ -93,6 +97,9 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Enviar Solicitud</button>
+                    <a href="<?php echo BASE_URL ?>views/admin-registro.php">
+                                <button type="button" class="btn btn-danger mt-2"> Cancelar</button>
+                    </a>
                 </form>
             </div>
         </div>

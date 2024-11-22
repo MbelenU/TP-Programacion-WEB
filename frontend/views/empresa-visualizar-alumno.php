@@ -40,8 +40,12 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
     <?php require __DIR__ . '/../components/empresa-navbar.php' ?>
 
     <div class="container p-sm-4 bg-white">
+        <a href="<?php echo BASE_URL ?>views/empresa-reclutar-alumno.php">
+            <button type="button" class="btn btn-light mt-3 mb-4">Volver a alumnos</button>
+        </a>
         <div class="container mt-5">
-            <div class="perfil-header d-flex align-items-center mb-4">
+        
+            <div class="perfil-header d-flex align-items-center mb-4 ">
                 <?php
                 $fotoPerfil = ($alumno->getFotoPerfil()) ? BASE_URL . 'img/' . htmlspecialchars($alumno->getFotoPerfil()) : BASE_URL . 'img/perfil.jpg';
                 ?>

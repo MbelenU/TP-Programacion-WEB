@@ -68,9 +68,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarPerfil'])) {
                 </div>
 
                 <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label for="address" class="form-label">Dirección</label>
+                        <input class="form-control" id="address" name="address" placeholder="Dirección" value="<?php echo htmlspecialchars($empresa->getUbicacion()); ?>">
+                    </div>
                     <div class="col-md-12 mb-3">
                         <label for="descripcion" class="form-label">Descripción de la Empresa</label>
                         <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="Descripción de la Empresa"><?php echo htmlspecialchars($empresa->getDescripcion()); ?></textarea>
+                    </div>
+                    
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label">Nombre de Representante</label>
+                        <input class="form-control" id="name" name="name" placeholder="Nombre de Representante" value="<?php echo htmlspecialchars($empresa->getNombre()); ?>">
                     </div>
                 </div>
 

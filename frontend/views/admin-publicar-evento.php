@@ -2,6 +2,9 @@
 
 require_once __DIR__ . '/../../controllers/AdministradorController.php';
 
+$administradorController = new AdministradorController();
+
+
 session_start();
 if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
@@ -40,8 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarEvento'])) {
                             <input type="text" class="form-control" id="titulo" name="titulo" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="tipo" class="form-label">Tipo</label>
-                            <input type="text" class="form-control" id="tipo" name="tipo" required>
+                            <label for="modalidad" class="form-label">Tipo</label>
+                            <select class="form-select" id="modalidad" required>
+                                <option value="" disabled selected>Seleccione un tipo de evento</option>
+                                <option value="capacitacion">Capacitación</option>
+                                <option value="tutoria">Tutoría</option>
+                            </select>
                         </div>
                         <div class="col-md-6">
                             <label for="fecha" class="form-label">Fecha</label>
@@ -58,9 +65,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarEvento'])) {
                             <label for="text-area" class="form-label">Descripción</label>
                             <textarea class="form-control" id="text-area" rows="3" name="descripcion"></textarea>
                         </div>
+
+                        <div class="col-md-6">
+                        <label for="number" class="form-label">Créditos</label>
+                        <input type="number" class="form-control" id="credito" name="number" required>
+                        </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success " id="btn-crear" name="guardarEvento">Publicar Evento</button>
+                <button type="submit" class="btn btn-success mt-2" id="btn-crear" name="guardarEvento">Publicar Evento</button>
+                <a href="<?php echo BASE_URL ?>views/admin-eventos.php">
+                                <button type="button" class="btn btn-danger mt-2"> Cancelar</button>
+                </a>
             </form>
         </div>
     </div>

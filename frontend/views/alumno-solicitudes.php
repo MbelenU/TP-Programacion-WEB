@@ -75,13 +75,16 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                                     </button>
                                 </div>
                             </div>
+                            
                         </li>
                     <?php endforeach; ?>
                 </ul>
             <?php else: ?>
                 <p>No hay solicitudes disponibles en este momento.</p>
             <?php endif; ?>
-
+            <a href="<?php echo BASE_URL ?>views/alumno-empleos.php">
+                                <button type="button" class="btn btn-light mt-2"> Volver a Empleos</button>
+                            </a>
         </div>
     </div>
     

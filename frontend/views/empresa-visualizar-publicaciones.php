@@ -37,7 +37,10 @@ if ($publicaciones['success']) {
 			<div class="pb-5">
 				<h1>Mis publicaciones</h1>
 			</div>
-			<div class="mb-5 list-group col-12 p-0">
+			<div class="puesto-header mb-5">
+				<a href="#" class="btn btn-success">Reporte</a>
+			</div>
+			<div class="row mb-5 list-group col-12 p-0">
 				<?php
 				if ($publicaciones) {
 					foreach ($publicaciones as $publicacion) {

@@ -188,21 +188,23 @@ class AdministradorDAO
     }
 
 
-    public function crearEvento($idUsuario, $titulo, $tipo, $fecha, $hora, $descripcion) {
+    public function crearEvento($idUsuario, $titulo, $tipo, $fecha, $hora, $descripcion, $creditos) {
         $queryCrearEvento = "INSERT INTO eventos (
                 id_usuario, 
                 id_estadoeventos, 
                 nombre, 
                 descripcion, 
                 fecha, 
-                tipo
+                tipo,
+                creditos
             ) VALUES (
                 :id_usuario, 
                 :id_estadoeventos, 
                 :nombre, 
                 :descripcion, 
                 :fecha, 
-                :tipo
+                :tipo,
+                :creditos
             )";
 
         $fechaHora = "$fecha $hora:00";
@@ -217,6 +219,7 @@ class AdministradorDAO
             $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
             $stmt->bindParam(':fecha', $fechaHora, PDO::PARAM_STR);
             $stmt->bindParam(':tipo', $tipo, PDO::PARAM_STR);
+            $stmt->bindParam(':creditos', $creditos, PDO::PARAM_STR);
             $stmt->execute();
     
             return [
@@ -262,8 +265,75 @@ class AdministradorDAO
             return [];
         }
     }
-    
-       
+
+    public function editarEvento($id, $titulo, $fecha, $tipo, $descripcion, $creditos){
+        $updateEventoQuery = "UPDATE eventos SET ";
+        $updateEventoFields = [];
+        $paramsEvento = [];
+
+        if ($titulo !== null) {
+            $updateEventoFields[] = "nombre = :titulo";
+            $paramsEvento[':titulo'] = $titulo;
+        }
+
+        if ($fecha !== null) {
+            $updateEventoFields[] = "fecha = :fecha";
+            $paramsEvento[':fecha'] = $fecha;
+        }
+
+        if ($tipo !== null) {
+            $updateEventoFields[] = "tipo = :tipo";
+            $paramsEvento[':tipo'] = $tipo;
+        }
+
+        if ($descripcion !== null) {
+            $updateEventoFields[] = "descripcion = :descripcion";
+            $paramsEvento[':descripcion'] = $descripcion;
+        }
+
+        if ($creditos !== null) {
+            $updateEventoFields[] = "creditos = :creditos";
+            $paramsEvento[':creditos'] = $creditos;
+        }
+
+        if (count($updateEventoFields) > 0) {
+            $updateEventoQuery .= implode(", ", $updateEventoFields) . " WHERE id = :id";
+            $paramsEvento[':id'] = $id;
+
+            $stmtEventoUpdate = $this->conn->prepare($updateEventoQuery);
+            foreach ($paramsEvento as $key => $value) {
+                $stmtEventoUpdate->bindValue($key, $value);
+            }
+
+            $stmtEventoUpdate->execute();
+        }
+
+        return $this->obtenerEventoPorId($id);
+    }
+
+    public function obtenerEventoPorId($eventoId) {
+        $query = "SELECT * FROM eventos WHERE id = :eventoId";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':eventoId', $eventoId, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            $eventoData = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($eventoData) {
+                
+                $evento = new Evento();
+                $evento->setId($eventoData['id']);
+                $evento->setNombreEvento($eventoData['nombre']);
+          //      $evento->getModalidadEvento($eventoData['modalidad']);
+                $evento->setFechaEvento($eventoData['fecha']);
+                $evento->setDescripcionEvento($eventoData['descripcion']);
+                $evento->setCreditos($eventoData['creditos']);
+
+                return $evento;
+            }
+        }
+
+        return null; //evento no encontrado 
+    }
 }
 
 ?>

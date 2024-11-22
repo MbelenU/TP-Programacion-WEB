@@ -31,7 +31,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                     onclick="buscarHabilidad()">Buscar</button>
                 <div class="mx-2"></div>
                 <input type="text" id="newSkillInput" class="form-control me-2" placeholder="Nueva Habilidad">
-                <button id="addSkillButton" class="btn btn-success">Crear Habilidad</button>
+                <button id="addSkillButton" class="btn btn-success">Agregar</button>
             </div>
 
             <div class="table-responsive rounded-table">

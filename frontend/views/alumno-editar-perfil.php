@@ -159,6 +159,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarPerfil'])) {
 
         <div class="text-end">
             <button type="submit" class="btn btn-success border border-dark mt-3" name="guardarPerfil">Guardar</button>
+            <a href="<?php echo BASE_URL ?>views/alumno-perfil.php">
+                                <button type="button" class="btn btn-danger mt-3"> Cancelar</button>
+            </a>
         </div>
         </form>
     </div>
