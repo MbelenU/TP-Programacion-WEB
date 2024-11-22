@@ -3,7 +3,7 @@
 class PlanEstudio {
     private int $id;
     private string $nombrePlanEstudio;
-    private array $materia; // List<Materia>
+    private array $materia;
     public function __construct(int $id, string $nombrePlanEstudio) {
         $this->setId($id);
         $this->setNombrePlanEstudio($nombrePlanEstudio);

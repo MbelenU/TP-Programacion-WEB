@@ -377,7 +377,7 @@ class AlumnoDAO
                 $nombre = $evento['nombre'];
                 $fecha = $evento['fecha'];
                 $tipo = $evento['tipo'];
-                $creditos = $evento['creditos'];
+                $creditos = $evento['creditos'] ? $evento['creditos'] : 0; 
                 //$ubicacion = $evento['ubicacion']; falta en la bbdd
                 //$modalidad = $evento['modalidad']; falta en la bbdd
                 
