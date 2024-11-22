@@ -4,14 +4,8 @@ document.addEventListener("DOMContentLoaded", function() {
     botonesAplicar.forEach(button => {
         const empleoId = button.getAttribute('data-empleo-id');
 
-        checkPostulacion(empleoId).then(data => {
-            if (data) {
-                button.disabled = true;
-                button.innerText = "Postulado";
-            }
-        });
-
-        button.addEventListener('click', function() {
+        button.addEventListener('click', async function(event) {
+            event.preventDefault();
             const postulacionData = {
                 empleoId: empleoId
             };
@@ -35,16 +29,4 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    async function checkPostulacion(empleoId) {
-        const response = await fetch(`http://localhost:80/TP-Programacion-WEB/controllers/AlumnoController.php?checkPostulacion`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ empleoId })
-        });
-
-        const data = await response.json();
-        return data;
-    }
 });

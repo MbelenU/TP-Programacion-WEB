@@ -32,18 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['aplicarEmpleo'])) {
     $resultado = $alumnoController->aplicarEmpleo();
     return $resultado;
     exit;
-}
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['checkPostulacion'])) {
-    session_start();
-    $resultado = $alumnoController->checkPostulacion();
-    return $resultado;
-    exit;
 }elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['darBaja'])) {
     $resultado = $alumnoController->darBaja();
     return $resultado;
     exit;
 }elseif(isset($_GET['buscarEmpleos'])) {
-    $resultado = $alumnoController->buscarEmpleos($_GET['buscarEmpleos']);
+    session_start();
+    $idUsuario = $_SESSION['user']['user_id'];
+    $resultado = $alumnoController->buscarEmpleos($idUsuario, $_GET['buscarEmpleos']);
     echo json_encode($resultado);
     exit();
 }
@@ -81,16 +77,15 @@ class AlumnoController {
             ]);
         }
     }
-    public function checkPostulacion(){
+    public function checkPostulacion($empleoId){
         $idUsuario = $_SESSION['user']['user_id'];
-        $data = json_decode(file_get_contents("php://input"), true);
-        $id_publicacion = htmlspecialchars($data['empleoId'] ?? '');
+        $id_publicacion = htmlspecialchars($empleoId ?? '');
         $postulacion = $this->alumnoDao->checkPostulacion($idUsuario, $id_publicacion);
         if($postulacion){
-            echo json_encode(true);
+            return true;
         }
         else {
-            echo json_encode(false);
+            return false;
         }
     }
     public function editarPerfilAlumno($id) {
@@ -226,9 +221,9 @@ class AlumnoController {
         }
     }
 
-    public function buscarEmpleos($buscar) {
+    public function buscarEmpleos($idUsuario, $buscar) {
     
-        $empleos = $this->alumnoDao->getBusquedaEmpleo($buscar);
+        $empleos = $this->alumnoDao->getBusquedaEmpleo($idUsuario, $buscar);
         if ($empleos) {
             return [
                 "success" => true,

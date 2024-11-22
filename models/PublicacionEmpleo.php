@@ -12,7 +12,7 @@ class PublicacionEmpleo {
     private array $materiasRequeridas;
     private DateTime $fecha;
     private array $habilidades;
-    
+    private bool $checkPostulado;
 
     public function getId(): int {
         return $this->id;
@@ -91,9 +91,12 @@ class PublicacionEmpleo {
     public function setMateriasRequeridas(array $materiasRequeridas): void {
         $this->materiasRequeridas = $materiasRequeridas;
     }
-
-
-
+    public function getCheckPostulado(): bool {
+        return $this->checkPostulado;
+    }
+    public function setCheckPostulado(bool $checkPostulado): void {
+        $this->checkPostulado = $checkPostulado;
+    }
     public function setHabilidades(array $habilidades): void {
         // Verificamos que todas las habilidades sean objetos de la clase Habilidad
         foreach ($habilidades as $habilidad) {
@@ -121,6 +124,7 @@ class PublicacionEmpleo {
             'habilidades' => array_map(function($habilidad) {
                 return $habilidad->toArray(); 
             }, $this->habilidades),
+            'checkPostulado' => $this->checkPostulado
         ];
     }
     

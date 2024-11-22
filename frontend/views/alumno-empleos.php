@@ -15,7 +15,6 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 $response = $alumnoController->listarEmpleos();
 $empleos = $response['body'];
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -39,7 +38,8 @@ $empleos = $response['body'];
             </form>
             <div class="mb-5 list-group col-12 p-0" id="resultadosBusqueda">
                 <?php foreach ($empleos as $empleo): ?>
-                    <li class="list-group-item list-group-item-action bg-white border" >
+
+                    <li class="list-group-item list-group-item-action bg-white border">
                         <div class="w-100 justify-content-between">
                             <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
                                 <h5 class="mb-1">
@@ -86,9 +86,15 @@ $empleos = $response['body'];
                         </div>
                         <div class="mt-2">
                             <div class="d-flex align-items-center">
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de empleo">
-                                    <button type="button" class="btn btn-success btn-sm aplicar-empleo" data-empleo-id="<?php echo $empleo->getId(); ?>" data-alumno-id="<?php echo $_SESSION['user']['user_id']; ?>">Aplicar</button>
-                                </div>
+                                <?php if ($empleo->getEstadoEmpleo()->getId() !== 2): ?>
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de empleo">
+                                        <?php if ($alumnoController->checkPostulacion($empleo->getId())): ?>
+                                            <button type="button" disabled class="btn btn-success btn-sm aplicar-empleo" data-empleo-id="<?php echo $empleo->getId() ?>">Postulado</button>
+                                        <?php else: ?>
+                                            <button type="button" class="btn btn-success btn-sm aplicar-empleo" data-empleo-id="<?php echo $empleo->getId() ?>">Aplicar</button>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </li>
@@ -97,8 +103,9 @@ $empleos = $response['body'];
             </div>
         </div>
     </div>
-    <script src="../scripts/alumno/buscarEmpleos.js"></script>
     <script src="../scripts/alumno/aplicarEmpleo.js"></script>
+    <script src="../scripts/alumno/buscarEmpleos.js"></script>
+
 </body>
 
 </html>

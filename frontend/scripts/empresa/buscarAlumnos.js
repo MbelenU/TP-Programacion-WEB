@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (query !== '') {
             url += encodeURIComponent(query);
         }
-
         fetch(url, {
             method: 'GET', 
             headers: {
@@ -21,8 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json()) 
         .then(data => {
             const resultadosContainer = document.getElementById('resultadosBusqueda');
-            resultadosContainer.innerHTML = ''; 
-            
+            resultadosContainer.innerHTML = '';
             if (data.body && data.body.length > 0) {
                 data.body.forEach(alumno => {
                     const alumnoDiv = document.createElement('div');

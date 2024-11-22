@@ -639,7 +639,7 @@ class AlumnoDAO
         }
         return null;
     }
-    public function getBusquedaEmpleo($buscar) {
+    public function getBusquedaEmpleo($idUsuario, $buscar) {
         try {
             if ($buscar === '') {
                 $sql = "SELECT * FROM publicaciones_empleos WHERE id_estadopublicacion != 3"; 
@@ -705,7 +705,7 @@ class AlumnoDAO
                     $empleoOBJ->setJornada($jornada);  
                     $empleoOBJ->setUbicacion($ubicacion); 
                     $empleoOBJ->setHabilidades($habilidades);
-    
+                    $empleoOBJ->setCheckPostulado($this->checkPostulacion($idUsuario, $id));
                     $empleosArray[] = $empleoOBJ->toArray();
                 }
     
