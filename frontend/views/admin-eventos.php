@@ -56,8 +56,8 @@ $eventos = $administradorController->getEventos();
                                 <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
                                     
                                 
-                                        <h5 class="mb-1 evento-titulo">
-                                            <?php echo htmlspecialchars($evento->getNombreEvento()); ?>
+                                        <h5 class="mb-1 evento-titulo text-decoration-none">
+                                            <a href="<?php echo BASE_URL . 'views/admin-detalle-evento.php?id=' . $evento->getId(); ?>" class="text-decoration-none"><?php echo htmlspecialchars($evento->getNombreEvento()); ?></a>
                                         </h5>
                         
                                     <small class="mb-1"><i class="bi bi-calendar3"></i> <?php echo htmlspecialchars($evento->getFechaEvento()); ?></small>
