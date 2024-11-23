@@ -73,12 +73,14 @@ $publicacion = $publicacion['body'];
 								</div>
 								<div class="d-flex align-items-center">
 									<div class="btn-group btn-group-sm" role="group" aria-label="Estado de la postulación" data-postulacion-id="<?php echo $postulacion->getId(); ?>">
-										
-										<button type="button" class="btn <?php echo ($estadoPostulacionId == 1 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="1">Recibido</button>
-							
-										<button type="button" class="btn <?php echo ($estadoPostulacionId == 2 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="2">En proceso</button>
-								
-										<button type="button" class="btn <?php echo ($estadoPostulacionId == 3 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="3">Finalizado</button>
+
+										<button type="button" class="btn <?php echo ($estadoPostulacionId == 1 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="1">Abierto</button>
+
+										<button type="button" class="btn <?php echo ($estadoPostulacionId == 2 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="2">En evaluación</button>
+						
+										<button type="button" class="btn <?php echo ($estadoPostulacionId == 3 ? 'btn-success' : 'btn-secondary'); ?> btn-sm" data-estado-id="3">Reclutado</button>
+
+										<button type="button" class="btn <?php echo ($estadoPostulacionId == 4 ? 'btn-danger' : 'btn-secondary'); ?> btn-sm" data-estado-id="4">Finalizado</button>
 									</div>
 								</div>
 							</li>

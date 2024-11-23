@@ -6,12 +6,21 @@ document.addEventListener('DOMContentLoaded', function() {
             
             var buttons = this.closest('.btn-group').querySelectorAll('button');
             buttons.forEach(function(btn) {
+                btn.classList.remove('btn-danger');
                 btn.classList.remove('btn-success');
                 btn.classList.add('btn-secondary');
             });
+            if(estadoSeleccionadoId == 4){
+                this.classList.remove('btn-secondary');
+                this.classList.add('btn-danger');
+            }else if(estadoSeleccionadoId == 3){
+                this.classList.remove('btn-secondary');
+                this.classList.add('btn-success');
+            }else{
+                this.classList.remove('btn-secondary');
+                this.classList.add('btn-primary');
+            }
 
-            this.classList.remove('btn-secondary');
-            this.classList.add('btn-success');
             
             let response = await fetch('http://localhost/TP-Programacion-WEB/controllers/EmpresaController.php?cambiarEstadoPostulacion', {
                 method: 'POST',
