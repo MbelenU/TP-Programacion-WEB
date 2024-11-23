@@ -13,6 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
     exit;
 }
+
+/*
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "darDeBaja") {
     $userId = $data['userId'];
     $result = $administradorController->darDeBaja($userId);
@@ -33,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "cambiarContraseña")
     echo json_encode(['success' => $result]);
     exit;
 }
-
+*/
 
 $administradorController = new AdministradorController();
 $endpoint = $_GET['endpoint'] ?? '';
@@ -146,6 +148,7 @@ class AdministradorController
             return []; // Devolver un arreglo vacío si falla la consulta
         }
     }
+    
     public function cambiarClave($userId, $newPassword) {
         return $this->administradorDAO->updatePassword($userId, $newPassword);
     }
@@ -155,6 +158,7 @@ class AdministradorController
     public function habilitar($userId) {
         return $this->administradorDAO->setUserStatushab($userId, 'N'); // 'N' para activo
     }
+    
     public function getEventos() {
         return $this->administradorDAO->getEventos();
     }
@@ -228,8 +232,118 @@ class AdministradorController
         
     }
 
+    public function handleRequest()
+    {
+        $action = $_GET['action'] ?? null;
 
-} 
+        switch ($action) {
+            case 'getAllHabilidades':
+                $this->getAllHabilidades();
+                break;
+            case 'searchHabilidad':
+                $this->searchHabilidad();
+                break;
+            case 'addHabilidad':
+                $this->addHabilidad();
+                break;
+            case 'deleteHabilidad':
+                $this->deleteHabilidad();
+                break;
+            default:
+                echo json_encode(['error' => 'Acción no válida']);
+        }
+    }
+
+    private function getAllHabilidades()
+    {
+        $dao = new AdministradorDAO();
+        $habilidades = $dao->getAllHabilidades();
+        echo json_encode($habilidades);
+    }
+
+    private function searchHabilidad()
+    {
+        $query = $_GET['query'] ?? '';
+        $dao = new AdministradorDAO();
+        $habilidades = $dao->searchHabilidad($query);
+        echo json_encode($habilidades);
+    }
+
+    private function addHabilidad()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $descripcion = $data['descripcion'] ?? '';
+        $dao = new AdministradorDAO();
+        $success = $dao->addHabilidad($descripcion);
+        echo json_encode(['success' => $success]);
+    }
+
+    private function deleteHabilidad()
+    {
+        $id = $_GET['id'] ?? 0;
+        $dao = new AdministradorDAO();
+        $success = $dao->deleteHabilidad($id);
+        echo json_encode(['success' => $success]);
+    }
+
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $input = json_decode(file_get_contents('php://input'), true);
+
+    if (!$input) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Entrada JSON inválida.']);
+        exit;
+    }
+
+    $action = $input['action'] ?? null;
+
+    $administradorController = new AdministradorController();
+
+    switch ($action) {
+        case 'darDeBaja':
+            $userId = $input['userId'] ?? null;
+            if ($userId) {
+                $result = $administradorController->darDeBaja($userId);
+                echo json_encode(['success' => $result]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'ID de usuario no proporcionado.']);
+            }
+            break;
+
+        case 'habilitar':
+            $userId = $input['userId'] ?? null;
+            if ($userId) {
+                $result = $administradorController->habilitar($userId);
+                echo json_encode(['success' => $result]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'ID de usuario no proporcionado.']);
+            }
+            break;
+
+        case 'cambiarContraseña':
+            $userId = $input['userId'] ?? null;
+            $newPassword = $input['newPassword'] ?? null;
+            if ($userId && $newPassword) {
+                $result = $administradorController->cambiarClave($userId, $newPassword);
+                echo json_encode(['success' => $result]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Datos insuficientes para cambiar la contraseña.']);
+            }
+            break;
+
+        default:
+            echo json_encode(['success' => false, 'message' => 'Acción no válida.']);
+            break;
+    }
+    exit;
+}
+
+$controller = new AdministradorController();
+$controller->handleRequest();
+
+
 
 
 

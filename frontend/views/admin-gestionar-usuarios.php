@@ -26,58 +26,8 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 
 <head>
     <?php require __DIR__.'/../components/header.php'; ?>
-    <style>
-        /* Estilo para el botón de registrar usuario */
-        .btn-registrar {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            background-color: #0d6efd;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-registrar:hover {
-            background-color: #0a58ca;
-        }
-
-        /* Estilo para la lista de usuarios */
-        .user-list {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .user-item {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr auto;
-            align-items: center;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background-color: #f8f9fa;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .user-info {
-            font-size: 14px;
-        }
-
-        .user-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-success, .btn-danger {
-            font-size: 14px;
-            padding: 5px 10px;
-        }
-    </style>
+    <!-- Enlace al archivo CSS -->
+    <link rel="stylesheet" href="http://localhost/TP-Programacion-WEB/frontend/css/admin-gestionar-usuarios.css">
 </head>
 
 <body class="bg-inicio p-0">
@@ -121,103 +71,8 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
         </div>
     </div>
 
-    <script>
-        // Función para cambiar contraseña
-        document.querySelectorAll('.btn-cambiar-pass').forEach(button => {
-            button.addEventListener('click', () => {
-                const userId = button.getAttribute('data-id');
-                const newPassword = prompt('Ingresa la nueva contraseña:');
-                
-                if (newPassword) {
-                    fetch('../../controllers/AdministradorController.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            action: 'cambiarContraseña',
-                            userId: userId,
-                            newPassword: newPassword
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Contraseña cambiada con éxito.');
-                        } else {
-                            alert('Error al cambiar la contraseña.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Ocurrió un error.');
-                    });
-                }
-            });
-        });
-
-        // Función para dar de baja a un usuario
-        document.querySelectorAll('.btn-dar-baja').forEach(button => {
-            button.addEventListener('click', () => {
-                const userId = button.getAttribute('data-id');
-                if (confirm('¿Estás seguro de que deseas dar de baja este usuario?')) {
-                    fetch('../../controllers/AdministradorController.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            action: 'darDeBaja',
-                            userId: userId
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Usuario dado de baja con éxito.');
-                            location.reload();
-                        } else {
-                            alert('Error al dar de baja el usuario.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Ocurrió un error.');
-                    });
-                }
-            });
-        });
-        document.querySelectorAll('.btn-habilitar').forEach(button => {
-            button.addEventListener('click', () => {
-                const userId = button.getAttribute('data-id');
-                if (confirm('¿Estás seguro de que deseas dar Activar este usuario?')) {
-                    fetch('../../controllers/AdministradorController.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            action: 'habilitar',
-                            userId: userId
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Usuario activado con éxito.');
-                            location.reload();
-                        } else {
-                            alert('Error al activar el usuario.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Ocurrió un error.');
-                    });
-                }
-            });
-        });
-    </script>
+    <!-- Enlace al archivo JS -->
+    <script src="http://localhost/TP-Programacion-WEB/frontend/scripts/admin/admin-gestionar-usuarios.js"></script>
 </body>
 
 </html>

@@ -361,6 +361,60 @@ class AdministradorDAO
             return false;
         }
     }
+
+    public function getAllHabilidades(): array
+    {
+        try {
+            $query = "SELECT * FROM habilidades";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error al obtener habilidades: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function searchHabilidad(string $query): array
+    {
+        try {
+            $sql = "SELECT * FROM habilidades WHERE descripcion LIKE :search";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(':search', '%' . $query . '%', PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error al buscar habilidades: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function addHabilidad(string $descripcion): bool
+    {
+        try {
+            $query = "INSERT INTO habilidades (descripcion) VALUES (:descripcion)";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':descripcion', $descripcion, PDO::PARAM_STR);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error al agregar habilidad: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function deleteHabilidad(int $id): bool
+    {
+        try {
+            $query = "DELETE FROM habilidades WHERE id = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error al eliminar habilidad: " . $e->getMessage());
+            return false;
+        }
+    }
+    
 }
 
 ?>
