@@ -13,8 +13,10 @@ class UsuarioDAO {
 
     public function iniciarSesion($email, $password) {
         $queryUser = "
-            SELECT u.id as user_id, 
-                   id_rol as user_type
+            SELECT 
+                u.id AS user_id, 
+                id_rol AS user_type,
+                u.de_baja
             FROM usuario u
             LEFT JOIN roles_usuario a ON u.id = a.id_usuario
             WHERE u.mail = :email AND u.clave = :password
@@ -24,12 +26,20 @@ class UsuarioDAO {
         $stmtUser->bindParam(':email', $email);
         $stmtUser->bindParam(':password', $password);
         $stmtUser->execute();
-
+    
         $result = $stmtUser->fetch(PDO::FETCH_ASSOC);
-
+    
         if ($result) {
-            return $result;
-        } 
+            // Validar si el usuario está activo
+            if ($result['de_baja'] === 'N') {
+                // Usuario válido y activo
+                return $result;
+            } else {
+                // Usuario deshabilitado
+                return ['error' => 'Usuario deshabilitado. Contacte al administrador.'];
+            }
+        }
+        // Usuario o contraseña incorrectos
         return null;
     }
 

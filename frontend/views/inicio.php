@@ -3,6 +3,28 @@
     require_once __DIR__ . '/../../controllers/UsuarioController.php';
     $usuarioController = new UsuarioController();
     $error = "";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
+        $resultado = $usuarioController->iniciarSesion();
+        if ($resultado['success']) {
+            $_SESSION['user'] = $resultado['usuario'];
+            switch ($resultado['usuario']['user_type']) {
+                case '1':
+                    header("Location: ./admin-gestionar-usuarios.php");
+                    exit();
+                case '2':
+                    header("Location: ./alumno-empleos.php");
+                    exit();
+                case '3':
+                    header("Location: ./empresa-visualizar-publicaciones.php");
+                    exit();
+            }
+        } else {
+            $error = $resultado['message']; // Mostrar mensaje específico
+        }
+    }
+
+    /*
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
         $resultado = $usuarioController->iniciarSesion();
         if($resultado['success']) {
@@ -22,6 +44,7 @@
             $error = "Credenciales incorrectas. Por favor, intenta de nuevo.";
         }
     }
+        */
 ?>
 
 <!DOCTYPE html>
