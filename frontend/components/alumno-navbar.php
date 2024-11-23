@@ -31,7 +31,7 @@
                         <a class="nav-link" href="<?php echo BASE_URL ?>views/alumno-empleos.php">Empleos</a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link" href="<?php echo BASE_URL ?>views/alumno-solicitudes.php">Solicitudes</a>
+                        <a class="nav-link" href="<?php echo BASE_URL ?>views/alumno-postulaciones.php">Postulaciones</a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link"

@@ -1,14 +1,16 @@
+
 .bg-inicio, .bg-alt {
+  background-position: center center;
+  background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-position: center;
-  background-size: cover;
 }
-
+html {
+  overflow-y: scroll;
+}
 .bg-inicio{
   background-image: url('../img/bg-inicio.avif');
 }
-
 .bg-alt{
   background-image: url('../img/bg-inicio.svg');
 }

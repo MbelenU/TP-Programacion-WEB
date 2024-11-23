@@ -47,7 +47,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                     <button onclick="window.location.href='admin-registro.php'" class="btn-registrar">Registrar Usuario</button>
 
                     <!-- Lista de usuarios -->
-                    <div class="user-list">
+                    <div class="user-list table-responsive ">
                         <?php if (!empty($response)): ?>
                             <?php foreach ($response as $usuario): ?>
                                 <div class="user-item">

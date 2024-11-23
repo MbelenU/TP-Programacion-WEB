@@ -27,14 +27,14 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     <?php require __DIR__ . '/../components/header.php' ?>
     <script src="<?php echo BASE_URL ?>scripts/alumno/solicitudes.js" defer></script>
     <link rel="stylesheet" href="<?php echo BASE_URL ?>css/alumno-solicitudes.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>css/global.css">
 </head>
 
 <body class="bg-inicio">
     <?php require __DIR__ . '/../components/alumno-navbar.php' ?>
-    <div class="container p-sm-4 bg-white">
-        <div class="container mt-5">
+        <div class="container mt-5 p-sm-4 bg-white">
             <div class="pb-5">
-                <h1>Mis solicitudes</h1>
+                <h1>Mis postulaciones</h1>
             </div>
             <div id="message-container" class="container mt-3"></div>
             <?php if ($postulaciones): ?>
@@ -47,7 +47,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                                         <div class="titulo-solic"><?php echo htmlspecialchars($postulacion->getPuestoOfrecido()); ?></div>
                                     </h5>
                                     <small class="mb-1"><i class="bi bi-geo-alt"></i> <?php echo htmlspecialchars($postulacion->getUbicacion()); ?></small>
-                                    <p class="my-4">Estado de la solicitud: <?php echo htmlspecialchars($postulacion->getEstadoPostulacion()->getEstado()) ?? null; ?></p>
+                                    <p class="my-4">Estado de la postulacion: <?php echo htmlspecialchars($postulacion->getEstadoPostulacion()->getEstado()) ?? null; ?></p>
                                 </button>
                             </div>
                             <div class="solicitud-details d-none">
@@ -71,7 +71,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                                 </div>
                                 <div class="d-flex align-items-center mt-3">
                                     <button class="btn btn-outline-danger"  id="darBaja">
-                                        Eliminar solicitud<i class="bi bi-person-fill-down fs-5"></i>
+                                        Eliminar postulacion<i class="bi bi-person-fill-down fs-5"></i>
                                     </button>
                                 </div>
                             </div>
@@ -80,13 +80,12 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                     <?php endforeach; ?>
                 </ul>
             <?php else: ?>
-                <p>No hay solicitudes disponibles en este momento.</p>
+                <p>No hay postulaciones</p>
             <?php endif; ?>
             <a href="<?php echo BASE_URL ?>views/alumno-empleos.php">
                                 <button type="button" class="btn btn-light mt-2"> Volver a Empleos</button>
                             </a>
         </div>
-    </div>
     
     <script src="../scripts/alumno/darBaja.js"></script>
 </body>

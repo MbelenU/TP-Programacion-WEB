@@ -21,13 +21,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 let alertMessage = '';
                 if (data.success) {
                     alertMessage = `<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        Solicitud eliminada.
+                                        Postulacion eliminada.
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                      </div>`;
                     solicitudItem.remove();
                 } else {
                     alertMessage = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        Hubo un error al eliminar la solicitud. Inténtalo de nuevo.
+                                        Hubo un error al eliminar la postulacion. Inténtalo de nuevo.
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                      </div>`;
                 }
@@ -35,10 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 messageContainer.innerHTML = alertMessage;
             })
             .catch(error => {
-                console.error('Error al procesar la solicitud:', error);
+                console.error('Error al procesar la postulacion:', error);
                 const messageContainer = document.getElementById('message-container');
                 const alertMessage = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        Hubo un problema con la solicitud. Inténtalo más tarde.
+                                        Hubo un problema con la postulacion. Inténtalo más tarde.
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                      </div>`;
                 messageContainer.innerHTML = alertMessage;
