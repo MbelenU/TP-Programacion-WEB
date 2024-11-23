@@ -19,7 +19,5 @@
 <!-- Bootstrap Bundle JS (includes Popper.js) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 
-<!-- Custom Scripts -->
-<script src="<?php echo BASE_URL ?>scripts/navbar.js" defer></script>
 
 <title>Escalón Uno</title>
