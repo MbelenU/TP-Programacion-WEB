@@ -2,6 +2,7 @@
 require_once 'Database.php';
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../models/Evento.php';
+require_once __DIR__ . '/../models/Notificaciones.php';
 
 class AdministradorDAO
 {
@@ -333,6 +334,32 @@ class AdministradorDAO
         }
 
         return null; //evento no encontrado 
+    }
+
+    public function agregarNotificacion($idUsuario, $descripcion)
+    {
+        $query = "INSERT INTO notificaciones (id_usuario, descripcion) VALUES (:id_usuario, :descripcion)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id_usuario', $idUsuario, PDO::PARAM_INT);
+        $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    public function obtenerAlumnos() {
+        $query = "SELECT u.id FROM usuario u
+                  JOIN roles_usuario ru ON u.id = ru.id_usuario
+                  WHERE ru.id_rol = 2";  // 2 es el rol de alumno
+        
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            
+            $alumnos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $alumnos;
+        } catch (PDOException $e) {
+            echo "Error al obtener los alumnos: " . $e->getMessage();
+            return false;
+        }
     }
 }
 

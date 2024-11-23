@@ -13,6 +13,7 @@ require_once __DIR__ . '/../models/Jornada.php';
 require_once __DIR__ . '/../models/EstadoPostulacion.php';
 require_once __DIR__ . '/../models/Postulacion.php';
 require_once __DIR__ . '/../models/Suscripcion.php';
+require_once __DIR__ . '/../models/Notificaciones.php';
 
 class AlumnoDAO
 {
@@ -780,6 +781,36 @@ class AlumnoDAO
                 return null; 
             }
 
+        }
+
+        // Obtener notificaciones de un usuario específico
+        public function obtenerNotificaciones($idUsuario)
+        {
+            $query = "SELECT * FROM notificaciones WHERE id_usuario = :id_usuario ORDER BY id DESC";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':id_usuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->execute();
+    
+            $notificaciones = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $notificacion = new Notificacion();
+                $notificacion->setId($row['id']);
+                $notificacion->setIdUsuario($row['id_usuario']);
+                $notificacion->setDescripcion($row['descripcion']);
+                $notificaciones[] = $notificacion;
+            }
+    
+            return $notificaciones;
+        }
+    
+        
+        public function agregarNotificacion($idUsuario, $descripcion)
+        {
+            $query = "INSERT INTO notificaciones (id_usuario, descripcion) VALUES (:id_usuario, :descripcion)";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':id_usuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+            $stmt->execute();
         }
         
 

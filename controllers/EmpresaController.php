@@ -162,6 +162,26 @@ class EmpresaController {
         $input = json_decode(file_get_contents('php://input'), true);
         $result = $this->empresaDAO->cambiarEstadoPostulacion($input['postulacion_id'], $input['estado_id']);
         if($result){
+
+                $publicacion = $this->empresaDAO->obtenerPublicacionPorPostulacion($input['postulacion_id']);
+                if (!$publicacion) {
+                    http_response_code(500);
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Error: No se encontró la publicación de empleo',
+                    ]);
+                    return;
+                }
+                $alumnos = $this->empresaDAO->obtenerAlumnosPorPostulacion($input['postulacion_id']);
+                if ($alumnos) {
+                    $descripcionNotificacion = "El estado de tu postulación para el puesto '{$publicacion['puesto_ofrecido']}' ha cambiado. Estado: {$publicacion['nombre']}";
+        
+                    foreach ($alumnos as $alumno) {
+                        $this->empresaDAO->agregarNotificacion($alumno['id'], $descripcionNotificacion);
+                    }
+                }
+
+
             http_response_code(200);
             echo json_encode([
                 "success" => true,

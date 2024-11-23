@@ -66,6 +66,15 @@ class AdministradorController
 
         $evento = $this->administradorDAO->crearEvento($_SESSION['user']['user_id'], $titulo, $tipo ,$fecha, $hora, $descripcion, $creditos);
         if($evento){
+             $alumnos = $this->administradorDAO->obtenerAlumnos();
+
+                    if ($alumnos) {
+                        $descripcionNotificacion = "Se ha creado un nuevo evento: " . $titulo;
+
+                        foreach ($alumnos as $alumno) {
+                            $this->administradorDAO->agregarNotificacion($alumno['id'], $descripcionNotificacion);
+                        }
+                    }
             $response = [
                 "success" => true,
                 "body" => $evento

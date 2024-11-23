@@ -13,6 +13,7 @@ require_once __DIR__ . '/../models/Postulacion.php';
 require_once __DIR__ . '/../models/EstadoPostulacion.php';
 require_once __DIR__ . '/../models/EstadoEmpleo.php';
 require_once __DIR__ . '/../models/Alumno.php';
+require_once __DIR__ . '/../models/Notificaciones.php';
 
 
 
@@ -540,6 +541,48 @@ class EmpresaDAO {
             }
         }
         return null;
+    }
+
+    public function agregarNotificacion($idUsuario, $descripcion)
+    {
+        $query = "INSERT INTO notificaciones (id_usuario, descripcion) VALUES (:id_usuario, :descripcion)";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id_usuario', $idUsuario, PDO::PARAM_INT);
+        $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    public function obtenerPublicacionPorPostulacion($postulacion_id) {
+        $sql = "SELECT pe.puesto_ofrecido, ep.nombre
+                FROM postulaciones p
+                JOIN publicaciones_empleos pe ON p.id_publicacionesempleos = pe.id
+                JOIN estados_postulacion ep ON p.id_estadopostulacion = ep.id
+                WHERE p.id = :postulacion_id";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':postulacion_id', $postulacion_id, PDO::PARAM_INT);
+        
+        if ($stmt->execute()) {
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return null;
+        }
+    }
+    
+    public function obtenerAlumnosPorPostulacion($postulacion_id) {
+        $sql = "SELECT u.id 
+                FROM postulaciones p
+                JOIN usuario u ON p.id_usuario = u.id
+                WHERE p.id = :postulacion_id";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':postulacion_id', $postulacion_id, PDO::PARAM_INT);
+        
+        if ($stmt->execute()) {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            return null;
+        }
     }
     
     

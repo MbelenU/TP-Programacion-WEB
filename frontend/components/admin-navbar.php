@@ -45,6 +45,10 @@
                         <a class="nav-link"
                             href="<?php echo BASE_URL ?>views/admin-gestionar-habilidades.php">Habilidades</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="<?php echo BASE_URL ?>views/admin-notificaciones.php">Notificaciones</a>
+                    </li>
                     <li class="nav-item align-self-center d-flex ">
                         <a href="<?php echo BASE_URL ?>views/logout.php">
                             <button type="button" class="btn btn-outline-danger"><i class="bi bi-box-arrow-left"></i> Cerrar sesión</button>
