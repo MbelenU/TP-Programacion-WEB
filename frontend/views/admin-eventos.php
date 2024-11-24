@@ -6,20 +6,11 @@ if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
-
-require_once (__DIR__ .'../../includes/permisos.php');
-if (Permisos::tienePermiso('Visualizar Eventos', $_SESSION['user']['user_id'])){
-    echo "Tien Permiso";
-} else {
-    echo "NOO Tien Permiso";
-};
-die;
-
-// $allowedRoles = ['1'];
-// if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
-//     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
-//     exit();
-// }
+$allowedRoles = ['1'];
+if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+    echo "Acceso denegado. No tienes permisos para acceder a esta página.";
+    exit();
+}
 
 $userId = $_SESSION['user'];
 
