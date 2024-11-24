@@ -38,6 +38,7 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
     <?php require __DIR__ . '/../components/header.php' ?>
     <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/global.css">
     <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/empresa.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../scripts/empresa/reclutar.js" defer></script>
 </head>
 
@@ -146,15 +147,18 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalReclutarLabel">Seleccionar publicación:</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
+
+                        <div id="successMessage" class="alert alert-success d-none"></div>
+                        <div id="errorMessage" class="alert alert-danger d-none"></div>
+
                             <label for="publicacionSelect">Elige una publicación</label>
                             <select class="form-select" id="publicacionSelect">
                                 <option selected>Selecciona una publicación</option>
-                                <?php if (!empty($publicaciones['body'])): ?>  <!-- Verifica si el array de publicaciones tiene elementos -->
-                                    <?php foreach ($publicaciones['body'] as $publicacion): ?>  <!-- Itera sobre las publicaciones -->
+                                <?php if (!empty($publicaciones['body'])): ?>  
+                                    <?php foreach ($publicaciones['body'] as $publicacion): ?>  
                                         <option value="<?php echo $publicacion->getId(); ?>">
                                             <?php echo htmlspecialchars($publicacion->getTitulo()); ?>
                                         </option>
