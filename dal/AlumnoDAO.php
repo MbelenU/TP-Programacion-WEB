@@ -365,7 +365,7 @@ class AlumnoDAO
     
 
     public function getEventos() {
-        $queryEventos = "SELECT * FROM eventos";
+        $queryEventos = "SELECT * FROM eventos WHERE id_estadoeventos = 1;";
         $stmt = $this->conn->prepare($queryEventos);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
@@ -767,20 +767,21 @@ class AlumnoDAO
     }
 
 
-    public function getSuscripciones() {
+    public function getSuscripciones($idUsuario) {
         
-            $query = "SELECT * FROM suscripciones";
+            $query = " SELECT e.* FROM eventos e INNER JOIN suscripciones s ON e.id = s.id_evento WHERE s.id_usuario = $idUsuario;";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                $suscripcion = new Suscripcion($row['id'], $row['id_usuario'],$row['id_evento']);
-                return $suscripcion;
+                $suscripciones = [];
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $suscripciones[] = $row;
+                }
+                return $suscripciones;
             } else {
-                return null; 
+                return []; 
             }
-
         }
 
         // Obtener notificaciones de un usuario específico

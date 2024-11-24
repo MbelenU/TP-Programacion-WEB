@@ -256,13 +256,13 @@ class AlumnoController {
         }
     }
 
-    public function verificarSuscripcion() {
-        $suscripcion = $this->alumnoDao->getSuscripciones();
-        if($suscripcion){
+    public function listarSuscripciones($idUsuario) {
+        $suscripciones = $this->alumnoDao->getSuscripciones($idUsuario);
+        if($suscripciones){
             
             $response = [
                 "success" => true,
-                "body" => $suscripcion
+                "body" => $suscripciones
             ];
             return $response;
         }
