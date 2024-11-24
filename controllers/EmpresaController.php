@@ -231,35 +231,50 @@ class EmpresaController {
         }
     }
     
-        public function reclutarAlumno() {
-            $input = json_decode(file_get_contents('php://input'), true);   
-            
-            $usuarioId = $input['usuario_id']; 
-
-            $publicacionId = $input['publicacion_id']; 
+    public function reclutarAlumno() {
+        // Decodificar la entrada JSON
+        $input = json_decode(file_get_contents('php://input'), true);               
+        $usuarioId = $input['usuario_id']; 
+        $publicacionId = $input['publicacion_id']; 
+        $estadoId = 3;
     
-            $postulante = $this->empresaDAO->obtenerPostulante($usuarioId, $publicacionId);
-            $estadoId = 3;
-            if ($postulante) {
-                $result = $this->empresaDAO->cambiarEstadoPostulacion($publicacionId, $estadoId);
-            } else {
-                $result = $this->empresaDAO->reclutarAlumno($usuarioId, $publicacionId, $estadoId);
-            }
-            
-            if ($result) {
-                http_response_code(200); 
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'El alumno ha sido reclutado con éxito.'
-                ]);
-            } else {
-                http_response_code(500); 
+        // Llamada al DAO para reclutar al alumno
+        $result = $this->empresaDAO->reclutarAlumno($usuarioId, $publicacionId, $estadoId);
+    
+        // Comprobar si el resultado fue exitoso (verificamos la clave 'success' en el array)
+        if ($result['success']) {
+            // Obtener la publicación para enviar notificación
+            $publicacion = $this->empresaDAO->obtenerPublicacion($publicacionId);
+    
+            if (!$publicacion) {
+                http_response_code(500);
                 echo json_encode([
                     'success' => false,
-                    'message' => 'Error al procesar la postulación.'
+                    'message' => 'Error: No se encontró la publicación de empleo',
                 ]);
+                return;
             }
+    
+            // Descripción de la notificación que se enviará al usuario
+            $descripcionNotificacion = "Fuiste reclutado para el puesto '{$publicacion->getTitulo()}'."; 
+            $idUsuario = $input['usuario_id']; 
+            $this->empresaDAO->agregarNotificacion($idUsuario, $descripcionNotificacion);
+    
+            // Responder con éxito
+            http_response_code(200); 
+            echo json_encode([
+                'success' => true,
+                'message' => 'El alumno ha sido reclutado con éxito.'
+            ]);
+        } else {
+            // Si la respuesta del DAO fue que no se pudo reclutar
+            http_response_code(500); 
+            echo json_encode([
+                'success' => false,
+                'message' => $result['message'] // Usamos el mensaje del DAO
+            ]);
         }
+    }
     
     
     

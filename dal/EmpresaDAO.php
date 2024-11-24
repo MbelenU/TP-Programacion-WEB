@@ -716,22 +716,27 @@ class EmpresaDAO {
     }
     
 
-    public function reclutarAlumno($usuario_id, $postulacion_id,$estadoId) {
+    public function reclutarAlumno($usuario_id, $postulacion_id, $estadoId) {
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $fecha = date('Y-m-d H:i:s');
         
-        $estadoId = 1; 
     
-        $checkQuery = "SELECT COUNT(*) FROM postulaciones WHERE id_usuario = :idAlumno AND id_publicacionesempleos = :idPublicacionesEmpleos";
+        $checkQuery = "SELECT id_estadopostulacion  FROM postulaciones WHERE id_usuario = :idAlumno AND id_publicacionesempleos = :idPublicacionesEmpleos";
         $stmtCheck = $this->conn->prepare($checkQuery);
         $stmtCheck->bindParam(':idAlumno', $usuario_id, PDO::PARAM_INT);
         $stmtCheck->bindParam(':idPublicacionesEmpleos', $postulacion_id, PDO::PARAM_INT);
         
         try {
             $stmtCheck->execute();
-            $count = $stmtCheck->fetchColumn(); 
+            $result  = $stmtCheck->fetch(PDO::FETCH_ASSOC);
     
-            if ($count > 0) {
+            if ($result) {
+                
+                if ($result['id_estadopostulacion'] == 3) {
+                    return ['success' => false, 'message' => 'Este usuario ya se encuentra reclutado.'];
+                } else {
+
+                $estadoId = 3; 
                 $queryUpdate = "UPDATE postulaciones SET id_estadopostulacion = :id_estadopostulacion WHERE id_usuario = :idAlumno AND id_publicacionesempleos = :idPublicacionesEmpleos";
                 $stmtUpdate = $this->conn->prepare($queryUpdate);
                 $stmtUpdate->bindParam(':id_estadopostulacion', $estadoId, PDO::PARAM_INT);
@@ -740,14 +745,14 @@ class EmpresaDAO {
                 $stmtUpdate->execute();
                 
                 return ['success' => true, 'message' => 'Estado de postulación cambiado a Reclutado.'];
+                }
             } else {
-                $estadoId = 3; 
-                
+                $estadoId = 3;                 
                 $queryInsert = "INSERT INTO postulaciones (id_usuario, id_publicacionesempleos, fecha, id_estadopostulacion) 
                                 VALUES (:idAlumno, :idPublicacionesEmpleos, :fecha, :id_estadopostulacion)";
                 
                 $stmtInsert = $this->conn->prepare($queryInsert);
-                $stmtInsert->bindParam(':idAlumno', $idUsuario, PDO::PARAM_INT);
+                $stmtInsert->bindParam(':idAlumno', $usuario_id, PDO::PARAM_INT);
                 $stmtInsert->bindParam(':idPublicacionesEmpleos', $postulacion_id, PDO::PARAM_INT);
                 $stmtInsert->bindParam(':fecha', $fecha, PDO::PARAM_STR);
                 $stmtInsert->bindParam(':id_estadopostulacion', $estadoId, PDO::PARAM_INT);
