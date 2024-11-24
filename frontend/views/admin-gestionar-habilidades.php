@@ -15,7 +15,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 
 <head>
     <?php require __DIR__ . '/../components/header.php'; ?>
-    <script src="<?php echo BASE_URL ?>frontend/scripts/admin/gestionar-habilidades.js" defer></script>
+    <script src="<?php echo BASE_URL ?>scripts/admin/gestion-habilidad.js" defer></script>
     <link rel="stylesheet" href="<?php echo BASE_URL ?>css/admin-habilidades.css">
     <title>Gestión de Habilidades</title>
 </head>

@@ -2,6 +2,9 @@
 require_once __DIR__ . '/../dal/AdministradorDAO.php';
 require_once __DIR__ . '/../models/Usuario.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -14,28 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-/*
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "darDeBaja") {
-    $userId = $data['userId'];
-    $result = $administradorController->darDeBaja($userId);
-    echo json_encode(['success' => $result]);
-    exit;
-}
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "habilitar") {
-    $userId = $data['userId'];
-    $result = $administradorController->habilitar($userId);
-    echo json_encode(['success' => $result]);
-    exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "cambiarContraseña") {
-    $userId = $data['userId'];
-    $newPassword = $data['newPassword'];
-    $result = $administradorController->cambiarClave($userId, $newPassword);
-    echo json_encode(['success' => $result]);
-    exit;
-}
-*/
 
 $administradorController = new AdministradorController();
 $endpoint = $_GET['endpoint'] ?? '';
@@ -253,36 +234,53 @@ class AdministradorController
                 echo json_encode(['error' => 'Acción no válida']);
         }
     }
-
+    
     private function getAllHabilidades()
     {
-        $dao = new AdministradorDAO();
-        $habilidades = $dao->getAllHabilidades();
+        $administradorDAO = new AdministradorDAO();
+        $habilidades = $administradorDAO->getAllHabilidades();
         echo json_encode($habilidades);
     }
 
     private function searchHabilidad()
     {
         $query = $_GET['query'] ?? '';
-        $dao = new AdministradorDAO();
-        $habilidades = $dao->searchHabilidad($query);
+        $administradorDAO = new AdministradorDAO();
+        $habilidades = $administradorDAO->searchHabilidad($query);
         echo json_encode($habilidades);
     }
 
+    private function addHabilidad() {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $descripcion = $data['descripcion'] ?? '';
+    
+        if (empty($descripcion)) {
+            echo json_encode(['success' => false, 'message' => 'Descripción vacía']);
+            return;
+        }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+            return;
+        }
+    
+        $success = $this->administradorDAO->addHabilidad($descripcion);
+        echo json_encode(['success' => $success]);
+    }
+/*
     private function addHabilidad()
     {
         $data = json_decode(file_get_contents('php://input'), true);
         $descripcion = $data['descripcion'] ?? '';
-        $dao = new AdministradorDAO();
-        $success = $dao->addHabilidad($descripcion);
+        $administradorDAO = new AdministradorDAO();
+        $success = $administradorDAO->addHabilidad($descripcion);
         echo json_encode(['success' => $success]);
     }
-
+*/
     private function deleteHabilidad()
     {
         $id = $_GET['id'] ?? 0;
-        $dao = new AdministradorDAO();
-        $success = $dao->deleteHabilidad($id);
+        $administradorDAO = new AdministradorDAO();
+        $success = $administradorDAO->deleteHabilidad($id);
         echo json_encode(['success' => $success]);
     }
 
@@ -340,11 +338,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+
 $controller = new AdministradorController();
 $controller->handleRequest();
-
-
-
 
 
 ?>
