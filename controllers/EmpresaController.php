@@ -42,6 +42,9 @@ elseif (isset($_GET['buscarAlumnos'])) {
     $query = $_GET['buscarAlumnos'];
     $resultados = $empresaController->buscarAlumnos($query);
     exit();
+}elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['reclutarAlumno'])) {
+    $resultados = $empresaController->reclutarAlumno();
+    exit();
 }
 
 class EmpresaController {
@@ -231,17 +234,16 @@ class EmpresaController {
         public function reclutarAlumno() {
             $input = json_decode(file_get_contents('php://input'), true);   
             
-            $alumnoId = $input['alumno_id']; 
-            $usuarioId = $alumno->getUsuarioId();  
+            $usuarioId = $input['usuario_id']; 
 
-            $postulacionId = $input['postulacion_id']; 
+            $publicacionId = $input['publicacion_id']; 
     
-            $postulante = $this->empresaDAO->obtenerPostulante($usuarioId, $postulacionId);
-    
+            $postulante = $this->empresaDAO->obtenerPostulante($usuarioId, $publicacionId);
+            $estadoId = 3;
             if ($postulante) {
-                $result = $this->empresaDAO->cambiarEstadoPostulacion($postulacion_id, $estadoId);
+                $result = $this->empresaDAO->cambiarEstadoPostulacion($publicacionId, $estadoId);
             } else {
-                $result = $this->empresaDAO->reclutarAlumno($usuarioId, $postulacionId, $estadoId);
+                $result = $this->empresaDAO->reclutarAlumno($usuarioId, $publicacionId, $estadoId);
             }
             
             if ($result) {

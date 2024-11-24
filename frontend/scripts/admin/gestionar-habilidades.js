@@ -61,13 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error al agregar habilidad:", error);
         }
     };
-
     const deleteHabilidad = async (id) => {
         try {
             const response = await fetch(`AdministradorController.php?action=deleteHabilidad&id=${id}`, {
                 method: "DELETE",
             });
-
             const result = await response.json();
             if (result.success) {
                 loadHabilidades();

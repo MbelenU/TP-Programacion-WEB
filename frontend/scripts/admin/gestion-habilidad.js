@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const addSkillButton = document.getElementById("addSkillButton");
     const searchButton = document.getElementById("searchButton");
 
-    // Cargar habilidades desde el servidor
     const loadHabilidades = async () => {
         try {
             const response = await fetch("/TP-Programacion-WEB/controllers/AdministradorController.php?action=getAllHabilidades");
@@ -16,9 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Renderizar habilidades en la tabla
     const renderHabilidades = (habilidades) => {
-        tableBody.innerHTML = ""; // Limpiar la tabla
+        tableBody.innerHTML = ""; 
         habilidades.forEach((habilidad) => {
             const row = document.createElement("tr");
             row.innerHTML = `
@@ -31,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    // Buscar habilidades por descripción
     const buscarHabilidad = async () => {
         try {
             const query = searchInput.value.trim();
@@ -42,8 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error al buscar habilidad:", error);
         }
     };
-
-    // Agregar una nueva habilidad
     const agregarHabilidad = async () => {
         try {
             const descripcion = newSkillInput.value.trim();
@@ -59,10 +54,11 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             const result = await response.json();
+
+            console.log(result)
             if (result.success) {
-                alert("Habilidad agregada con éxito.");
-                newSkillInput.value = ""; // Limpiar el campo de entrada
-                loadHabilidades(); // Recargar la tabla
+                newSkillInput.value = "";
+                loadHabilidades(); 
             } else {
                 alert(result.message || "Error al agregar habilidad.");
             }
@@ -70,8 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error al agregar habilidad:", error);
         }
     };
-
-    // Eliminar una habilidad
     const eliminarHabilidad = async (id) => {
         try {
             const response = await fetch(`/TP-Programacion-WEB/controllers/AdministradorController.php?action=deleteHabilidad&id=${id}`, {
@@ -80,8 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const result = await response.json();
             if (result.success) {
-                alert("Habilidad eliminada con éxito.");
-                loadHabilidades(); // Recargar la tabla
+                loadHabilidades(); 
             } else {
                 alert(result.message || "Error al eliminar habilidad.");
             }
@@ -90,20 +83,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Delegación de eventos para manejar clicks en los botones "Eliminar"
     tableBody.addEventListener("click", (event) => {
         if (event.target.classList.contains("btnEliminar")) {
             const id = event.target.getAttribute("data-id");
-            if (confirm("¿Estás seguro de que deseas eliminar esta habilidad?")) {
-                eliminarHabilidad(id);
-            }
+            eliminarHabilidad(id);
+
         }
     });
 
-    // Eventos de botones
     addSkillButton.addEventListener("click", agregarHabilidad);
     searchButton.addEventListener("click", buscarHabilidad);
 
-    // Cargar habilidades al cargar la página
     loadHabilidades();
 });

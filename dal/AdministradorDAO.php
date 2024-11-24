@@ -392,10 +392,26 @@ class AdministradorDAO
     public function addHabilidad(string $descripcion): bool
     {
         try {
+            $checkQuery = "SELECT COUNT(*) FROM habilidades WHERE descripcion = :descripcion";
+            $checkStmt = $this->conn->prepare($checkQuery);
+            $checkStmt->bindValue(':descripcion', $descripcion, PDO::PARAM_STR);
+            $checkStmt->execute();
+            $count = $checkStmt->fetchColumn();
+    
+
+            if ($count > 0) {
+                return false;
+            }
+    
             $query = "INSERT INTO habilidades (descripcion) VALUES (:descripcion)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':descripcion', $descripcion, PDO::PARAM_STR);
-            return $stmt->execute();
+            
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (PDOException $e) {
             error_log("Error al agregar habilidad: " . $e->getMessage());
             return false;

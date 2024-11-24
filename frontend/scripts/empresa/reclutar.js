@@ -1,8 +1,8 @@
 document.getElementById('guardarReclutamiento').addEventListener('click',async function() {
     const alumnoId = document.getElementById('alumno-info').getAttribute('data-alumno-id');
-    const postulacionId = document.getElementById('publicacionSelect').value;  
+    const publicacionId = document.getElementById('publicacionSelect').value;  
 
-    if (postulacionId === "Selecciona una publicación") {
+    if (publicacionId === "Selecciona una publicación") {
         alert("Por favor, selecciona una publicación.");
         return;
     }
@@ -14,8 +14,8 @@ document.getElementById('guardarReclutamiento').addEventListener('click',async f
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            alumno_id: alumnoId,
-            postulacion_id: postulacionId
+            usuario_id: alumnoId,
+            publicacion_id: publicacionId
         })
     });
     response = await response.json();

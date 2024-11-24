@@ -217,7 +217,7 @@ class AdministradorController
     public function handleRequest()
     {
         $action = $_GET['action'] ?? null;
-
+        $input =  json_decode(file_get_contents('php://input'), true);
         switch ($action) {
             case 'getAllHabilidades':
                 $this->getAllHabilidades();
@@ -230,6 +230,34 @@ class AdministradorController
                 break;
             case 'deleteHabilidad':
                 $this->deleteHabilidad();
+                break;
+            case 'darDeBaja':
+                $userId = $input['userId'] ?? null;
+                if ($userId) {
+                    $result = $this->darDeBaja($userId);
+                    echo json_encode(['success' => $result]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'ID de usuario no proporcionado.']);
+                }
+                break;
+            case 'habilitar':
+                $userId = $input['userId'] ?? null;
+                if ($userId) {
+                    $result = $this->habilitar($userId);
+                    echo json_encode(['success' => $result]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'ID de usuario no proporcionado.']);
+                }
+                break;
+            case 'cambiarContrasena':
+                $userId = $input['userId'] ?? null;
+                $newPassword = $input['newPassword'] ?? null;
+                if ($userId && $newPassword) {
+                    $result = $this->cambiarClave($userId, $newPassword);
+                    echo json_encode(['success' => $result]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Datos insuficientes para cambiar la contraseña.']);
+                }
                 break;
             default:
                 echo json_encode(['error' => 'Acción no válida']);
@@ -266,6 +294,7 @@ class AdministradorController
     
         $success = $this->administradorDAO->addHabilidad($descripcion);
         echo json_encode(['success' => $success]);
+        return;
     }
 /*
     private function addHabilidad()
@@ -287,57 +316,7 @@ class AdministradorController
 
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $input = json_decode(file_get_contents('php://input'), true);
 
-    if (!$input) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Entrada JSON inválida.']);
-        exit;
-    }
-
-    $action = $input['action'] ?? null;
-
-    $administradorController = new AdministradorController();
-
-    switch ($action) {
-        case 'darDeBaja':
-            $userId = $input['userId'] ?? null;
-            if ($userId) {
-                $result = $administradorController->darDeBaja($userId);
-                echo json_encode(['success' => $result]);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'ID de usuario no proporcionado.']);
-            }
-            break;
-
-        case 'habilitar':
-            $userId = $input['userId'] ?? null;
-            if ($userId) {
-                $result = $administradorController->habilitar($userId);
-                echo json_encode(['success' => $result]);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'ID de usuario no proporcionado.']);
-            }
-            break;
-
-        case 'cambiarContraseña':
-            $userId = $input['userId'] ?? null;
-            $newPassword = $input['newPassword'] ?? null;
-            if ($userId && $newPassword) {
-                $result = $administradorController->cambiarClave($userId, $newPassword);
-                echo json_encode(['success' => $result]);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Datos insuficientes para cambiar la contraseña.']);
-            }
-            break;
-
-        default:
-            echo json_encode(['success' => false, 'message' => 'Acción no válida.']);
-            break;
-    }
-    exit;
-}
 
 
 
