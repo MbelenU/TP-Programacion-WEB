@@ -203,37 +203,112 @@ class EmpresaDAO {
             return null;
         }
     }
+    public function listarAlumnos() {
+        $queryAlumnos = "SELECT alumno.nombre, 
+                            alumno.apellido, 
+                            alumno.descripcion, 
+                            alumno.id, 
+                            usuario.foto_perfil, 
+                            c.nombre_carrera
+                        FROM alumno
+                        JOIN usuario ON alumno.id_usuario = usuario.id
+                        LEFT JOIN carreras_alumnos ca ON ca.id_usuario = alumno.id_usuario
+                        LEFT JOIN carreras c ON ca.id_carrera = c.id";
+        
+        $stmt = $this->conn->prepare($queryAlumnos);
+        $stmt->execute();
+        
+        $alumnosArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if (count($alumnosArray) > 0) {
+            $alumnos = [];
+            foreach ($alumnosArray as $alumno) {
+                $alumnoOBJ = new Alumno();
+                $alumnoOBJ->setId($alumno['id']);
+                $alumnoOBJ->setNombreAlumno($alumno['nombre']);
+                $alumnoOBJ->setApellidoAlumno($alumno['apellido']);
+                $alumnoOBJ->setDescripcion($alumno['descripcion'] ? $alumno['descripcion'] : '');
+                $alumnoOBJ->setFotoPerfil($alumno['foto_perfil'] ? $alumno['foto_perfil'] : '');
+
+                $carrera = new Carrera();
+                $carrera->setNombreCarrera($alumno['nombre_carrera'] ? $alumno['nombre_carrera'] : '');
+                $alumnoOBJ->setCarrera($carrera); 
+                $alumnos[] = $alumnoOBJ;
+            }
+            return $alumnos;
+        } else {
+            return null;
+        }
+    }
     public function buscarAlumnos($query) {
         try {
-            if ($query === '') {
-                $sql = "SELECT alumno.nombre AS nombre_alumno, alumno.apellido, alumno.descripcion, alumno.id, usuario.foto_perfil 
-                        FROM alumno 
-                        JOIN usuario ON alumno.id_usuario = usuario.id";
+            if ($query == '') {
+                $sql = "
+                SELECT alumno.nombre AS nombre_alumno, 
+                       alumno.apellido, 
+                       alumno.descripcion, 
+                       alumno.id, 
+                       usuario.foto_perfil, 
+                       c.nombre_carrera
+                FROM alumno
+                JOIN usuario ON alumno.id_usuario = usuario.id
+                LEFT JOIN carreras_alumnos ca ON ca.id_usuario = alumno.id_usuario
+                LEFT JOIN carreras c ON ca.id_carrera = c.id";
+                $stmt = $this->conn->prepare($sql);
             } else {
-                $sql = "SELECT alumno.nombre AS nombre_alumno, alumno.apellido, alumno.descripcion, alumno.id, usuario.foto_perfil 
-                        FROM alumno 
-                        JOIN usuario ON alumno.id_usuario = usuario.id
-                        WHERE alumno.nombre LIKE :query OR 
-                              alumno.apellido LIKE :query OR 
-                              alumno.descripcion LIKE :query";
+                $sql = "
+                SELECT alumno.nombre AS nombre_alumno, 
+                       alumno.apellido, 
+                       alumno.descripcion, 
+                       alumno.id, 
+                       usuario.foto_perfil, 
+                       c.nombre_carrera
+                FROM alumno
+                JOIN usuario ON alumno.id_usuario = usuario.id
+                LEFT JOIN carreras_alumnos ca ON ca.id_usuario = alumno.id_usuario
+                LEFT JOIN carreras c ON ca.id_carrera = c.id
+                WHERE (alumno.nombre LIKE :query_nombre OR 
+                       alumno.apellido LIKE :query_apellido OR 
+                       alumno.descripcion LIKE :query_descripcion OR 
+                       c.nombre_carrera LIKE :query_carrera)";
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindValue(':query_nombre', '%' . $query . '%');
+                $stmt->bindValue(':query_apellido', '%' . $query . '%');
+                $stmt->bindValue(':query_descripcion', '%' . $query . '%');
+                $stmt->bindValue(':query_carrera', '%' . $query . '%');
             }
-    
-            $stmt = $this->conn->prepare($sql);
-    
-            if ($query !== '') {
-                $stmt->bindValue(':query', '%' . $query . '%');
-            }
+        
+
+
     
             $stmt->execute();
+    
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-            return $result; 
+            $alumnos = [];
+            foreach ($result as $row) {
+                $alumno = new Alumno();
+                $alumno->setId($row['id']);
+                $alumno->setNombreAlumno($row['nombre_alumno']);
+                $alumno->setDescripcion($row['descripcion']);
+                $alumno->setApellidoAlumno($row['apellido']);
+                $alumno->setFotoPerfil($row['foto_perfil']);
+                $carrera = new Carrera();
+                $carrera->setNombreCarrera($row['nombre_carrera']);
+                $alumno->setCarrera($carrera);
+    
+                $alumnos[] = $alumno->toArray();
+            }
+    
+            return $alumnos;
     
         } catch (Exception $e) {
             echo "Error en la búsqueda: " . $e->getMessage();
             return false;
         }
     }
+    
+    
     public function obtenerCarreraPorId($idCarrera) {
         $query = "SELECT * FROM carreras WHERE id = :id_carrera";
         $stmt = $this->conn->prepare($query);

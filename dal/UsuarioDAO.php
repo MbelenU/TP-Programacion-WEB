@@ -219,7 +219,17 @@ class UsuarioDAO {
         }
     }
     public function listarAlumnos() {
-        $queryAlumnos = "SELECT a.id, a.nombre, a.apellido, a.descripcion, u.foto_perfil FROM alumno a JOIN usuario u ON a.id_usuario = u.id";
+        $queryAlumnos = "SELECT alumno.nombre, 
+                            alumno.apellido, 
+                            alumno.descripcion, 
+                            alumno.id, 
+                            usuario.foto_perfil, 
+                            c.nombre_carrera
+                        FROM alumno
+                        JOIN usuario ON alumno.id_usuario = usuario.id
+                        LEFT JOIN carreras_alumnos ca ON ca.id_usuario = alumno.id_usuario
+                        LEFT JOIN carreras c ON ca.id_carrera = c.id";
+        
         $stmt = $this->conn->prepare($queryAlumnos);
         $stmt->execute();
         
@@ -234,6 +244,10 @@ class UsuarioDAO {
                 $alumnoOBJ->setApellidoAlumno($alumno['apellido']);
                 $alumnoOBJ->setDescripcion($alumno['descripcion'] ? $alumno['descripcion'] : '');
                 $alumnoOBJ->setFotoPerfil($alumno['foto_perfil'] ? $alumno['foto_perfil'] : '');
+
+                $carrera = new Carrera();
+                $carrera->setNombreCarrera($alumno['carrera'] ? $alumno['carrera'] : '');
+                $alumnoOBJ->setCarrera($carrera); 
                 $alumnos[] = $alumnoOBJ;
             }
             return $alumnos;
@@ -241,6 +255,7 @@ class UsuarioDAO {
             return null;
         }
     }
+    
     public function listarPublicaciones($idUsuario) {
         $queryPublicaciones = "SELECT * FROM publicaciones_empleos WHERE id_usuario = :id";
         $stmt = $this->conn->prepare($queryPublicaciones);

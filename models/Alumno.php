@@ -106,7 +106,9 @@ class Alumno extends Usuario {
             'id' => $this->id,
             'nombre' => $this->nombreAlumno,
             'apellido' => $this->apellidoAlumno,
-            'materiasAprobadas' => $this->materiasAprobadas, 
+            'descripcion' => $this->descripcion,
+            'fotoPerfil' => $this->getFotoPerfil(),
+            'carrera' => $this->carrera->toArray()
         ];
     }
 

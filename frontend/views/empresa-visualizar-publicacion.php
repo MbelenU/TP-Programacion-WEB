@@ -74,7 +74,7 @@ $publicacion = $publicacion['body'];
 								<div class="d-flex align-items-center">
 									<div class="btn-group btn-group-sm" role="group" aria-label="Estado de la postulación" data-postulacion-id="<?php echo $postulacion->getId(); ?>">
 
-										<button type="button" class="btn <?php echo ($estadoPostulacionId == 1 ? 'btn-primary' : 'btn-secondary'); ?> btn-sm" data-estado-id="1">Abierto</button>
+										<button type="button" class="btn <?php echo ($estadoPostulacionId == 1 ? 'btn-primary' : 'btn-secondary'); ?> btn-sm" data-estado-id="1">Recibido</button>
 
 										<button type="button" class="btn <?php echo ($estadoPostulacionId == 2 ? 'btn-primary' : 'btn-secondary'); ?> btn-sm" data-estado-id="2">En evaluación</button>
 						

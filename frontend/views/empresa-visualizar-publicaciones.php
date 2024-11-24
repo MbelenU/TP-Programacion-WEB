@@ -40,7 +40,7 @@ if ($publicaciones['success']) {
 			<div class="puesto-header mb-5">
 				<a href="#" class="btn btn-success">Reporte</a>
 			</div>
-			<div class="row mb-5 list-group col-12 p-0">
+			<div class="mb-5 list-group col-12 p-0">
 				<?php
 				if ($publicaciones) {
 					foreach ($publicaciones as $publicacion) {
@@ -75,14 +75,14 @@ if ($publicaciones['success']) {
 				<small>' . htmlspecialchars($publicacion->getUbicacion()) . '</small>
 
 				<div class="mt-2">
-					<div class="d-flex align-items-center">
+					<div class="d-flex justify-content-between align-items-center">
 						<div class="btn-group btn-group-sm" role="group" aria-label="Estado de la publicacion" data-publicacion-id="' . $publicacion->getId() . '">';
 
 							echo '<button type="button" class="btn ' . ($estadoNombre == 'Abierta' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="1">Abierta</button>';
 							echo '<button type="button" class="btn ' . ($estadoNombre == 'Finalizada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="2">Finalizada</button>';
 							echo '<button type="button" class="btn ' . ($estadoNombre == 'Deshabilitada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="3">Deshabilitada</button>';
-
-							echo '  </div>
+							echo '</div>
+								<button type="button" class="btn btn-danger btn-sm" data-publicacion-id="'. $publicacion->getId() . '">Eliminar</button>
 						</div>
 					</div>
 				</div>';
@@ -92,6 +92,7 @@ if ($publicaciones['success']) {
 			</div>
 		</div>
 	</div>
+	<script src="../scripts/empresa/borrarPublicacion.js"></script>
 
 	<script src="../scripts/empresa/cambiar-estado-publicacion.js"></script>
 </body>

@@ -1,9 +1,13 @@
 <?php
+require_once __DIR__ . '/../../controllers/AdministradorController.php';
+$administradorController = new AdministradorController();
+
 session_start();
 if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
+
 $allowedRoles = ['1'];
 if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";

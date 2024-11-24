@@ -18,14 +18,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 
-$administradorController = new AdministradorController();
 $endpoint = $_GET['endpoint'] ?? '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "register") {
     $resultado = $administradorController->register();
     return $resultado;
     exit;
+}elseif(isset($_GET['action'])) {
+    $administradorController = new AdministradorController();
+    $administradorController->handleRequest();
 }
-$administradorController = new AdministradorController();
 
 
 
@@ -338,13 +339,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(204);
-    exit;
-}
-
-$controller = new AdministradorController();
-$controller->handleRequest();
 
 
 ?>
