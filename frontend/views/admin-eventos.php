@@ -13,7 +13,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 }
 
 $userId = $_SESSION['user'];
-
+$administradorController = new AdministradorController();
 $eventos = $administradorController->getEventos();
 
 ?> 
@@ -34,7 +34,7 @@ $eventos = $administradorController->getEventos();
         <div class="container mt-5">
             <div class="evento mb-5 d-flex justify-content-between align-items-center">
                 <div class="nombre-evento">
-                    <h1>Mis Eventos</h1>
+                    <h1>Eventos</h1>
                 </div>
                 <a href="<?php echo BASE_URL ?>views/admin-publicar-evento.php"><button class="btn btn-success">Publicar
                         evento</button></a>
