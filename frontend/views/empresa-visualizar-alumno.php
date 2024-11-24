@@ -15,6 +15,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 }
 
 $alumno = $empresaController->obtenerAlumno($_GET['id']);
+$publicaciones = $empresaController->listarPublicaciones();
 
 if (!$alumno['success']) {
     echo "<div class='alert alert-danger'>Alumno no existe.</div>";
@@ -22,9 +23,12 @@ if (!$alumno['success']) {
 }
 $alumno = $alumno['body'];
 
+$usuarioId = $alumno->getUsuarioId();  
+
 function mostrarValor($valor, $mensaje = 'No disponible') {
     return htmlspecialchars($valor ?? $mensaje);
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -34,10 +38,13 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
     <?php require __DIR__ . '/../components/header.php' ?>
     <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/global.css">
     <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/empresa.css">
+    <script src="../scripts/empresa/reclutar.js" defer></script>
 </head>
 
 <body class="bg-inicio">
     <?php require __DIR__ . '/../components/empresa-navbar.php' ?>
+
+<div id="alumno-info" data-alumno-id="<?php echo $alumno->getUsuarioId(); ?>"></div>
 
     <div class="container p-sm-4 bg-white">
         <a href="<?php echo BASE_URL ?>views/empresa-reclutar-alumno.php">
@@ -59,6 +66,9 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
                         <p><?php echo mostrarValor($alumno->getDescripcion()); ?></p>
                     </div>
                     <button class="btn btn-outline-success">Descargar CV</button>
+                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalReclutar">
+                        Reclutar
+                    </button>
                 </div>
             </div>
 
@@ -131,6 +141,37 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
             </section>
         </div>
     </div>
+          <!-- Modal -->
+          <div class="modal fade" id="modalReclutar" tabindex="-1" aria-labelledby="modalReclutarLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalReclutarLabel">Seleccionar publicación:</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <label for="publicacionSelect">Elige una publicación</label>
+                            <select class="form-select" id="publicacionSelect">
+                                <option selected>Selecciona una publicación</option>
+                                <?php if (!empty($publicaciones['body'])): ?>  <!-- Verifica si el array de publicaciones tiene elementos -->
+                                    <?php foreach ($publicaciones['body'] as $publicacion): ?>  <!-- Itera sobre las publicaciones -->
+                                        <option value="<?php echo $publicacion->getId(); ?>">
+                                            <?php echo htmlspecialchars($publicacion->getTitulo()); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <option disabled>No hay publicaciones disponibles</option>
+                                <?php endif; ?>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" id="guardarReclutamiento">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 </body>
 
 </html>

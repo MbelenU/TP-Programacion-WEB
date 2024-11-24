@@ -173,45 +173,94 @@ class EmpresaController {
             ];
         }
     }
+
     public function cambiarEstadoPostulacion() {
         $input = json_decode(file_get_contents('php://input'), true);
         $result = $this->empresaDAO->cambiarEstadoPostulacion($input['postulacion_id'], $input['estado_id']);
-        if($result){
+    
+        if ($result) {
+            $publicacion = $this->empresaDAO->obtenerPublicacionPorPostulacion($input['postulacion_id']);
+            if (!$publicacion) {
+                http_response_code(500);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Error: No se encontró la publicación de empleo',
+                ]);
+                return;
+            }
 
-                $publicacion = $this->empresaDAO->obtenerPublicacionPorPostulacion($input['postulacion_id']);
-                if (!$publicacion) {
-                    http_response_code(500);
-                    echo json_encode([
-                        'success' => false,
-                        'message' => 'Error: No se encontró la publicación de empleo',
-                    ]);
-                    return;
+            $alumnos = $this->empresaDAO->obtenerAlumnosPorPostulacion($input['postulacion_id']);
+            if ($alumnos) {
+                switch ($input['estado_id']) {
+                    case 1:
+                        $descripcionNotificacion = "Tu postulación para el puesto '{$publicacion['puesto_ofrecido']}' fue recibida.";
+                        break;
+                    case 2:
+                        $descripcionNotificacion = "Tu postulación para el puesto '{$publicacion['puesto_ofrecido']}' está en evaluación.";
+                        break;
+                    case 3:
+                        $descripcionNotificacion = "Fuiste reclutado para el puesto '{$publicacion['puesto_ofrecido']}'.";
+                        break;
+                    case 4:
+                        $descripcionNotificacion = "Tu postulación para el puesto '{$publicacion['puesto_ofrecido']}' ha finalizado.";
+                        break;
+                    default:
+                        $descripcionNotificacion = "El estado de tu postulación para el puesto '{$publicacion['puesto_ofrecido']}' ha cambiado.";
                 }
-                $alumnos = $this->empresaDAO->obtenerAlumnosPorPostulacion($input['postulacion_id']);
-                if ($alumnos) {
-                    $descripcionNotificacion = "El estado de tu postulación para el puesto '{$publicacion['puesto_ofrecido']}' ha cambiado. Estado: {$publicacion['nombre']}";
-        
-                    foreach ($alumnos as $alumno) {
-                        $this->empresaDAO->agregarNotificacion($alumno['id'], $descripcionNotificacion);
-                    }
+    
+                foreach ($alumnos as $alumno) {
+                    $this->empresaDAO->agregarNotificacion($alumno['id'], $descripcionNotificacion);
                 }
-
-
+            }
+    
             http_response_code(200);
             echo json_encode([
                 "success" => true,
                 "body" => $result
             ]);
             return;
-        }
-        else {
+        } else {
             http_response_code(500);
             echo json_encode([
                 'success' => false,
-                'message' => 'Error: No se pudo cambiar el estado de la postulacion',
+                'message' => 'Error: No se pudo cambiar el estado de la postulación',
             ]);
         }
     }
+    
+        public function reclutarAlumno() {
+            $input = json_decode(file_get_contents('php://input'), true);   
+            
+            $alumnoId = $input['alumno_id']; 
+            $usuarioId = $alumno->getUsuarioId();  
+
+            $postulacionId = $input['postulacion_id']; 
+    
+            $postulante = $this->empresaDAO->obtenerPostulante($usuarioId, $postulacionId);
+    
+            if ($postulante) {
+                $result = $this->empresaDAO->cambiarEstadoPostulacion($postulacion_id, $estadoId);
+            } else {
+                $result = $this->empresaDAO->reclutarAlumno($usuarioId, $postulacionId, $estadoId);
+            }
+            
+            if ($result) {
+                http_response_code(200); 
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'El alumno ha sido reclutado con éxito.'
+                ]);
+            } else {
+                http_response_code(500); 
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Error al procesar la postulación.'
+                ]);
+            }
+        }
+    
+    
+    
     public function cambiarEstadoPublicacion() {
         $input = json_decode(file_get_contents('php://input'), true);
         $result = $this->empresaDAO->cambiarEstadoPublicacion($input['publicacion_id'], $input['estado_id']);
@@ -284,6 +333,23 @@ class EmpresaController {
             ];
         }
     }
+
+    public function obtenerUsuarioPorId($id) {
+        $usuario = $this->empresaDAO->obtenerUsuarioPorId($id);
+        if($usuario){
+            return [
+                "success" => true,
+                "body" => $usuario
+            ];
+        }
+        else {
+            return [
+                'success' => false,
+                'message' => 'Error: No se encontro usuario',
+            ];
+        }
+    }
+
     public function listarJornadas(){
         $jornadas = $this->empresaDAO->listarJornadas();
         if($jornadas){

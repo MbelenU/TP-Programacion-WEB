@@ -116,6 +116,7 @@ class EmpresaDAO {
         }
         return $postulaciones;
     }
+
     public function cambiarEstadoPostulacion($postulacion_id, $nuevo_estado_id) {
         $sql = "UPDATE postulaciones SET id_estadopostulacion = :nuevo_estado_id WHERE id = :postulacion_id";
     
@@ -163,9 +164,10 @@ class EmpresaDAO {
         
         if ($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+ 
             $alumno = new Alumno();
             $alumno->setId($row['alumno_id']);
+            $alumno->setUsuarioId($row['usuario_id']);
             $alumno->setNombreAlumno($row['alumno_nombre']);
             $alumno->setApellidoAlumno($row['apellido']);
             $alumno->setEmail($row['mail']);
@@ -659,6 +661,105 @@ class EmpresaDAO {
             return null;
         }
     }
+
+    public function aplicarEmpleo($idUsuario, $id_publicacion) {
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $fecha = date('Y-m-d H:i:s');
+        $id_estadopostulacion = '1';
+    
+        $checkQuery = "SELECT COUNT(*) FROM postulaciones WHERE id_usuario = :idAlumno AND id_publicacionesempleos = :idPublicacionesEmpleos";
+        $stmtCheck = $this->conn->prepare($checkQuery);
+        $stmtCheck->bindParam(':idAlumno', $idUsuario, PDO::PARAM_INT);
+        $stmtCheck->bindParam(':idPublicacionesEmpleos', $id_publicacion, PDO::PARAM_INT);
+    
+        try {
+            $stmtCheck->execute();
+            $count = $stmtCheck->fetchColumn(); 
+    
+            if ($count > 0) {
+                return ['success' => false, 'message' => 'Ya has postulado a este empleo.'];
+            } else {
+                $query = "INSERT INTO postulaciones (id_usuario, id_publicacionesempleos, fecha, id_estadopostulacion) 
+                          VALUES (:idAlumno, :idPublicacionesEmpleos, :fecha, :idestadopostulacion)";
+                
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(':idAlumno', $idUsuario, PDO::PARAM_INT);
+                $stmt->bindParam(':idPublicacionesEmpleos', $id_publicacion, PDO::PARAM_INT);
+                $stmt->bindParam(':fecha', $fecha, PDO::PARAM_STR);
+                $stmt->bindParam(':idestadopostulacion', $id_estadopostulacion, PDO::PARAM_INT);
+    
+                $stmt->execute();
+    
+                return ['success' => true, 'message' => 'Postulación realizada con éxito.'];
+            }
+    
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Error al realizar la postulación: ' . $e->getMessage()];
+        }
+    }
+
+    public function obtenerUsuarioPorId($id) {
+        $query = "SELECT * FROM usuario WHERE id = :id LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $usuario = new Usuario();
+            $usuario->setId($row['id']);
+            // Asignar otros valores al objeto Usuario si es necesario
+            return $usuario;
+        } else {
+            return null;  // No se encontró el usuario
+        }
+    }
+    
+
+    public function reclutarAlumno($usuario_id, $postulacion_id,$estadoId) {
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $fecha = date('Y-m-d H:i:s');
+        
+        $estadoId = 1; 
+    
+        $checkQuery = "SELECT COUNT(*) FROM postulaciones WHERE id_usuario = :idAlumno AND id_publicacionesempleos = :idPublicacionesEmpleos";
+        $stmtCheck = $this->conn->prepare($checkQuery);
+        $stmtCheck->bindParam(':idAlumno', $usuario_id, PDO::PARAM_INT);
+        $stmtCheck->bindParam(':idPublicacionesEmpleos', $postulacion_id, PDO::PARAM_INT);
+        
+        try {
+            $stmtCheck->execute();
+            $count = $stmtCheck->fetchColumn(); 
+    
+            if ($count > 0) {
+                $queryUpdate = "UPDATE postulaciones SET id_estadopostulacion = :id_estadopostulacion WHERE id_usuario = :idAlumno AND id_publicacionesempleos = :idPublicacionesEmpleos";
+                $stmtUpdate = $this->conn->prepare($queryUpdate);
+                $stmtUpdate->bindParam(':id_estadopostulacion', $estadoId, PDO::PARAM_INT);
+                $stmtUpdate->bindParam(':idAlumno', $usuario_id, PDO::PARAM_INT);
+                $stmtUpdate->bindParam(':idPublicacionesEmpleos', $postulacion_id, PDO::PARAM_INT);
+                $stmtUpdate->execute();
+                
+                return ['success' => true, 'message' => 'Estado de postulación cambiado a Reclutado.'];
+            } else {
+                $estadoId = 3; 
+                
+                $queryInsert = "INSERT INTO postulaciones (id_usuario, id_publicacionesempleos, fecha, id_estadopostulacion) 
+                                VALUES (:idAlumno, :idPublicacionesEmpleos, :fecha, :id_estadopostulacion)";
+                
+                $stmtInsert = $this->conn->prepare($queryInsert);
+                $stmtInsert->bindParam(':idAlumno', $idUsuario, PDO::PARAM_INT);
+                $stmtInsert->bindParam(':idPublicacionesEmpleos', $postulacion_id, PDO::PARAM_INT);
+                $stmtInsert->bindParam(':fecha', $fecha, PDO::PARAM_STR);
+                $stmtInsert->bindParam(':id_estadopostulacion', $estadoId, PDO::PARAM_INT);
+                $stmtInsert->execute();
+                
+                return ['success' => true, 'message' => 'Postulación creada con éxito como Reclutado.'];
+            }
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Error al realizar la postulación: ' . $e->getMessage()];
+        }
+    }
+    
     
     
 }
