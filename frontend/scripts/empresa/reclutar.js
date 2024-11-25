@@ -13,7 +13,7 @@ document.getElementById('guardarReclutamiento').addEventListener('click', async 
     successMessageDiv.classList.add('d-none');
     errorMessageDiv.classList.add('d-none');
 
-    let response = await fetch('http://localhost/TP-Programacion-WEB/controllers/EmpresaController.php?reclutarAlumno', {
+    let response = await fetch('/TP-Programacion-WEB/controllers/EmpresaController.php?reclutarAlumno', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

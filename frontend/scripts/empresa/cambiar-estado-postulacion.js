@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             
-            let response = await fetch('http://localhost/TP-Programacion-WEB/controllers/EmpresaController.php?cambiarEstadoPostulacion', {
+            let response = await fetch('/TP-Programacion-WEB/controllers/EmpresaController.php?cambiarEstadoPostulacion', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

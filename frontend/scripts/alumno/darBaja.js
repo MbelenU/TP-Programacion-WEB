@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const formData = new FormData();
             formData.append('solicitud_id', solicitudId);
-            const BASEURL = "localhost:80/TP-Programacion-WEB";  
 
             fetch(`/controllers/AlumnoController.php?darBaja`, {
                 method: 'POST',

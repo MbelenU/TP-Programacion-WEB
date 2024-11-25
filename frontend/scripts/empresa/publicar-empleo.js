@@ -143,7 +143,7 @@ function planEstudioChange() {
 
 
 async function cargarMaterias(idPlanEstudio) {
-    let response = await fetch(`http://localhost/TP-Programacion-WEB/controllers/EmpresaController.php?idPlanEstudio=${idPlanEstudio}`)
+    let response = await fetch(`/TP-Programacion-WEB/controllers/EmpresaController.php?idPlanEstudio=${idPlanEstudio}`)
     response = await response.json()
     let planEstudio = response.body
     planEstudio.forEach(materia => {

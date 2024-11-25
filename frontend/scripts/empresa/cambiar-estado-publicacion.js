@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.remove('btn-secondary');
             this.classList.add('btn-success');
             
-            let response = await fetch('http://localhost/TP-Programacion-WEB/controllers/EmpresaController.php?cambiarEstadoPublicacion', {
+            let response = await fetch('/TP-Programacion-WEB/controllers/EmpresaController.php?cambiarEstadoPublicacion', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
