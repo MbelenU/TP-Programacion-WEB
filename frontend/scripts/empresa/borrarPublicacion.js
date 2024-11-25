@@ -9,9 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
 function borrarPublicacion(id) {
-    fetch('borrar-publicacion.php', {
+    fetch('EmpresaController.php?borrarPublicacion', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

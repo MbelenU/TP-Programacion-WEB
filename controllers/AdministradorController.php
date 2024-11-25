@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-
 $endpoint = $_GET['endpoint'] ?? '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "register") {
     $resultado = $administradorController->register();
     return $resultado;
@@ -101,7 +101,7 @@ class AdministradorController
 
     public function editarEvento($id){
         
-        $titulo = $_POST['nombre'] ? $_POST['nombre'] : NULL;
+        $titulo = $_POST['titulo'] ? $_POST['titulo'] : NULL;
         $fecha = $_POST['fecha'] ? $_POST['fecha'] : NULL ;
         $tipo = $_POST['tipo'] ? $_POST['tipo'] : NULL;
         $descripcion = $_POST['descripcion'] ? $_POST['descripcion'] : NULL;

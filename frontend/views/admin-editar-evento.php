@@ -33,9 +33,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editarEvento'])) {
     $eventoId = $_POST['eventoId'];
-    
-    $actualizado = $administradorController->editarEvento($eventoId, $_POST);
-    if ($actualizado) {
+    $actualizado = $administradorController->editarEvento($eventoId);
+    if ($actualizado['success']) {
         header("Location: ./admin-eventos.php");
         exit();
     } else {
@@ -57,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editarEvento'])) {
     <div class="container p-sm-4 bg-white">
         <div class="row p-3">
             <h1>Editar evento</h1>
-            <form class="g-3 pt-3 method='POST'">
+            <form class="g-3 pt-3" method="POST">
             <input type="hidden" name="eventoId" value="<?php echo $evento->getId(); ?>">
                 <div class="col-md-12">
                     <div class="row mb-3">
@@ -68,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editarEvento'])) {
                         </div>
                         <div class="col-md-6">
                             <label for="tipo" class="form-label">Tipo</label>
-                            <select class="form-select" id="tipo" required>
+                            <select class="form-select" id="tipo" name="tipo" required>
                                 <option value="" disabled selected>Seleccione un tipo de evento</option>
                                 <option value="capacitacion">Capacitación</option>
                                 <option value="tutoria">Tutoría</option>
@@ -80,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editarEvento'])) {
                         </div>
 
                     </div>
-                    <div class="row mb-3">
+                    <div class="mb-3">
                         <div class="col-md-6">
                         <div class="col-md-6">
                             <label for="number" class="form-label">Créditos</label>
@@ -90,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editarEvento'])) {
                         <label for="text-area" class="form-label">Descripción</label>
                         </div>
                         
-                        <textarea id="descripcion" name="descripcion" placeholder="Escriba una descripción del evento" value="<?php echo htmlspecialchars($evento->getDescripcionEvento()); ?>"></textarea>
+                        <textarea class="w-100" id="descripcion" name="descripcion" placeholder="Escriba una descripción del evento" value="<?php echo htmlspecialchars($evento->getDescripcionEvento()); ?>"></textarea>
                         </div>
                         
                     </div>
