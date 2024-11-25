@@ -218,29 +218,8 @@ class UsuarioDAO {
             return false;
         }
     }
-    public function listarAlumnos() {
-        $queryAlumnos = "SELECT a.id, a.nombre, a.apellido, a.descripcion, u.foto_perfil FROM alumno a JOIN usuario u ON a.id_usuario = u.id";
-        $stmt = $this->conn->prepare($queryAlumnos);
-        $stmt->execute();
-        
-        $alumnosArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        if (count($alumnosArray) > 0) {
-            $alumnos = [];
-            foreach ($alumnosArray as $alumno) {
-                $alumnoOBJ = new Alumno();
-                $alumnoOBJ->setId($alumno['id']);
-                $alumnoOBJ->setNombreAlumno($alumno['nombre']);
-                $alumnoOBJ->setApellidoAlumno($alumno['apellido']);
-                $alumnoOBJ->setDescripcion($alumno['descripcion'] ? $alumno['descripcion'] : '');
-                $alumnoOBJ->setFotoPerfil($alumno['foto_perfil'] ? $alumno['foto_perfil'] : '');
-                $alumnos[] = $alumnoOBJ;
-            }
-            return $alumnos;
-        } else {
-            return null;
-        }
-    }
+
+    
     public function listarPublicaciones($idUsuario) {
         $queryPublicaciones = "SELECT * FROM publicaciones_empleos WHERE id_usuario = :id";
         $stmt = $this->conn->prepare($queryPublicaciones);

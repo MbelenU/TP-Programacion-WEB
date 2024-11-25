@@ -2,6 +2,7 @@
 
 class Alumno extends Usuario {
     private int $id;
+    private string $id_usuario;
     private string $nombreAlumno;
     private string $apellidoAlumno;
     private string $descripcion;
@@ -20,6 +21,15 @@ class Alumno extends Usuario {
     public function setMateriasAprobadas(array $materiasAprobadas): void {
         $this->materiasAprobadas = $materiasAprobadas;
     }
+
+    public function getUsuarioId() {
+        return $this->id_usuario;  
+    }
+    
+    public function setUsuarioId(int $id_usuario): void {
+        $this->id_usuario = $id_usuario;
+    }
+
 
 
     public function getId(): int {
@@ -106,7 +116,9 @@ class Alumno extends Usuario {
             'id' => $this->id,
             'nombre' => $this->nombreAlumno,
             'apellido' => $this->apellidoAlumno,
-            'materiasAprobadas' => $this->materiasAprobadas, 
+            'descripcion' => $this->descripcion,
+            'fotoPerfil' => $this->getFotoPerfil(),
+            'carrera' => $this->carrera->toArray()
         ];
     }
 

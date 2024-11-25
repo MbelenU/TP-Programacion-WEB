@@ -1,13 +1,10 @@
 <?php
-
-require_once '../../controllers/AdministradorController.php';
+require_once __DIR__ . '/../../controllers/AdministradorController.php';
 
 
 
 $administradorController = new AdministradorController();
 $response = $administradorController->listarUsuarios();
-//$response = $administradorController->cambiarClave();
-
 
 
 session_start();

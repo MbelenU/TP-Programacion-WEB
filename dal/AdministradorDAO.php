@@ -392,28 +392,63 @@ class AdministradorDAO
     public function addHabilidad(string $descripcion): bool
     {
         try {
+            $checkQuery = "SELECT COUNT(*) FROM habilidades WHERE descripcion = :descripcion";
+            $checkStmt = $this->conn->prepare($checkQuery);
+            $checkStmt->bindValue(':descripcion', $descripcion, PDO::PARAM_STR);
+            $checkStmt->execute();
+            $count = $checkStmt->fetchColumn();
+    
+
+            if ($count > 0) {
+                return false;
+            }
+    
             $query = "INSERT INTO habilidades (descripcion) VALUES (:descripcion)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':descripcion', $descripcion, PDO::PARAM_STR);
-            return $stmt->execute();
+            
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (PDOException $e) {
             error_log("Error al agregar habilidad: " . $e->getMessage());
             return false;
         }
     }
 
-    public function deleteHabilidad(int $id): bool
+    public function deleteHabilidad(int $id): bool 
     {
         try {
-            $query = "DELETE FROM habilidades WHERE id = :id";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-            return $stmt->execute();
+            $this->conn->beginTransaction();
+    
+            $queryAlumnos = "DELETE FROM habilidades_alumnos WHERE id_habilidad = :id";
+            $stmtAlumnos = $this->conn->prepare($queryAlumnos);
+            $stmtAlumnos->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmtAlumnos->execute();
+    
+            $queryPublicaciones = "DELETE FROM habilidades_publicaciones WHERE id_habilidad = :id";
+            $stmtPublicaciones = $this->conn->prepare($queryPublicaciones);
+            $stmtPublicaciones->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmtPublicaciones->execute();
+    
+            $queryHabilidad = "DELETE FROM habilidades WHERE id = :id";
+            $stmtHabilidad = $this->conn->prepare($queryHabilidad);
+            $stmtHabilidad->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmtHabilidad->execute();
+    
+            $this->conn->commit();
+    
+            return true;
+    
         } catch (PDOException $e) {
-            error_log("Error al eliminar habilidad: " . $e->getMessage());
+            $this->conn->rollBack();
+            error_log("Error al eliminar habilidad y relaciones: " . $e->getMessage());
             return false;
         }
     }
+    
     
 }
 

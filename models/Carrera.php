@@ -31,9 +31,7 @@ class Carrera {
     
     public function toArray(): array {
         return [
-            'id' => $this->id,
-            'nombreCarrera' => $this->nombreCarrera,
-            'planEstudios' => $this->planEstudios
+            'nombreCarrera' => $this->nombreCarrera
         ];
     }
 }

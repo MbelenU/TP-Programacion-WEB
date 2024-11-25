@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../controllers/UsuarioController.php';
-$usuarioController = new UsuarioController();
+require_once __DIR__ . '/../../controllers/EmpresaController.php';
+$empresaController = new EmpresaController();
 
 if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
@@ -12,7 +12,7 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
 }
-$alumnos = $usuarioController->listarAlumnos();
+$alumnos = $empresaController->listarAlumnos();
 $alumnos = $alumnos['body']; 
 ?>
 
@@ -41,16 +41,17 @@ $alumnos = $alumnos['body'];
             <div class="mb-5 list-group col-12 p-0" id="resultadosBusqueda">
                 <?php
                 foreach ($alumnos as $alumno) {
-                    $nombreCompleto = htmlspecialchars($alumno->getNombreAlumno() . ' ' . $alumno->getApellidoAlumno());
-					$fotoPerfil = ($alumno->getFotoPerfil()) ? BASE_URL . 'img/' . htmlspecialchars($alumno->getFotoPerfil()) : BASE_URL . 'img/perfil.jpg';
-					$descripcion = htmlspecialchars($alumno->getDescripcion());
-
+                    $nombreCompleto = $alumno->getNombreAlumno() . ' ' . $alumno->getApellidoAlumno();
+					$fotoPerfil = $alumno->getFotoPerfil() ? BASE_URL . 'img/' . $alumno->getFotoPerfil() : BASE_URL . 'img/perfil.jpg';
+					$descripcion = $alumno->getDescripcion();
+                    $nombreCarrera = $alumno->getCarrera()->getNombreCarrera();
                     echo '<div class="col-12 list-group-item list-group-item-action">
                             <div class="d-flex justify-content-between align-items-center p-3 rounded w-100">
                                 <div class="d-flex align-items-center w-100">
                                     <img src="' . htmlspecialchars($fotoPerfil) . '" alt="Foto de perfil de ' . $nombreCompleto . '" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover; margin-right: 10px;">
                                     <div class="w-100">
 										<span class="fw-bold w-100 d-block">' . $nombreCompleto . '</span>
+                                        <span class="w-100 d-block">Carrera: ' . $nombreCarrera . '</span>
 										<span class="w-100">' . $descripcion . '</span>
 									</div>
                                 </div>

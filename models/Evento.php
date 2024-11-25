@@ -95,7 +95,7 @@ class Evento {
         return $this->creditos;
     }
 
-    public function setCreditos(int $creditos): void {
+    public function setCreditos(float $creditos): void {
         $this->creditos = $creditos;
     }
 

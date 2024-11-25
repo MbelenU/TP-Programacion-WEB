@@ -116,6 +116,7 @@ class EmpresaDAO {
         }
         return $postulaciones;
     }
+
     public function cambiarEstadoPostulacion($postulacion_id, $nuevo_estado_id) {
         $sql = "UPDATE postulaciones SET id_estadopostulacion = :nuevo_estado_id WHERE id = :postulacion_id";
     
@@ -163,9 +164,10 @@ class EmpresaDAO {
         
         if ($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+ 
             $alumno = new Alumno();
             $alumno->setId($row['alumno_id']);
+            $alumno->setUsuarioId($row['usuario_id']);
             $alumno->setNombreAlumno($row['alumno_nombre']);
             $alumno->setApellidoAlumno($row['apellido']);
             $alumno->setEmail($row['mail']);
@@ -203,37 +205,112 @@ class EmpresaDAO {
             return null;
         }
     }
+    public function listarAlumnos() {
+        $queryAlumnos = "SELECT alumno.nombre, 
+                            alumno.apellido, 
+                            alumno.descripcion, 
+                            alumno.id, 
+                            usuario.foto_perfil, 
+                            c.nombre_carrera
+                        FROM alumno
+                        JOIN usuario ON alumno.id_usuario = usuario.id
+                        LEFT JOIN carreras_alumnos ca ON ca.id_usuario = alumno.id_usuario
+                        LEFT JOIN carreras c ON ca.id_carrera = c.id";
+        
+        $stmt = $this->conn->prepare($queryAlumnos);
+        $stmt->execute();
+        
+        $alumnosArray = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if (count($alumnosArray) > 0) {
+            $alumnos = [];
+            foreach ($alumnosArray as $alumno) {
+                $alumnoOBJ = new Alumno();
+                $alumnoOBJ->setId($alumno['id']);
+                $alumnoOBJ->setNombreAlumno($alumno['nombre']);
+                $alumnoOBJ->setApellidoAlumno($alumno['apellido']);
+                $alumnoOBJ->setDescripcion($alumno['descripcion'] ? $alumno['descripcion'] : '');
+                $alumnoOBJ->setFotoPerfil($alumno['foto_perfil'] ? $alumno['foto_perfil'] : '');
+
+                $carrera = new Carrera();
+                $carrera->setNombreCarrera($alumno['nombre_carrera'] ? $alumno['nombre_carrera'] : '');
+                $alumnoOBJ->setCarrera($carrera); 
+                $alumnos[] = $alumnoOBJ;
+            }
+            return $alumnos;
+        } else {
+            return null;
+        }
+    }
     public function buscarAlumnos($query) {
         try {
-            if ($query === '') {
-                $sql = "SELECT alumno.nombre AS nombre_alumno, alumno.apellido, alumno.descripcion, alumno.id, usuario.foto_perfil 
-                        FROM alumno 
-                        JOIN usuario ON alumno.id_usuario = usuario.id";
+            if ($query == '') {
+                $sql = "
+                SELECT alumno.nombre AS nombre_alumno, 
+                       alumno.apellido, 
+                       alumno.descripcion, 
+                       alumno.id, 
+                       usuario.foto_perfil, 
+                       c.nombre_carrera
+                FROM alumno
+                JOIN usuario ON alumno.id_usuario = usuario.id
+                LEFT JOIN carreras_alumnos ca ON ca.id_usuario = alumno.id_usuario
+                LEFT JOIN carreras c ON ca.id_carrera = c.id";
+                $stmt = $this->conn->prepare($sql);
             } else {
-                $sql = "SELECT alumno.nombre AS nombre_alumno, alumno.apellido, alumno.descripcion, alumno.id, usuario.foto_perfil 
-                        FROM alumno 
-                        JOIN usuario ON alumno.id_usuario = usuario.id
-                        WHERE alumno.nombre LIKE :query OR 
-                              alumno.apellido LIKE :query OR 
-                              alumno.descripcion LIKE :query";
+                $sql = "
+                SELECT alumno.nombre AS nombre_alumno, 
+                       alumno.apellido, 
+                       alumno.descripcion, 
+                       alumno.id, 
+                       usuario.foto_perfil, 
+                       c.nombre_carrera
+                FROM alumno
+                JOIN usuario ON alumno.id_usuario = usuario.id
+                LEFT JOIN carreras_alumnos ca ON ca.id_usuario = alumno.id_usuario
+                LEFT JOIN carreras c ON ca.id_carrera = c.id
+                WHERE (alumno.nombre LIKE :query_nombre OR 
+                       alumno.apellido LIKE :query_apellido OR 
+                       alumno.descripcion LIKE :query_descripcion OR 
+                       c.nombre_carrera LIKE :query_carrera)";
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindValue(':query_nombre', '%' . $query . '%');
+                $stmt->bindValue(':query_apellido', '%' . $query . '%');
+                $stmt->bindValue(':query_descripcion', '%' . $query . '%');
+                $stmt->bindValue(':query_carrera', '%' . $query . '%');
             }
-    
-            $stmt = $this->conn->prepare($sql);
-    
-            if ($query !== '') {
-                $stmt->bindValue(':query', '%' . $query . '%');
-            }
+        
+
+
     
             $stmt->execute();
+    
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-            return $result; 
+            $alumnos = [];
+            foreach ($result as $row) {
+                $alumno = new Alumno();
+                $alumno->setId($row['id']);
+                $alumno->setNombreAlumno($row['nombre_alumno']);
+                $alumno->setDescripcion($row['descripcion']);
+                $alumno->setApellidoAlumno($row['apellido']);
+                $alumno->setFotoPerfil($row['foto_perfil']);
+                $carrera = new Carrera();
+                $carrera->setNombreCarrera($row['nombre_carrera']);
+                $alumno->setCarrera($carrera);
+    
+                $alumnos[] = $alumno->toArray();
+            }
+    
+            return $alumnos;
     
         } catch (Exception $e) {
             echo "Error en la búsqueda: " . $e->getMessage();
             return false;
         }
     }
+    
+    
     public function obtenerCarreraPorId($idCarrera) {
         $query = "SELECT * FROM carreras WHERE id = :id_carrera";
         $stmt = $this->conn->prepare($query);
@@ -584,6 +661,110 @@ class EmpresaDAO {
             return null;
         }
     }
+
+    public function aplicarEmpleo($idUsuario, $id_publicacion) {
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $fecha = date('Y-m-d H:i:s');
+        $id_estadopostulacion = '1';
+    
+        $checkQuery = "SELECT COUNT(*) FROM postulaciones WHERE id_usuario = :idAlumno AND id_publicacionesempleos = :idPublicacionesEmpleos";
+        $stmtCheck = $this->conn->prepare($checkQuery);
+        $stmtCheck->bindParam(':idAlumno', $idUsuario, PDO::PARAM_INT);
+        $stmtCheck->bindParam(':idPublicacionesEmpleos', $id_publicacion, PDO::PARAM_INT);
+    
+        try {
+            $stmtCheck->execute();
+            $count = $stmtCheck->fetchColumn(); 
+    
+            if ($count > 0) {
+                return ['success' => false, 'message' => 'Ya has postulado a este empleo.'];
+            } else {
+                $query = "INSERT INTO postulaciones (id_usuario, id_publicacionesempleos, fecha, id_estadopostulacion) 
+                          VALUES (:idAlumno, :idPublicacionesEmpleos, :fecha, :idestadopostulacion)";
+                
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(':idAlumno', $idUsuario, PDO::PARAM_INT);
+                $stmt->bindParam(':idPublicacionesEmpleos', $id_publicacion, PDO::PARAM_INT);
+                $stmt->bindParam(':fecha', $fecha, PDO::PARAM_STR);
+                $stmt->bindParam(':idestadopostulacion', $id_estadopostulacion, PDO::PARAM_INT);
+    
+                $stmt->execute();
+    
+                return ['success' => true, 'message' => 'Postulación realizada con éxito.'];
+            }
+    
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Error al realizar la postulación: ' . $e->getMessage()];
+        }
+    }
+
+    public function obtenerUsuarioPorId($id) {
+        $query = "SELECT * FROM usuario WHERE id = :id LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $usuario = new Usuario();
+            $usuario->setId($row['id']);
+            // Asignar otros valores al objeto Usuario si es necesario
+            return $usuario;
+        } else {
+            return null;  // No se encontró el usuario
+        }
+    }
+    
+
+    public function reclutarAlumno($usuario_id, $postulacion_id, $estadoId) {
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $fecha = date('Y-m-d H:i:s');
+        
+    
+        $checkQuery = "SELECT id_estadopostulacion  FROM postulaciones WHERE id_usuario = :idAlumno AND id_publicacionesempleos = :idPublicacionesEmpleos";
+        $stmtCheck = $this->conn->prepare($checkQuery);
+        $stmtCheck->bindParam(':idAlumno', $usuario_id, PDO::PARAM_INT);
+        $stmtCheck->bindParam(':idPublicacionesEmpleos', $postulacion_id, PDO::PARAM_INT);
+        
+        try {
+            $stmtCheck->execute();
+            $result  = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+    
+            if ($result) {
+                
+                if ($result['id_estadopostulacion'] == 3) {
+                    return ['success' => false, 'message' => 'Este usuario ya se encuentra reclutado.'];
+                } else {
+
+                $estadoId = 3; 
+                $queryUpdate = "UPDATE postulaciones SET id_estadopostulacion = :id_estadopostulacion WHERE id_usuario = :idAlumno AND id_publicacionesempleos = :idPublicacionesEmpleos";
+                $stmtUpdate = $this->conn->prepare($queryUpdate);
+                $stmtUpdate->bindParam(':id_estadopostulacion', $estadoId, PDO::PARAM_INT);
+                $stmtUpdate->bindParam(':idAlumno', $usuario_id, PDO::PARAM_INT);
+                $stmtUpdate->bindParam(':idPublicacionesEmpleos', $postulacion_id, PDO::PARAM_INT);
+                $stmtUpdate->execute();
+                
+                return ['success' => true, 'message' => 'Estado de postulación cambiado a Reclutado.'];
+                }
+            } else {
+                $estadoId = 3;                 
+                $queryInsert = "INSERT INTO postulaciones (id_usuario, id_publicacionesempleos, fecha, id_estadopostulacion) 
+                                VALUES (:idAlumno, :idPublicacionesEmpleos, :fecha, :id_estadopostulacion)";
+                
+                $stmtInsert = $this->conn->prepare($queryInsert);
+                $stmtInsert->bindParam(':idAlumno', $usuario_id, PDO::PARAM_INT);
+                $stmtInsert->bindParam(':idPublicacionesEmpleos', $postulacion_id, PDO::PARAM_INT);
+                $stmtInsert->bindParam(':fecha', $fecha, PDO::PARAM_STR);
+                $stmtInsert->bindParam(':id_estadopostulacion', $estadoId, PDO::PARAM_INT);
+                $stmtInsert->execute();
+                
+                return ['success' => true, 'message' => 'Postulación creada con éxito como Reclutado.'];
+            }
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Error al realizar la postulación: ' . $e->getMessage()];
+        }
+    }
+    
     
     
 }
