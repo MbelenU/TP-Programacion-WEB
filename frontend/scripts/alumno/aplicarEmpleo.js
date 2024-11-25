@@ -9,8 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const postulacionData = {
                 empleoId: empleoId
             };
-            const BASEURL = "localhost:80/TP-Programacion-WEB";  
-            fetch(`http://${BASEURL}/controllers/AlumnoController.php?aplicarEmpleo`, {
+            fetch(`/controllers/AlumnoController.php?aplicarEmpleo`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

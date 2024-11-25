@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const formEmpresa = document.getElementById('formEmpresa');
     const successAlert = document.getElementById('successAlert');
     const errorAlert = document.getElementById('errorAlert');
-
     // Escuchar el cambio en el tipo de usuario
     tipoUsuario.addEventListener('change', function() {
         const usuarioSeleccionado = tipoUsuario.value;
+
         console.log('Usuario seleccionado:', usuarioSeleccionado);
         formAlumno.classList.add('d-none');
         formEmpresa.classList.add('d-none');
@@ -77,9 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Función para manejar el registro
     async function registrarse(userData) {
-        try {
-            const BASEURL = "localhost:80/TP-Programacion-WEB";  // Asegúrate de que el BASEURL sea correcto
-            const response = await fetch(`http://${BASEURL}/controllers/AdministradorController.php?endpoint=register`, {
+        try { // Asegúrate de que el BASEURL sea correcto
+            const response = await fetch(`/controllers/AdministradorController.php?endpoint=register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

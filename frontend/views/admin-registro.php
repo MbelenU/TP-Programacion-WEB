@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../css/global.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="../img/logo.png" type="image/x-icon">
+    <script src="../scripts/admin/registro.js" defer></script>
     <title>Registro</title>
 </head>
 
@@ -18,7 +19,7 @@
                     <img src="../img/logo.png" alt="logo" class="img-fluid">
                 </div>
                 <h2 class="text-center mb-4">Solicitud de Registro</h2>
-                
+
                 <!-- Botón para volver a la vista "admin-gestionar-usuarios.php" -->
                 <div class="mb-3">
                     <a href="admin-gestionar-usuarios.php" class="btn btn-secondary w-100">Volver a Gestionar Usuarios</a>
@@ -27,7 +28,7 @@
                 <!-- Contenedores para mostrar mensajes -->
                 <div id="errorAlert" class="alert alert-danger d-none" role="alert"></div>
                 <div id="successAlert" class="alert alert-success d-none" role="alert"></div>
-                
+
                 <div class="mb-3 input-group">
                     <label for="tipoUsuario" class="input-group-text">Tipo de usuario</label>
                     <select id="tipoUsuario" class="form-select rounded-end">
@@ -35,7 +36,6 @@
                         <option value="2">Alumno</option>
                         <option value="3">Empresa</option>
                     </select>
-                    
                 </div>
                 <div id="successAlert" class="alert alert-success d-none"></div>
                 <div id="errorAlert" class="alert alert-danger d-none"></div>
@@ -68,7 +68,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Enviar Solicitud</button>
                     <a href="<?php echo BASE_URL ?>views/admin-registro.php">
-                                <button type="button" class="btn btn-danger mt-2"> Cancelar</button>
+                        <button type="button" class="btn btn-danger mt-2"> Cancelar</button>
                     </a>
                 </form>
 
@@ -98,7 +98,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Enviar Solicitud</button>
                     <a href="<?php echo BASE_URL ?>views/admin-registro.php">
-                                <button type="button" class="btn btn-danger mt-2"> Cancelar</button>
+                        <button type="button" class="btn btn-danger mt-2"> Cancelar</button>
                     </a>
                 </form>
             </div>
@@ -106,7 +106,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../scripts/admin/registro.js"></script>
 </body>
 
 </html>

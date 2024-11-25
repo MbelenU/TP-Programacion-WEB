@@ -5,7 +5,7 @@ document.querySelectorAll('.btn-cambiar-pass').forEach(button => {
         const newPassword = prompt('Ingresa la nueva contraseña:');
         
         if (newPassword) {
-            fetch('../../controllers/AdministradorController.php/action=cambiarContrasena', {
+            fetch('/TP-Programacion-WEB/controllers/AdministradorController.php?action=cambiarContrasena', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ document.querySelectorAll('.btn-dar-baja').forEach(button => {
     button.addEventListener('click', () => {
         const userId = button.getAttribute('data-id');
         if (confirm('¿Estás seguro de que deseas dar de baja este usuario?')) {
-            fetch('../../controllers/AdministradorController.php/action=darDeBaja', {
+            fetch('/TP-Programacion-WEB/controllers/AdministradorController.php?action=darDeBaja', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ document.querySelectorAll('.btn-habilitar').forEach(button => {
     button.addEventListener('click', () => {
         const userId = button.getAttribute('data-id');
         if (confirm('¿Estás seguro de que deseas activar este usuario?')) {
-            fetch('../../controllers/AdministradorController.php/action=habilitar', {
+            fetch('/TP-Programacion-WEB/controllers/AdministradorController.php?action=habilitar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
