@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         
         const query = buscarInput.value.trim();
-        let url = '/EmpresaController.php?buscarAlumnos=';
+        let url = '/TP-Programacion-WEB/controllers/EmpresaController.php?buscarAlumnos=';
 
         if (query !== '') {
             url += encodeURIComponent(query);

@@ -13,6 +13,35 @@ class AdministradorDAO
     {
         $this->conn = (new Database())->getConnection();
     }
+    
+    public function buscarUsuarios($query) {
+        if ($query === '') {
+            $sql = "SELECT * FROM usuario"; 
+        } else {
+            $sql = "SELECT * FROM usuario
+                    WHERE nombre LIKE :buscar
+                    OR mail LIKE :buscar";
+        }
+        $stmt = $this->conn->prepare($sql);
+        if ($query !== '') {
+            $stmt->bindValue(':buscar', '%' . $query . '%');
+        }
+        $stmt->execute();
+    
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $usuarios = [];
+        foreach ($result as $row) {
+            $usuario = new Usuario();
+            $usuario->setId($row['id']);
+            $usuario->setNombre($row['nombre']);
+            $usuario->setEmail($row['mail']);
+            $usuario->setEstado($row['de_baja']);
+            $usuarios[] = $usuario->toArray();
+        }
+        return $usuarios;
+
+    }
     public function getUsuarios() {
         $queryUsuarios = "SELECT id, nombre, mail, de_baja FROM usuario";
     

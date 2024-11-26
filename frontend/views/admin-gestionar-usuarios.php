@@ -22,13 +22,13 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 <html lang="en">
 
 <head>
-    <?php require __DIR__.'/../components/header.php'; ?>
+    <?php require __DIR__ . '/../components/header.php'; ?>
     <!-- Enlace al archivo CSS -->
     <link rel="stylesheet" href="http://localhost/TP-Programacion-WEB/frontend/css/admin-gestionar-usuarios.css">
 </head>
 
 <body class="bg-inicio p-0">
-    <?php require __DIR__.'/../components/admin-navbar.php'; ?>
+    <?php require __DIR__ . '/../components/admin-navbar.php'; ?>
     <div class="container p-sm-4 bg-white">
         <h1>Gestión de Usuarios</h1>
         <nav>
@@ -40,11 +40,14 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                 <div class="mt-4 mb-4">
-                    <!-- Botón de registrar usuario -->
                     <button onclick="window.location.href='admin-registro.php'" class="btn-registrar">Registrar Usuario</button>
-
-                    <!-- Lista de usuarios -->
-                    <div class="user-list table-responsive ">
+                    <form class="d-sm-flex" role="search">
+                        <input class="form-control me-2" type="search" id="buscarInput" placeholder="Buscar usuarios" aria-label="Search">
+                        <button class="btn btn-outline-success d-grid align-content-center" id="buscarUsuarios">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+                    <div class="user-list table-responsive " id="resultadosBusqueda">
                         <?php if (!empty($response)): ?>
                             <?php foreach ($response as $usuario): ?>
                                 <div class="user-item">

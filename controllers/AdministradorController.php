@@ -26,8 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "register") {
 }elseif(isset($_GET['action'])) {
     $administradorController = new AdministradorController();
     $administradorController->handleRequest();
+}elseif(isset($_GET['buscarUsuarios'])) {
+    $query = $_GET['buscarUsuarios'];
+    $administradorController = new AdministradorController();
+    $resultado = $administradorController->buscarUsuarios($query);
+    return $resultado;
 }
-
 
 
 class AdministradorController 
@@ -125,9 +129,24 @@ class AdministradorController
     public function listarUsuarios() {
         $usuarios = $this->administradorDAO->getUsuarios();
         if ($usuarios !== false) {
-            return $usuarios; // Devolver el arreglo de usuarios
+            return $usuarios;
         } else {
-            return []; // Devolver un arreglo vacío si falla la consulta
+            return [];
+        }
+    }
+    public function buscarUsuarios($query) {
+        $result = $this->administradorDAO->buscarUsuarios($query);
+        if($result){
+            echo json_encode([
+                "success" => true,
+                "body" => $result
+            ]);
+        }
+        else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error: No se pudo obtener los usuarios',
+            ]);
         }
     }
     
