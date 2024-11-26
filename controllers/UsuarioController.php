@@ -27,6 +27,7 @@ class UsuarioController {
         
     }
 
+
     public function verifyEmail() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['mail'] ?? '';

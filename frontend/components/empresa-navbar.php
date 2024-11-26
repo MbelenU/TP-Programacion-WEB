@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../includes/base-url.php';
 require_once __DIR__ . '/../../controllers/UsuarioController.php';
-$empresa = $usuarioController->obtenerEmpresa(); 
-$empresa = $empresa['body'];
+
+$foto_perfil = $_SESSION['user']['foto_perfil'];
 ?>
 
 <header>
@@ -23,7 +23,7 @@ $empresa = $empresa['body'];
                 <div class="offcanvas-body">
                     <ul class="navbar-nav justify-content-start flex-grow-1">
                         <li class="nav-item">
-                        <a href="<?php echo BASE_URL ?>views/empresa-visualizar-perfil.php"><img src="<?php echo ($empresa->getFotoPerfil()) ? BASE_URL . 'img/' . htmlspecialchars($empresa->getFotoPerfil()) : BASE_URL . 'img/perfil.jpg'; ?>"
+                        <a href="<?php echo BASE_URL ?>views/empresa-visualizar-perfil.php"><img src="<?php echo $foto_perfil ? BASE_URL . 'img/' . $foto_perfil : BASE_URL . 'img/perfil.jpg'; ?>"
                                     alt="foto-perfil" class="rounded-circle m-2" style="width: 120px; height: 120px; object-fit: cover; margin-right: 20px;" id="foto-perfil-navbar"></a>
                         </li>
                         <li class="nav-item">

@@ -14,6 +14,7 @@ class UsuarioDAO {
     public function iniciarSesion($email, $password) {
         $queryUser = "
             SELECT 
+                u.foto_perfil,
                 u.id AS user_id, 
                 id_rol AS user_type,
                 u.de_baja
@@ -275,7 +276,14 @@ class UsuarioDAO {
     
         return null;
     }
-    
+    public function getFotoPerfil($usuarioId) {
+        $query = "SELECT 'foto_perfil' FROM usuario WHERE id = :id";
+        //$row['foto_perfil'] ? $row['foto_perfil'] :
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $usuarioId);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     public function buscarPorEmail($email) {
         $query = "SELECT * FROM usuario WHERE mail = :email";
         $stmt = $this->conn->prepare($query);

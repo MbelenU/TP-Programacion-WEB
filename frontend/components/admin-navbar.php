@@ -1,4 +1,7 @@
-<?php require_once __DIR__ . '/../includes/base-url.php' ?>
+<?php 
+require_once __DIR__ . '/../includes/base-url.php';
+$foto_perfil = $_SESSION['user']['foto_perfil'];
+?>
 <nav class="navbar sticky-top bg-navbar p-0">
     <div class="container-fluid">
         <a class="navbar-brand" href="#"><img src="<?php echo BASE_URL ?>img/logo.png" alt="logo"></a>
@@ -17,9 +20,7 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a href="<?php echo BASE_URL ?>views/admin-perfil.php"><img
-                                src="<?php echo BASE_URL ?>img/perfil.jpg" alt="foto-perfil"
-                                class="rounded-circle w-25 pb-2"></a>
+                        <a href="<?php echo BASE_URL ?>views/admin-perfil.php"><img src="<?php echo $foto_perfil ? BASE_URL . 'img/' . $foto_perfil : BASE_URL . 'img/perfil.jpg'; ?>" alt="foto-perfil" class="rounded-circle w-25 pb-2"></a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link" href="<?php echo BASE_URL ?>views/admin-gestionar-usuarios.php">Usuarios</a>
