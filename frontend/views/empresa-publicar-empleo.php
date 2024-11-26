@@ -107,13 +107,11 @@ $carreras = $carreras['body'];
                                     <option value="<?php echo $carrera->getId(); ?>"><?php echo $carrera->getNombreCarrera(); ?></option>
                                 <?php endforeach; ?>
                             </select>
-
                             <label for="planEstudios" class="form-label mt-3 d-none" id="planEstudiosLabel">Plan de Estudios</label>
                             <div id="planerror" class="text-danger"></div>
                             <select class="form-select d-none" id="planEstudios">
                                 <option value="" disabled selected>Seleccione un plan de estudios</option>
                             </select>
-
                             <label for="materia" class="form-label mt-3 d-none" id="materiaLabel">Materia</label>
                             <select class="form-select d-none" id="materia">
                                 <option value="" disabled selected>Seleccione una materia</option>

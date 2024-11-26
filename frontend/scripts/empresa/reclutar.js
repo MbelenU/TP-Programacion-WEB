@@ -28,20 +28,18 @@ document.getElementById('guardarReclutamiento').addEventListener('click', async 
 
 
     if (response.success) {
-        successMessageDiv.textContent = response.message; // Colocar el mensaje de éxito
-        successMessageDiv.classList.remove('d-none'); // Mostrar el mensaje de éxito
+        successMessageDiv.textContent = response.message;
+        successMessageDiv.classList.remove('d-none');
     } else {
-        errorMessageDiv.textContent = response.message; // Colocar el mensaje de error
-        errorMessageDiv.classList.remove('d-none'); // Mostrar el mensaje de error
+        errorMessageDiv.textContent = response.message;
+        errorMessageDiv.classList.remove('d-none'); 
     }
 });
 
-// Limpia el contenido del modal cuando se va a mostrar
 $('#modalReclutar').on('show.bs.modal', function () {
     const successMessageDiv = document.getElementById('successMessage');
     const errorMessageDiv = document.getElementById('errorMessage');
     
-    // Limpiar mensajes al abrir el modal
     successMessageDiv.classList.add('d-none');
     errorMessageDiv.classList.add('d-none');
 });

@@ -1,16 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Captura todos los botones de eliminar
-    const deleteButtons = document.querySelectorAll('button[data-borrar-id]');
-
+    const deleteButtons = document.querySelectorAll('[data-publicacion-id]');
     deleteButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const id = this.getAttribute('data-borrar-id');
+            const id = this.getAttribute('data-publicacion-id');
+            console.log(id);
             borrarPublicacion(id);
         });
     });
 });
 function borrarPublicacion(id) {
-    fetch('EmpresaController.php?borrarPublicacion', {
+    fetch('/TP-Programacion-WEB/controllers/EmpresaController.php?borrarPublicacion', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
