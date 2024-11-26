@@ -329,6 +329,26 @@ class AlumnoController {
         }
     }
 
+    public function getUsuarioAdmin(){
+        $usuario = $this->alumnoDao->getUsuarioAdmin();
+        if($usuario){
+            
+            $response = [
+                "success" => true,
+                "body" => $usuario
+            ];
+            return $response;
+        }
+        else {
+            
+            $response = [
+                'success' => false,
+                'message' => 'Error: No se encontraron solicitudes',
+            ];
+            return $response;
+        }
+    }
+
     public function obtenerNotificaciones($idUsuario) {
         $notificaciones = $this->alumnoDao->obtenerNotificaciones($idUsuario);
     
@@ -349,13 +369,23 @@ class AlumnoController {
         
         $input = json_decode(file_get_contents('php://input'), true);
     
-        $eventoId = $input['id'];
-       
-        $idUsuario = $_SESSION['user']['user_id'];
+        $eventoId = $input['id'];      
+        $idUsuario = $_SESSION['user']['user_id'];       
+        $nombreEvento = $this->alumnoDao->getEventoNombreById($eventoId);
+        
+        $alumno = $this->alumnoDao->obtenerAlumno($idUsuario);
+        $nombreAlumno = $alumno->getNombreAlumno();
+        $apellidoAlumno = $alumno->getApellidoAlumno();
 
-       // $descripcionNotificacion = "El evento '$nombreEvento' se ha eliminado.";
+        $descripcionNotificacion = "El alumno $nombreAlumno $apellidoAlumno elimino su suscripción al evento '$nombreEvento'.";
 
        $result = $this->alumnoDao->eliminarSuscripcion($eventoId,$idUsuario);
+
+       $idAdministrador = $this->alumnoDao->getUsuarioAdmin();
+
+       if ($idAdministrador) {
+        $this->alumnoDao->agregarNotificacion($idAdministrador, $descripcionNotificacion);
+    }
         
         // Devolvemos una respuesta JSON
         echo json_encode(['success' => $result]);
@@ -367,22 +397,30 @@ class AlumnoController {
         
         $input = json_decode(file_get_contents('php://input'), true);
     
-        $eventoId = $input['id'];
-       
+        $eventoId = $input['id'];      
         $idUsuario = $_SESSION['user']['user_id'];
+        $nombreEvento = $this->alumnoDao->getEventoNombreById($eventoId);
 
-       // $descripcionNotificacion = "El evento '$nombreEvento' se ha suscrito.";
+        $alumno = $this->alumnoDao->obtenerAlumno($idUsuario);
+        $nombreAlumno = $alumno->getNombreAlumno();
+        $apellidoAlumno = $alumno->getApellidoAlumno();
+
+        $descripcionNotificacion = "El alumno $nombreAlumno $apellidoAlumno se suscribió al evento '$nombreEvento'.";
+
        $result = $this->alumnoDao->agregarSuscripcion($idUsuario, $eventoId);
        
+       $idAdministrador = $this->alumnoDao->getUsuarioAdmin();
+
+       if ($idAdministrador) {
+        $this->alumnoDao->agregarNotificacion($idAdministrador, $descripcionNotificacion);
+    }
         
         echo json_encode(['success' => $result]);
         exit();
         
     }
 
-    
-    
-    
+        
 }
 ?>
 
