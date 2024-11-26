@@ -44,6 +44,8 @@ $eventosNoSuscritos = filtrarEventosNoSuscritos($eventos, $suscripciones);
 <head>
     <?php require __DIR__ . '/../components/header.php' ?>
     <script src="<?php echo BASE_URL ?>scripts/alumno/eventos.js" defer></script>
+    <script src="<?php echo BASE_URL ?>scripts/alumno/borrarSuscripcion.js" defer></script>
+    <script src="<?php echo BASE_URL ?>scripts/alumno/agregarSuscripcion.js" defer></script>
 </head>
 
 <body class="bg-inicio">
@@ -92,7 +94,7 @@ $eventosNoSuscritos = filtrarEventosNoSuscritos($eventos, $suscripciones);
                                             <div><?php echo htmlspecialchars($evento['creditosEvento']); ?></div>
                                         </div>
                                         <div class="row mt-4 d-flex align-items-center">
-                                            <button class="btn btn-success">
+                                            <button class="btn btn-success" data-suscribir-usuario="<?php echo $userId; ?>" data-suscribir-id="<?php echo htmlspecialchars($evento['idEvento']); ?>">
                                                 <i class="bi bi-bell"></i> Suscribirme
                                             </button>
                                         </div>
@@ -131,9 +133,9 @@ $eventosNoSuscritos = filtrarEventosNoSuscritos($eventos, $suscripciones);
                                             <div><?php echo htmlspecialchars($evento['creditos']); ?></div>
                                         </div>
                                         <div class="row mt-4 d-flex align-items-center">
-                                            <button class="btn btn-danger">
-                                                <i class="bi bi-bell"></i> Desuscribirme
-                                            </button>
+                                        <button class="btn btn-danger" data-desuscribir-id="<?php echo $evento['id']; ?>">
+                                            <i class="bi bi-bell"></i> Desuscribirme
+                                        </button>
                                         </div>
                                     </div>
                                 </div>

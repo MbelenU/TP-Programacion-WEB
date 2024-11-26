@@ -386,6 +386,25 @@ class AdministradorDAO
         $stmt->execute();
     }
 
+    public function obtenerNotificaciones($idUsuario)
+    {
+        $query = "SELECT * FROM notificaciones WHERE id_usuario = :id_usuario ORDER BY id DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id_usuario', $idUsuario, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $notificaciones = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $notificacion = new Notificacion();
+            $notificacion->setId($row['id']);
+            $notificacion->setIdUsuario($row['id_usuario']);
+            $notificacion->setDescripcion($row['descripcion']);
+            $notificaciones[] = $notificacion;
+        }
+
+        return $notificaciones;
+    }
+
     public function obtenerAlumnos() {
         $query = "SELECT u.id FROM usuario u
                   JOIN roles_usuario ru ON u.id = ru.id_usuario

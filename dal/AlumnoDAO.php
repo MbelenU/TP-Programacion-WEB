@@ -813,7 +813,80 @@ class AlumnoDAO
             $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
             $stmt->execute();
         }
+
+
+        public function eliminarSuscripcion($eventoId,$idUsuario) {
+            try {
+    
+                $querySuscripcion = "DELETE FROM suscripciones WHERE id_evento = :evento_id AND id_usuario = :idUsuario";
+                $stmtSuscripcion = $this->conn->prepare($querySuscripcion);
+                $stmtSuscripcion->bindParam(':evento_id', $eventoId, PDO::PARAM_INT);
+                $stmtSuscripcion->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+    
+                if (!$stmtSuscripcion->execute()) {
+                    return false;
+                }
+    
+                return true; 
+
+            } catch (PDOException $e) {
+                // Manejo de errores
+                echo "Error: " . $e->getMessage();
+                return false;
+            }
+    
+        }
+
+        public function agregarSuscripcion($idUsuario, $eventoId) {
+           
+            $insertQuery = "INSERT INTO suscripciones (id_usuario, id_evento) VALUES (:idUsuario, :evento_id)";
+            $insertStmt = $this->conn->prepare($insertQuery);
+    
+            $insertStmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $insertStmt->bindParam(':evento_id', $eventoId, PDO::PARAM_INT);
+    
+            if (!$insertStmt->execute()) {
+                return false;
+            }
+
+            return true; 
+        }
+
+
+        public function getUsuarioAdmin() {
+            $Query = "SELECT usuario.id FROM usuario
+                        INNER JOIN roles_usuario ON usuario.id = roles_usuario.id_usuario
+                        INNER JOIN rol ON roles_usuario.id_rol = rol.id
+                        WHERE rol.id = 1";  // Suponiendo que el rol con id 1 es el administrador
+            $Stmt = $this->conn->prepare($Query);
         
+            if (!$Stmt->execute()) {
+                return false;
+            }
+        
+            // Obtener el ID del administrador
+            $usuario = $Stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($usuario) {
+                return $usuario['id'];  // Devolver solo el ID del administrador
+            } else {
+                return false;  // Si no hay administrador, devolver false
+            }
+        }
+
+        public function getEventoNombreById($eventoId) {
+            $query = "SELECT nombre FROM eventos WHERE id = :eventoId";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':eventoId', $eventoId, PDO::PARAM_INT);
+            $stmt->execute();
+        
+            // Si encontramos un evento, devolvemos el nombre
+            if ($stmt->rowCount() > 0) {
+                $evento = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $evento['nombre']; // Devolvemos solo el nombre del evento
+            }
+            return null; // Si no encontramos el evento
+        }
 
 
 }

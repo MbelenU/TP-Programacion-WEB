@@ -718,6 +718,22 @@ class AdministradorController
         }
     }
 
+    public function obtenerNotificaciones($idUsuario) {
+        $notificaciones = $this->administradorDAO->obtenerNotificaciones($idUsuario);
+    
+        if (!empty($notificaciones)) {
+            return [
+                "success" => true,
+                "body" => $notificaciones
+            ];
+        } else {
+            return [
+                "success" => false,
+                "message" => "No se encontraron notificaciones"
+            ];
+        }
+    }
+
 }
 
 
