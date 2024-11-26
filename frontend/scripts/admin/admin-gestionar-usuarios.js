@@ -114,9 +114,8 @@ buscarButton.addEventListener('click', function (event) {
         .then(data => {
             const resultadosContainer = document.getElementById('resultadosBusqueda'); 
             resultadosContainer.innerHTML = ''; 
-
-            if (data && data.length > 0) { 
-                data.forEach(usuario => {
+            if (data.success) { 
+                data.body.forEach(usuario => {
                     const usuarioDiv = document.createElement('div');
                     usuarioDiv.classList.add('user-item');
 
