@@ -43,6 +43,7 @@ $totalPages = $paginationData['totalPages'];
     <script src="<?php echo BASE_URL ?>scripts/admin/eventos-admin.js" defer></script>
     <script src="<?php echo BASE_URL ?>scripts/admin/pagination.js" defer></script>
     <script src="../scripts/alumno/buscarEvento.js" defer></script>
+    <script src="../scripts/admin/borrarEventos.js" defer></script>
 </head>
 
 <body class="bg-inicio">
@@ -99,6 +100,30 @@ $totalPages = $paginationData['totalPages'];
                                 </div>
                             </div>
                             <a href="<?php echo BASE_URL . 'views/admin-editar-evento.php?id=' . $evento->getId(); ?>" class="btn btn-light mt-2 mb-3">Editar evento</a>
+                                                                                   
+                            <button type="button" class="btn btn-outline-danger mt-2 mb-3" title="Eliminar evento" data-bs-toggle="modal" data-bs-target="#modalEliminar<?php echo $evento->getId(); ?>" data-borrar-id="<?php echo $evento->getId(); ?>" data-evento-id="<?php echo $evento->getId(); ?>">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </button>
+
+                        </div>
+
+                        <!-- Modal de Confirmación de Eliminación -->
+                        <div class="modal fade" id="modalEliminar<?php echo $evento->getId(); ?>" tabindex="-1" aria-labelledby="modalEliminarLabel<?php echo $evento->getId(); ?>" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalEliminarLabel<?php echo $evento->getId(); ?>">Confirmación de eliminación</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Estás seguro de que deseas eliminar este evento?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" data-borrar-id="<?php echo $evento->getId(); ?>">Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     <?php endforeach; ?>
                 </div>

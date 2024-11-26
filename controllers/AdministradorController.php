@@ -20,13 +20,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $endpoint = $_GET['endpoint'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "register") {
+    $administradorController = new AdministradorController();
     $resultado = $administradorController->register();
     return $resultado;
     exit;
 }elseif(isset($_GET['action'])) {
     $administradorController = new AdministradorController();
     $administradorController->handleRequest();
+    exit; 
+}elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['borrarEvento'])){
+    $administradorController = new AdministradorController();
+    $resultado = $administradorController->eliminarEvento();
+    return $resultado;
+    exit;
 }
+
 
 
 
@@ -312,6 +320,22 @@ class AdministradorController
         $administradorDAO = new AdministradorDAO();
         $success = $administradorDAO->deleteHabilidad($id);
         echo json_encode(['success' => $success]);
+    }
+
+    public function eliminarEvento() {
+        $input = json_decode(file_get_contents('php://input'), true);
+    
+        $eventoId = $input['id'];
+        $result = $this->administradorDAO->eliminarEvento($eventoId);
+
+        $descripcionNotificacion = "El evento'{$evento->getNombreEvento()}' se ha eliminado."; 
+        $idUsuario = $input['usuario_id']; 
+        $this->empresaDAO->agregarNotificacion($idUsuario, $descripcionNotificacion);
+        
+        // Devolvemos una respuesta JSON
+        echo json_encode(['success' => $result]);
+        exit();
+        
     }
 
 }

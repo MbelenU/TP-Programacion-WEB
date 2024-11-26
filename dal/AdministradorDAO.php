@@ -448,6 +448,40 @@ class AdministradorDAO
             return false;
         }
     }
+
+
+    public function eliminarEvento($eventoId) {
+        try {
+
+            // 1. Eliminar la suscripción asociada al evento
+            $querySuscripcion = "DELETE FROM suscripciones WHERE id_evento = :evento_id";
+            $stmtSuscripcion = $this->conn->prepare($querySuscripcion);
+            $stmtSuscripcion->bindParam(':evento_id', $eventoId, PDO::PARAM_INT);
+
+            // Ejecutar la eliminación de la suscripción
+            if (!$stmtSuscripcion->execute()) {
+                return false;
+            }
+
+            $queryEvento = "DELETE FROM eventos WHERE id = :evento_id";
+            $stmtEvento = $this->conn->prepare($queryEvento);
+            $stmtEvento->bindParam(':evento_id', $eventoId, PDO::PARAM_INT);
+
+
+            if ($stmtEvento->execute()) {
+                return true; 
+            } else {
+                return false; 
+            }
+            
+        } catch (PDOException $e) {
+            // Manejo de errores
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+
+    }
+
     
     
 }
