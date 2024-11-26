@@ -4,8 +4,9 @@ require_once '../../controllers/AlumnoController.php';
 
 
 $alumnoController = new AlumnoController();
-$response = $alumnoController->listarEventos();
-$eventos = $response['body'];
+$responseEventos = $alumnoController->listarEventos();
+$eventos = isset($responseEventos['body']) && is_array($responseEventos['body']) ? $responseEventos['body'] : []; // Asegúrate que eventos siempre sea un arreglo
+
 
 session_start();
 if (!isset($_SESSION['user'])) {
@@ -19,10 +20,13 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 }
 
 $userId = $_SESSION['user']['user_id'];
-$response = $alumnoController->listarSuscripciones($userId);
-$suscripciones = $response['body'];
+$responseSuscripciones = $alumnoController->listarSuscripciones($userId);
+$suscripciones = isset($responseSuscripciones['body']) && is_array($responseSuscripciones['body']) ? $responseSuscripciones['body'] : []; // Asegúrate que suscripciones siempre sea un arreglo
 
 function filtrarEventosNoSuscritos($eventos, $suscripciones) {
+    if (empty($suscripciones)) {
+        return $eventos; // Si no hay suscripciones, devuelve todos los eventos
+    }
 
     $idsEventosSuscritos = array_map(function($suscripcion) {
         return $suscripcion['id'];
@@ -34,6 +38,7 @@ function filtrarEventosNoSuscritos($eventos, $suscripciones) {
 
     return $eventosNoSuscritos;
 }
+
 $eventosNoSuscritos = filtrarEventosNoSuscritos($eventos, $suscripciones);
 ?>
 
@@ -143,7 +148,7 @@ $eventosNoSuscritos = filtrarEventosNoSuscritos($eventos, $suscripciones);
                         </div>
                     <?php else: ?>
                         <div class="pt-3 text-center ">
-                            <h5 class="d-grid justify-content-center align-items-center "> <i class="bi bi-emoji-frown fs-1"></i> "Actualmente no estás suscrito a ningún evento."</h5>
+                            <h5 class="d-grid justify-content-center align-items-center "> <i class="bi bi-emoji-frown fs-1"></i> "Actualmente no estás suscripto a ningún evento."</h5>
                         </div>
                     <?php endif; ?>
                 </div>
