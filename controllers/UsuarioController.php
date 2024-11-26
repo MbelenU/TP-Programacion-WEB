@@ -184,21 +184,7 @@ class UsuarioController {
         }
         
     }
-    public function listarAlumnos(){
-        $alumnos = $this->usuarioDao->listarAlumnos();
-        if($alumnos){
-            return[
-                "success" => true,
-                "body" => $alumnos
-            ];
-        }
-        else {
-            return[
-                'success' => false,
-                'message' => 'Error: No se encontraron alumnos',
-            ];
-        }
-    }  
+
     public function obtenerEmpresa(){
         $idUsuario = $_SESSION['user']['user_id'];
         $empresa = $this->usuarioDao->obtenerEmpresa($idUsuario);
