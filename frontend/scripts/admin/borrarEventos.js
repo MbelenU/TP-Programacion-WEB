@@ -5,19 +5,20 @@ document.addEventListener('DOMContentLoaded', function() {
     deleteButtons.forEach(button => {
         button.addEventListener('click', async function() {
             const id = this.getAttribute('data-borrar-id');
-            await borrarEvento(id); // Esperamos que la función async se complete
+            const nombreEvento = this.getAttribute('data-borrar-nombre');            
+            await borrarEvento(id, nombreEvento); // Esperamos que la función async se complete
         });
     });
 });
 
-async function borrarEvento(id) {
+async function borrarEvento(id, nombreEvento) {
     try {
         const response = await fetch(`/TP-Programacion-WEB/controllers/AdministradorController.php?borrarEvento=`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ id: id }) // Añadimos la acción
+            body: JSON.stringify({ id: id, nombreEvento: nombreEvento }) // Añadimos la acción
         });
 
         const data = await response.json(); // Esperamos la respuesta

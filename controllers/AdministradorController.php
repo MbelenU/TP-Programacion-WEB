@@ -323,14 +323,19 @@ class AdministradorController
     }
 
     public function eliminarEvento() {
+        
         $input = json_decode(file_get_contents('php://input'), true);
     
         $eventoId = $input['id'];
         $result = $this->administradorDAO->eliminarEvento($eventoId);
 
-        $descripcionNotificacion = "El evento'{$evento->getNombreEvento()}' se ha eliminado."; 
-        $idUsuario = $input['usuario_id']; 
-        $this->empresaDAO->agregarNotificacion($idUsuario, $descripcionNotificacion);
+        $nombreEvento = $input['nombreEvento'];
+        $alumnos = $this->administradorDAO->obtenerAlumnos();
+        $descripcionNotificacion = "El evento '$nombreEvento' se ha eliminado.";
+
+        foreach ($alumnos as $alumno) {
+            $this->administradorDAO->agregarNotificacion($alumno['id'], $descripcionNotificacion);
+        }
         
         // Devolvemos una respuesta JSON
         echo json_encode(['success' => $result]);

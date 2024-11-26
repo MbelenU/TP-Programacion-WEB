@@ -101,7 +101,7 @@ $totalPages = $paginationData['totalPages'];
                             </div>
                             <a href="<?php echo BASE_URL . 'views/admin-editar-evento.php?id=' . $evento->getId(); ?>" class="btn btn-light mt-2 mb-3">Editar evento</a>
                                                                                    
-                            <button type="button" class="btn btn-outline-danger mt-2 mb-3" title="Eliminar evento" data-bs-toggle="modal" data-bs-target="#modalEliminar<?php echo $evento->getId(); ?>" data-borrar-id="<?php echo $evento->getId(); ?>" data-evento-id="<?php echo $evento->getId(); ?>">
+                            <button type="button" class="btn btn-outline-danger mt-2 mb-3" title="Eliminar evento" data-bs-toggle="modal" data-bs-target="#modalEliminar<?php echo $evento->getId(); ?>" data-evento-id="<?php echo $evento->getId(); ?>">
                                 <i class="fas fa-trash-alt"></i> Eliminar
                             </button>
 
@@ -120,7 +120,7 @@ $totalPages = $paginationData['totalPages'];
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" data-borrar-id="<?php echo $evento->getId(); ?>">Eliminar</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" data-borrar-id="<?php echo $evento->getId(); ?>" data-borrar-nombre="<?php echo $evento->getNombreEvento(); ?>">Eliminar</button>
                                     </div>
                                 </div>
                             </div>
