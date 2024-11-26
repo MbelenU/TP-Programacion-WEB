@@ -23,6 +23,35 @@ class EmpresaDAO {
     public function __construct() {
         $this->conn = (new Database())->getConnection();
     }
+    public function borrarPublicacion($id_publicacion) {
+        try {
+            $this->conn->beginTransaction();
+
+            $query = "DELETE FROM materias_requeridas WHERE id_publicacionesempleos = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':id', $id_publicacion, PDO::PARAM_INT);
+            $stmt->execute();
+    
+            $query = "DELETE FROM postulaciones WHERE id_publicacionesempleos = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':id', $id_publicacion, PDO::PARAM_INT);
+            $stmt->execute();
+    
+            $query = "DELETE FROM publicaciones_empleos WHERE id = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':id', $id_publicacion, PDO::PARAM_INT);
+            $stmt->execute();
+    
+            $this->conn->commit();
+    
+            return true;
+    
+        } catch (PDOException $e) {
+            $this->conn->rollBack();
+            echo $e->getMessage();
+            return false;
+        }
+    }
     public function editarPerfilEmpresa($id, $email, $nombreEmpresa, $telefono, $descripcion, $sitio_web, $foto_perfil)
     {
         try {

@@ -73,11 +73,9 @@ if ($publicaciones['success']) {
 				</div>
 				<p class="mb-1">' . htmlspecialchars($publicacion->getDescripcion()) . '</p>
 				<small>' . htmlspecialchars($publicacion->getUbicacion()) . '</small>
-
 				<div class="mt-2">
 					<div class="d-flex justify-content-between align-items-center">
-						<div class="btn-group btn-group-sm" role="group" aria-label="Estado de la publicacion" data-publicacion-id="' . $publicacion->getId() . '">';
-
+						<div class="btn-group btn-group-sm" role="group" aria-label="Estado de la publicacion">';
 							echo '<button type="button" class="btn ' . ($estadoNombre == 'Abierta' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="1">Abierta</button>';
 							echo '<button type="button" class="btn ' . ($estadoNombre == 'Finalizada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="2">Finalizada</button>';
 							echo '<button type="button" class="btn ' . ($estadoNombre == 'Deshabilitada' ? 'btn-success' : 'btn-secondary') . ' btn-sm" data-estado-id="3">Deshabilitada</button>';

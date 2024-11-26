@@ -53,14 +53,12 @@ $eventosNoSuscritos = filtrarEventosNoSuscritos($eventos, $suscripciones);
             <div class="pb-5">
                 <h1>Eventos</h1>
             </div>
-
             <form class="filtro d-flex mb-5" role="search">
                 <input class="form-control me-2 border-success-subtle" type="search"
                     id="form-control" placeholder="Carreras | Nombre del evento | Fecha | Ubicación | Modalidad"
                     aria-label="Search">
                 <button class="botonFiltro btn btn-light border border-success-subtle" type="submit">Filtrar</button>
             </form>
-
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item " role="presentation">
                     <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Nuevos Eventos</button>
@@ -72,7 +70,7 @@ $eventosNoSuscritos = filtrarEventosNoSuscritos($eventos, $suscripciones);
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
                     <?php if (!empty($eventosNoSuscritos)): ?>
-                        <div class="row mb-5 list-group col-12 p-0">
+                        <div class="mb-5 list-group col-12 p-0">
                             <?php foreach ($eventosNoSuscritos as $evento) : ?>
                                 <div class="list-group-item list-group-item-action bg-white border border-success-subtle">
                                     <div class="w-100 justify-content-between">
@@ -110,7 +108,7 @@ $eventosNoSuscritos = filtrarEventosNoSuscritos($eventos, $suscripciones);
                 </div>
                 <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                     <?php if (!empty($suscripciones)): ?>
-                        <div class="row mb-5 list-group col-12 p-0">
+                        <div class="mb-5 list-group col-12 p-0">
                             <?php foreach ($suscripciones as $evento) :
                             ?>
                                 <div class="list-group-item list-group-item-action bg-white border border-success-subtle">

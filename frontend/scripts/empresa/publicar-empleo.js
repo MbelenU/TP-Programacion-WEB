@@ -19,6 +19,7 @@ const listaHabilidades = document.getElementById('listaHabilidades');
 const agregarHabilidadBtn = document.getElementById('agregarHabilidad');
 const publicarForm = document.getElementById('publicarForm');
 const guardarPublicacion = document.getElementById('guardarPublicacion');
+
 document.addEventListener('DOMContentLoaded', async function() {
     guardarPublicacion.addEventListener('click', async function (event) {
         event.preventDefault();
@@ -43,18 +44,17 @@ document.addEventListener('DOMContentLoaded', async function() {
             materias: materias
         }
 
-        let response = await fetch(`http://localhost:80/TP-Programacion-WEB/controllers/EmpresaController.php?publicarEmpleo`, {
+        let response = await fetch(`/TP-Programacion-WEB/controllers/EmpresaController.php?publicarEmpleo`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(publicacionData)
         });
-
         response = await response.json();
 
         if(response.success) {
-            window.location.href = `http://localhost:80/TP-Programacion-WEB/frontend/views/empresa-visualizar-publicacion.php?id=${response.body}`;
+            window.location.href = `/TP-Programacion-WEB/frontend/views/empresa-visualizar-publicacion.php?id=${response.body}`;
         } else {
             const errorDiv = document.createElement('div');
             errorDiv.classList.add('alert', 'alert-danger', 'mt-3');
@@ -81,7 +81,7 @@ async function agregarHabilidad() {
     if (!habilidadText || habilidades.includes(habilidadText)) {
         return; 
     }
-    const response = await fetch(`http://localhost/TP-Programacion-WEB/controllers/EmpresaController.php?habilidad=${habilidadText}`)
+    const response = await fetch(`/TP-Programacion-WEB/controllers/EmpresaController.php?habilidad=${habilidadText}`)
     if(!response.ok) {
         throw new Error(`Errors: ${response.status}`)
     }
@@ -154,7 +154,7 @@ async function cargarMaterias(idPlanEstudio) {
     });
 }
 async function cargarPlanesEstudio(idCarrera) {
-    let response = await fetch(`http://localhost/TP-Programacion-WEB/controllers/EmpresaController.php?id_carrera=${idCarrera}`)
+    let response = await fetch(`/TP-Programacion-WEB/controllers/EmpresaController.php?id_carrera=${idCarrera}`)
     response = await response.json()
     let planesEstudio = response.body
     const select = document.getElementById('planEstudios')

@@ -45,6 +45,9 @@ elseif (isset($_GET['buscarAlumnos'])) {
 }elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['reclutarAlumno'])) {
     $resultados = $empresaController->reclutarAlumno();
     exit();
+}elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['borrarPublicacion'])) {
+    $resultados = $empresaController->borrarPublicacion();
+    exit();
 }
 
 class EmpresaController {
@@ -65,6 +68,22 @@ class EmpresaController {
                 'success' => false,
                 'message' => 'Error: No se encontraron alumnos',
             ];
+        }
+    }  
+    public function borrarPublicacion(){
+        $input = json_decode(file_get_contents('php://input'), true);
+        $result = $this->empresaDAO->borrarPublicacion($input['id']);
+        if($result){
+            echo json_encode([
+                "success" => true,
+                "body" => $result
+            ]);
+        }
+        else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error: No se pudo borrar la publicacion',
+            ]);
         }
     }  
     public function editarPerfilEmpresa($id) {
