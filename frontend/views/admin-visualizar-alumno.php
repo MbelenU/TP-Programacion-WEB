@@ -1,20 +1,21 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../controllers/AlumnoController.php';
-$alumnoController = new AlumnoController();
+require_once __DIR__ . '/../../controllers/AdministradorController.php';
+$empresaController = new AdministradorController();
 
 if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
 
-$allowedRoles = ['2'];
+$allowedRoles = ['1'];
 if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
 }
 
-$alumno = $alumnoController->obtenerAlumnoPorId($_SESSION['user']['user_id']);
+$alumno = $administradorController->obtenerAlumno($_GET['id']);
+$publicaciones = $administradorController->listarPublicaciones();
 
 if (!$alumno['success']) {
     echo "<div class='alert alert-danger'>Alumno no existe.</div>";
@@ -22,9 +23,12 @@ if (!$alumno['success']) {
 }
 $alumno = $alumno['body'];
 
+$usuarioId = $alumno->getUsuarioId();  
+
 function mostrarValor($valor, $mensaje = 'No disponible') {
     return htmlspecialchars($valor ?? $mensaje);
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -33,14 +37,23 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
 <head>
     <?php require __DIR__ . '/../components/header.php' ?>
     <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/global.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/administrador.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../scripts/admin/reclutar.js" defer></script>
 </head>
 
 <body class="bg-inicio">
-    <?php require __DIR__ . '/../components/alumno-navbar.php' ?>
+    <?php require __DIR__ . '/../components/admin-navbar.php' ?>
+
+<div id="alumno-info" data-alumno-id="<?php echo $alumno->getUsuarioId(); ?>"></div>
 
     <div class="container p-sm-4 bg-white">
+        <a href="<?php echo BASE_URL ?>views/admin-reclutar-alumno.php">
+            <button type="button" class="btn btn-light mt-3 mb-4">Volver a alumnos</button>
+        </a>
         <div class="container mt-5">
-            <div class="perfil-header d-flex align-items-center mb-4">
+        
+            <div class="perfil-header d-flex align-items-center mb-4 ">
                 <?php
                 $fotoPerfil = ($alumno->getFotoPerfil()) ? BASE_URL . 'img/' . htmlspecialchars($alumno->getFotoPerfil()) : BASE_URL . 'img/perfil.jpg';
                 ?>
@@ -53,8 +66,10 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
                     <div class="descripcion mb-3">
                         <p><?php echo mostrarValor($alumno->getDescripcion()); ?></p>
                     </div>
-                    <button class="btn btn-outline-success">Cargar CV</button>
-                    <a href="<?php echo BASE_URL ?>views/alumno-editar-perfil.php" class="btn btn-outline-success">Editar perfil</a>
+                    <button class="btn btn-outline-success">Descargar CV</button>
+                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalReclutar">
+                        Reclutar
+                    </button>
                 </div>
             </div>
 
@@ -90,18 +105,18 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
                     if ($habilidades && count($habilidades) > 0) {
                         foreach ($habilidades as $habilidad) {
                             $nombreHabilidad = htmlspecialchars($habilidad->getNombreHabilidad());
-                            // $nivelHabilidad = (int) $habilidad->getNivelHabilidad();
+                            $nivelHabilidad = (int) $habilidad->getNivelHabilidad();
                             
-                            // $estrellas = '';
-                            // for ($i = 0; $i < 5; $i++) {
-                            //     if ($i < $nivelHabilidad) {
-                            //         $estrellas .= '<i class="bi bi-star-fill text-warning"></i>';
-                            //     } else {
-                            //         $estrellas .= '<i class="bi bi-star text-muted"></i>';
-                            //     }
-                            // }
+                            $estrellas = '';
+                            for ($i = 0; $i < 5; $i++) {
+                                if ($i < $nivelHabilidad) {
+                                    $estrellas .= '<i class="bi bi-star-fill text-warning"></i>';
+                                } else {
+                                    $estrellas .= '<i class="bi bi-star text-muted"></i>';
+                                }
+                            }
 
-                            echo '<li class="mb-3">' . $nombreHabilidad . '</li>';
+                            echo '<li class="mb-3">' . $nombreHabilidad . ' ' . $estrellas . '</li>';
                         }
                     } else {
                         echo '<p class="mb-3">-</p>';
@@ -127,6 +142,40 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
             </section>
         </div>
     </div>
+          <!-- Modal -->
+          <div class="modal fade" id="modalReclutar" tabindex="-1" aria-labelledby="modalReclutarLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+
+                        <div id="successMessage" class="alert alert-success d-none"></div>
+                        <div id="errorMessage" class="alert alert-danger d-none"></div>
+
+                            <label for="publicacionSelect">Elige una publicación</label>
+                            <select class="form-select" id="publicacionSelect">
+                                <option selected>Selecciona una publicación</option>
+                                <?php if (!empty($publicaciones['body'])): ?>  
+                                    <?php foreach ($publicaciones['body'] as $publicacion): ?>  
+                                        <option value="<?php echo $publicacion->getId(); ?>">
+                                            <?php echo htmlspecialchars($publicacion->getTitulo()); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <option disabled>No hay publicaciones disponibles</option>
+                                <?php endif; ?>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" id="guardarReclutamiento">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 </body>
 
 </html>
