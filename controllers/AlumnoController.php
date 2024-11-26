@@ -42,7 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['aplicarEmpleo'])) {
     $resultado = $alumnoController->buscarEmpleos($idUsuario, $_GET['buscarEmpleos']);
     echo json_encode($resultado);
     exit();
+}elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['borrarSuscripcion'])){
+    session_start();
+    $idUsuario = $_SESSION['user']['user_id'];
+    $alumnoController = new AlumnoController();
+    $resultado = $alumnoController->eliminarSuscripcion();
+    return $resultado;
+    exit;
 }
+
 class AlumnoController {
     private AlumnoDAO $alumnoDao;
 
@@ -327,6 +335,24 @@ class AlumnoController {
                 "message" => "No se encontraron notificaciones"
             ];
         }
+    }
+
+    public function eliminarSuscripcion() {
+        
+        $input = json_decode(file_get_contents('php://input'), true);
+    
+        $eventoId = $input['id'];
+       
+        $idUsuario = $_SESSION['user']['user_id'];
+
+       // $descripcionNotificacion = "El evento '$nombreEvento' se ha eliminado.";
+
+       $result = $this->alumnoDao->eliminarSuscripcion($eventoId,$idUsuario);
+        
+        // Devolvemos una respuesta JSON
+        echo json_encode(['success' => $result]);
+        exit();
+        
     }
     
     

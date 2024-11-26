@@ -813,6 +813,29 @@ class AlumnoDAO
             $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
             $stmt->execute();
         }
+
+
+        public function eliminarSuscripcion($eventoId,$idUsuario) {
+            try {
+    
+                $querySuscripcion = "DELETE FROM suscripciones WHERE id_evento = :evento_id AND id_usuario = :idUsuario";
+                $stmtSuscripcion = $this->conn->prepare($querySuscripcion);
+                $stmtSuscripcion->bindParam(':evento_id', $eventoId, PDO::PARAM_INT);
+                $stmtSuscripcion->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+    
+                if (!$stmtSuscripcion->execute()) {
+                    return false;
+                }
+    
+                return true; 
+
+            } catch (PDOException $e) {
+                // Manejo de errores
+                echo "Error: " . $e->getMessage();
+                return false;
+            }
+    
+        }
         
 
 
