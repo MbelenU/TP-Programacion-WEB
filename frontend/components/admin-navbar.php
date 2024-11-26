@@ -24,6 +24,10 @@
                     <li class="nav-item ">
                         <a class="nav-link" href="<?php echo BASE_URL ?>views/admin-gestionar-usuarios.php">Usuarios</a>
                     </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="<?php echo BASE_URL ?>views/admin-publicar-empleo.php">Publicar
+                                empleo</a>
+                        </li>
                     <li class="nav-item ">
                         <a class="nav-link"
                             href="<?php echo BASE_URL ?>views/admin-eventos.php">Eventos</a>

@@ -67,24 +67,7 @@ class UsuarioController {
         }
     }
 
-    public function iniciarSesion() {
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
-        
-        $usuarioDAO = new UsuarioDAO();
-        $resultado = $usuarioDAO->iniciarSesion($email, $password);
-    
-        if ($resultado && !isset($resultado['error'])) {
-            return ['success' => true, 'usuario' => $resultado];
-        } elseif (isset($resultado['error'])) {
-            return ['success' => false, 'message' => $resultado['error']];
-        } else {
-            return ['success' => false, 'message' => 'Credenciales incorrectas.'];
-        }
-    }
 
-
-    /*
     public function iniciarSesion() {
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
@@ -105,7 +88,6 @@ class UsuarioController {
             ];
         }
     }
-    */
 
     public function register() {
         
