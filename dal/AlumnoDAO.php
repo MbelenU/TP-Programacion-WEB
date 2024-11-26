@@ -836,7 +836,21 @@ class AlumnoDAO
             }
     
         }
-        
+
+        public function agregarSuscripcion($idUsuario, $eventoId) {
+           
+            $insertQuery = "INSERT INTO suscripciones (id_usuario, id_evento) VALUES (:idUsuario, :evento_id)";
+            $insertStmt = $this->conn->prepare($insertQuery);
+    
+            $insertStmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $insertStmt->bindParam(':evento_id', $eventoId, PDO::PARAM_INT);
+    
+            if (!$insertStmt->execute()) {
+                return false;
+            }
+
+            return true; 
+        }
 
 
 }

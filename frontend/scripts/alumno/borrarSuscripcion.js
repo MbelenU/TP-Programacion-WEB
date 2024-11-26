@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-async function eliminarSuscripcion(id, nombreEvento) {
+async function eliminarSuscripcion(id) {
     try {
         const response = await fetch(`/TP-Programacion-WEB/controllers/AlumnoController.php?borrarSuscripcion=`, {
             method: 'POST',

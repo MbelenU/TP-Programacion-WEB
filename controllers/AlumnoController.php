@@ -50,6 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['aplicarEmpleo'])) {
     return $resultado;
     exit;
 }
+elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['agregarSuscripcion'])){
+    session_start();
+    $idUsuario = $_SESSION['user']['user_id'];
+    $alumnoController = new AlumnoController();
+    $resultado = $alumnoController->agregarSuscripcion();
+    return $resultado;
+    exit;
+}
 
 class AlumnoController {
     private AlumnoDAO $alumnoDao;
@@ -354,6 +362,25 @@ class AlumnoController {
         exit();
         
     }
+
+    public function agregarSuscripcion() {
+        
+        $input = json_decode(file_get_contents('php://input'), true);
+    
+        $eventoId = $input['id'];
+       
+        $idUsuario = $_SESSION['user']['user_id'];
+
+       // $descripcionNotificacion = "El evento '$nombreEvento' se ha suscrito.";
+       $result = $this->alumnoDao->agregarSuscripcion($idUsuario, $eventoId);
+       
+        
+        echo json_encode(['success' => $result]);
+        exit();
+        
+    }
+
+    
     
     
 }
