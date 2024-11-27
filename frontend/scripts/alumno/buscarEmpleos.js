@@ -16,9 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             event.preventDefault();
             const postulacionData = { empleoId: empleoId };
-            const BASEURL = "localhost:80/TP-Programacion-WEB";
-
-            fetch(`/controllers/AlumnoController.php?aplicarEmpleo`, {
+            fetch(`/TP-Programacion-WEB/controllers/AlumnoController.php?aplicarEmpleo`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -42,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
 
         const query = buscarInput.value.trim();
-        let url = '/controllers/AlumnoController.php?buscarEmpleos=';
+        let url = '/TP-Programacion-WEB/controllers/AlumnoController.php?buscarEmpleos=';
 
         if (query !== '') {
             url += encodeURIComponent(query);

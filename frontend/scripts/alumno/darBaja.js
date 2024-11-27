@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = new FormData();
             formData.append('solicitud_id', solicitudId);
 
-            fetch(`/controllers/AlumnoController.php?darBaja`, {
+            fetch(`/TP-Programacion-WEB/controllers/AlumnoController.php?darBaja`, {
                 method: 'POST',
                 body: formData
             })

@@ -6,7 +6,6 @@ $foto_perfil = $_SESSION['user']['foto_perfil'];
     <div class="container-fluid">
         <a class="navbar-brand" href="#"><img src="<?php echo BASE_URL ?>img/logo.png" alt="logo"></a>
 
-        <!--Menú-->
         <button class="navbar-toggler shadow-sm" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -20,7 +19,7 @@ $foto_perfil = $_SESSION['user']['foto_perfil'];
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a href="<?php echo BASE_URL ?>views/admin-perfil.php"><img src="<?php echo $foto_perfil ? BASE_URL . 'img/' . $foto_perfil : BASE_URL . 'img/perfil.jpg'; ?>" alt="foto-perfil" class="rounded-circle w-25 pb-2"></a>
+                        <a href="<?php echo BASE_URL ?>views/admin-perfil.php"><img src="<?php echo $foto_perfil ? BASE_URL . 'img/' . $foto_perfil : BASE_URL . 'img/perfil.jpg'; ?>" alt="foto-perfil" class="rounded-circle m-2" style="width: 120px; height: 120px; object-fit: cover; margin-right: 20px;" id="foto-perfil-navbar"></a>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link" href="<?php echo BASE_URL ?>views/admin-gestionar-usuarios.php">Usuarios</a>

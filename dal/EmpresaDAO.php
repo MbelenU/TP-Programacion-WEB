@@ -161,12 +161,12 @@ class EmpresaDAO {
         }
     }
     public function cambiarEstadoPublicacion($publicacion_id, $nuevo_estado_id) {
-        $sql = "UPDATE publicaciones_empleos SET id_estadopublicacion = :nuevo_estado_id WHERE id = :postulacion_id";
+        $sql = "UPDATE publicaciones_empleos SET id_estadopublicacion = :nuevo_estado_id WHERE id = :publicacionId";
     
         $stmt = $this->conn->prepare($sql);
     
         $stmt->bindParam(':nuevo_estado_id', $nuevo_estado_id, PDO::PARAM_INT);
-        $stmt->bindParam(':postulacion_id', $publicacion_id, PDO::PARAM_INT);
+        $stmt->bindParam(':publicacionId', $publicacion_id, PDO::PARAM_INT);
     
         if ($stmt->execute()) {
             return true;

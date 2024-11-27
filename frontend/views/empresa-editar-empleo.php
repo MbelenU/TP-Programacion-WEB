@@ -9,6 +9,8 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
 }
+$publicacion = $empresaController->obtenerPublicacion($_GET['id']);
+$publicacion = $publicacion['body'];
 ?>
 
 <!DOCTYPE html>

@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const deleteButtons = document.querySelectorAll('[data-publicacion-id]');
+    const deleteButtons = document.querySelectorAll('[data-borrar-publicacion]');
     deleteButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const id = this.getAttribute('data-publicacion-id');
+            const id = this.getAttribute('data-borrar-publicacion');
             console.log(id);
             borrarPublicacion(id);
         });
@@ -19,14 +19,12 @@ function borrarPublicacion(id) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Publicación eliminada con éxito');
-            document.querySelector(`[data-publicacion-id="${id}"]`).closest('.list-group-item').remove();
+            document.querySelector(`[data-borrar-publicacion="${id}"]`).closest('.list-group-item').remove();
         } else {
             alert('Ocurrió un error al eliminar la publicación');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Ocurrió un error al eliminar la publicación');
     });
 }
