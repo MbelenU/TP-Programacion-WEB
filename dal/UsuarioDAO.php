@@ -12,17 +12,20 @@ class UsuarioDAO {
     }
 
     public function iniciarSesion($email, $password) {
+
         $queryUser = "
             SELECT 
-                u.foto_perfil,
-                u.id AS user_id, 
-                id_rol AS user_type,
-                u.de_baja
+            u.foto_perfil,
+            u.id AS user_id, 
+            id_rol AS user_type,
+            u.de_baja
             FROM usuario u
             LEFT JOIN roles_usuario a ON u.id = a.id_usuario
             WHERE u.mail = :email AND u.clave = :password
             LIMIT 1;
         ";
+
+    
         $stmtUser = $this->conn->prepare($queryUser);
         $stmtUser->bindParam(':email', $email);
         $stmtUser->bindParam(':password', $password);
