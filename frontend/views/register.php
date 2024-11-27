@@ -18,7 +18,9 @@
                     <img src="../img/logo.png" alt="logo" class="img-fluid">
                 </div>
                 <h2 class="text-center mb-4">Solicitud de Registro</h2>
-                
+                <div class="mb-3">
+                    <a href="inicio.php" class="btn btn-secondary w-100">Volver a inicio</a>
+                </div>
                 <!-- Contenedores para mostrar mensajes -->
                 <div id="errorAlert" class="alert alert-danger d-none" role="alert"></div>
                 <div id="successAlert" class="alert alert-success d-none" role="alert"></div>
