@@ -30,12 +30,14 @@ document.addEventListener("DOMContentLoaded", function () {
         nuevaHabilidad.className = "habilidad-item d-grid align-items-center justify-content-start bg-light p-2 rounded mb-2";
         nuevaHabilidad.dataset.id = habilidadId;
 
-        // Crear las estrellas dinámicamente (inicialmente 0 estrellas llenas)
+        // Crear las estrellas dinámicamente
         let estrellasHTML = '';
         for (let i = 1; i <= 5; i++) {
             estrellasHTML += `
-                <i class="star bi bi-star" data-value="${i}" data-id="${habilidadId}"></i>
-            `;
+                <i class="star bi ${i <= 0 ? 'bi-star-fill' : 'bi-star'}" 
+                   data-value="${i}"
+                   data-id="${habilidadId}">
+                </i>`;
         }
 
         nuevaHabilidad.innerHTML = `
@@ -50,18 +52,8 @@ document.addEventListener("DOMContentLoaded", function () {
             eliminarHabilidad(habilidadId, nuevaHabilidad, alumnoId);  
         });
 
-        // Añadir evento a las estrellas para permitir calificación
-        nuevaHabilidad.querySelectorAll('.star').forEach(star => {
-            star.addEventListener('click', function () {
-                calificarHabilidad(star, habilidadId);
-            });
-        });
-
         // Agregar al DOM
         listaHabilidades.appendChild(nuevaHabilidad);
-
-        // Llamar a la función para agregar la habilidad
-        agregarHabilidad(habilidadId, alumnoId);
 
         // Actualizar el campo hidden
         actualizarHabilidadesSeleccionadas();
@@ -76,94 +68,36 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Función para agregar habilidad
-    function agregarHabilidad(habilidadId, alumnoId) {
-        // Obtener el nivel de habilidad (número de estrellas llenas)
-        const habilidadItem = document.querySelector(`.habilidad-item[data-id="${habilidadId}"]`);
-        const nivelHabilidad = habilidadItem.querySelectorAll('.bi-star-fill').length; // Contar las estrellas llenas
-
-        // Enviar AJAX para agregar la habilidad con el nivel de habilidad
-        fetch(`http://localhost/TP-Programacion-WEB/controllers/AlumnoController.php?agregarHabilidad=`, {
+    // Función para eliminar habilidad
+    function eliminarHabilidad(habilidadId, elementoHabilidad, alumnoId) {
+        // Enviar AJAX para eliminar la habilidad
+        fetch(`http://localhost/TP-Programacion-WEB/controllers/AlumnoController.php?eliminarHabilidad=`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 idAlumno: alumnoId,
-                idHabilidad: habilidadId,
-                nivelHabilidad: nivelHabilidad  // Enviar el nivel de habilidad
+                idHabilidad: habilidadId
             })
         })
         .then(response => response.json())
         .then(data => {
-            if (!data.success) {
-                alert("Error al agregar la habilidad. Intente nuevamente.");
+            if (data.success) {
+                // Si la habilidad fue eliminada con éxito, eliminarla del DOM
+                if (elementoHabilidad) {
+                    elementoHabilidad.remove();
+                }
+                actualizarHabilidadesSeleccionadas();
+            } else {
+                alert("Error al eliminar la habilidad. Intente nuevamente.");
             }
         })
         .catch(() => alert("Error de conexión con el servidor."));
     }
 
-    // Función para eliminar habilidad
-    function agregarHabilidad(habilidadId, alumnoId) {
-        // Obtener el nivel de habilidad (número de estrellas llenas)
-        const habilidadItem = document.querySelector(`.habilidad-item[data-id="${habilidadId}"]`);
-        const nivelHabilidad = habilidadItem.querySelectorAll('.bi-star-fill').length; // Contar las estrellas llenas
-    
-        // Enviar AJAX para agregar la habilidad con el nivel de habilidad
-        fetch(`http://localhost/TP-Programacion-WEB/controllers/AlumnoController.php?agregarHabilidad=`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                idAlumno: alumnoId,
-                idHabilidad: habilidadId,
-                nivelHabilidad: nivelHabilidad  // Enviar el nivel de habilidad (incluido 0)
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (!data.success) {
-                alert("Error al agregar la habilidad. Intente nuevamente.");
-            }
-        })
-        .catch((error) => {
-            // Solo mostrar el mensaje de error si el nivel de habilidad no es 0
-            if (nivelHabilidad !== 0) {
-                alert("Error de conexión con el servidor.");
-            }
-            // Si el nivel es 0, no mostrar el error
-        });
-    }
-
-    // Función para calificar habilidad (marcar estrellas)
-    function calificarHabilidad(star, habilidadId) {
-        const habilidadItem = document.querySelector(`.habilidad-item[data-id="${habilidadId}"]`);
-        const estrellas = habilidadItem.querySelectorAll('.star');
-        const nivel = star.dataset.value;
-
-        // Cambiar el estado de las estrellas
-        estrellas.forEach(est => {
-            if (parseInt(est.dataset.value) <= nivel) {
-                est.classList.add('bi-star-fill');
-                est.classList.remove('bi-star');
-            } else {
-                est.classList.add('bi-star');
-                est.classList.remove('bi-star-fill');
-            }
-        });
-
-        // Actualizar el valor de habilidades seleccionadas
-        actualizarHabilidadesSeleccionadas();
-    }
-
-    // Actualizar el valor del campo hidden con los IDs de las habilidades y sus niveles
+    // Actualizar el valor del campo hidden con los IDs de las habilidades
     function actualizarHabilidadesSeleccionadas() {
-        const habilidadesSeleccionadasData = [];
-        document.querySelectorAll(".habilidad-item").forEach(item => {
-            const habilidadId = item.dataset.id;
-            const nivelGrado = item.querySelectorAll('.bi-star-fill').length; // Contar las estrellas llenas
-            habilidadesSeleccionadasData.push({
-                id_habilidad: habilidadId,
-                nivel_grado: nivelGrado
-            });
-        });
-
+        const habilidadIds = Array.from(listaHabilidades.querySelectorAll(".habilidad-item"))
+            .map(item => item.dataset.id);
+        habilidadesSeleccionadas.value = habilidadIds.join(",");
     }
 });
