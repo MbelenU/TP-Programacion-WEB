@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../includes/base-url.php';
 require_once __DIR__ . '/../../controllers/UsuarioController.php';
 
-$foto_perfil = $_SESSION['user']['foto_perfil'];
+//$foto_perfil = $_SESSION['user']['foto_perfil'];
 ?>
 
 <header>

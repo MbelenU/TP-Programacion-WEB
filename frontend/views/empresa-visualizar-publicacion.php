@@ -43,7 +43,7 @@ $publicacion = $publicacion['body'];
 					<p><?php echo $publicacion->getDescripcion() ?></p>
 				</div>
 				<div>
-					<a href="<?php echo BASE_URL ?>views/empresa-editar-empleo.php" class="btn btn-success">Editar publicación</a>
+					<a href="<?php echo BASE_URL ?>views/empresa-editar-empleo.php?id=<?php echo $_GET['id']; ?>" class="btn btn-success">Editar publicación</a>
 				</div>
 			</div>
 			<ul class="list-group">
