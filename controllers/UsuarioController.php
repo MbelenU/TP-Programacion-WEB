@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 $usuarioController = new UsuarioController();
 
-$endpoint = $_GET['endpoint'] ?? '';
+$endpoint = htmlspecialchars($_GET['endpoint'] ?? '');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "register") {
     $resultado = $usuarioController->register();
@@ -30,7 +30,15 @@ class UsuarioController {
 
     public function verifyEmail() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['mail'] ?? '';
+            $email = htmlspecialchars($_POST['mail'] ?? '');
+
+            if (empty($email)) {
+                return[
+                    'success' => false,
+                    'message' => 'Faltan datos obligatorios.'
+                ];
+            }
+
             $usuarioDAO = new UsuarioDAO();
             $usuario = $usuarioDAO->buscarPorEmail($email);
     
@@ -40,20 +48,26 @@ class UsuarioController {
             error_log("Resultado de la búsqueda de email: " . print_r($usuario, true));
     
             if ($usuario) {
-                echo json_encode(['success' => true, 'message' => 'El correo está registrado.']);
-            } else {
+                echo json_encode(['success' => true, 'message' => 'El correo está registrado.']); 
                 echo json_encode(['success' => false, 'message' => 'El correo no está registrado.']);
             }
         } else {
-            http_response_code(405); // Método no permitido
+            http_response_code(405); // Método no permitido 
             echo json_encode(['success' => false, 'message' => 'Método no permitido.']);
         }
     }
 
     public function resetPassword() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['mail'];
-            $newPassword = $_POST['newPassword'];
+            $email = htmlspecialchars($_POST['mail'] ?? '');
+            $newPassword = htmlspecialchars($_POST['newPassword'] ?? '');
+
+            if (empty($email) || empty($newPassword)) {
+                return[
+                    'success' => false,
+                    'message' => 'Faltan datos obligatorios.'
+                ];
+            }
 
             $usuarioDAO = new UsuarioDAO();
             $usuario = $usuarioDAO->buscarPorEmail($email);
@@ -70,8 +84,15 @@ class UsuarioController {
 
 
     public function iniciarSesion() {
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
+        $email = htmlspecialchars($_POST['email'] ?? '');
+        $password = htmlspecialchars($_POST['password'] ?? '');
+
+        if (empty($email) || empty($password)) {
+            return[
+                'success' => false,
+                'message' => 'Faltan datos obligatorios.'
+            ];
+        }
 
         $usuario = $this->usuarioDao->iniciarSesion($email, $password);
 
@@ -91,7 +112,7 @@ class UsuarioController {
     }
 
     public function register() {
-        
+
         $input = json_decode(file_get_contents('php://input'), true);
         $typeUser = htmlspecialchars($input['typeUser'] ?? '');
         $email = htmlspecialchars($input['email'] ?? '');
@@ -101,7 +122,7 @@ class UsuarioController {
         $telefono = htmlspecialchars($input['telefono'] ?? '');
         $nombreUsuario = htmlspecialchars($input['nombreUsuario'] ?? '');
 
-        if (empty($email) || empty($password) || empty($repeatPassword) || empty($nombreUsuario)) {
+        if (empty($typeUser) || empty($email) || empty($password) || empty($repeatPassword) || empty($direccion) || empty($telefono) || empty($nombreUsuario)) {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
@@ -109,6 +130,7 @@ class UsuarioController {
             ]);
             return;
         }
+            
     
         if ($password !== $repeatPassword) {
             http_response_code(400);
@@ -189,7 +211,7 @@ class UsuarioController {
 
 
 
-$action = $_GET['action'] ?? '';
+$action = htmlspecialchars_decode($_GET['action'] ?? '');
 $controller = new UsuarioController();
 
 if ($action === 'verifyEmail') {

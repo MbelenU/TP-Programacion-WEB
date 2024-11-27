@@ -7,13 +7,19 @@ if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
-$allowedRoles = ['2'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Visualizar Empleos', $_SESSION['user']['user_id'])){
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
-}
+} 
+
+
 $response = $alumnoController->listarEmpleos();
 $empleos = $response['body'];
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -38,7 +44,6 @@ $empleos = $response['body'];
             </form>
             <div class="mb-5 list-group col-12 p-0" id="resultadosBusqueda">
                 <?php foreach ($empleos as $empleo): ?>
-
                     <li class="list-group-item list-group-item-action bg-white border">
                         <div class="w-100 justify-content-between">
                             <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">

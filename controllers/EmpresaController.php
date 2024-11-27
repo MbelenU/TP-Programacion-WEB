@@ -72,7 +72,7 @@ class EmpresaController {
     }  
     public function borrarPublicacion(){
         $input = json_decode(file_get_contents('php://input'), true);
-        $result = $this->empresaDAO->borrarPublicacion($input['id']);
+        $result = $this->empresaDAO->borrarPublicacion($input['id']);     
         if($result){
             echo json_encode([
                 "success" => true,
@@ -87,11 +87,21 @@ class EmpresaController {
         }
     }  
     public function editarPerfilEmpresa($id) {
-        $email = $_POST['email'];
-        $nombreEmpresa = $_POST['nombreEmpresa'];
-        $telefono = $_POST['phone'];
-        $descripcion = $_POST['descripcion'];
-        $sitio_web = $_POST['website'];
+        $email = htmlspecialchars($_POST['email'] ?? ''); 
+        $nombreEmpresa = htmlspecialchars($_POST['nombreEmpresa'] ?? ''); 
+        $telefono = htmlspecialchars($_POST['phone'] ?? '');
+        $descripcion = htmlspecialchars($_POST['descripcion'] ?? '');
+        $sitio_web = htmlspecialchars($_POST['website'] ?? '');
+
+        if (empty($email) || empty($descripcion) || empty($telefono) || empty($nombreEmpresa) || empty($sitio_web)) {
+          
+          return [
+                'success' => false,
+                'message' => 'Faltan datos obligatorios.'
+            ];
+            
+        }
+
 
         $foto_perfil = null;
         if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === UPLOAD_ERR_OK) {
@@ -129,13 +139,13 @@ class EmpresaController {
         $idUsuario = $_SESSION['user']['user_id'];
         $input = json_decode(file_get_contents('php://input'), true);
 
-        $titulo = htmlspecialchars($input['titulo'] ?? null);
-        $modalidad = htmlspecialchars($input['modalidad'] ?? null);
-        $ubicacion = htmlspecialchars($input['ubicacion'] ?? null);
-        $jornada = htmlspecialchars($input['jornada'] ?? null);
-        $descripcion = htmlspecialchars($input['descripcion'] ?? null);
-        $habilidad = htmlspecialchars($input['habilidad'] ?? null);
-        $materia = htmlspecialchars($input['materia'] ?? null);
+        $titulo = htmlspecialchars($input['titulo'] ?? '');
+        $modalidad = htmlspecialchars($input['modalidad'] ?? '');
+        $ubicacion = htmlspecialchars($input['ubicacion'] ?? '');
+        $jornada = htmlspecialchars($input['jornada'] ?? '');
+        $descripcion = htmlspecialchars($input['descripcion'] ?? '');
+        $habilidad = $input['habilidades'] ?? '';
+        $materia = $input['materias'] ?? '';
 
         if (empty($idUsuario) || empty($titulo) || empty($modalidad) || empty($ubicacion) || empty($jornada) || empty($descripcion)) {
             http_response_code(400);
@@ -148,8 +158,8 @@ class EmpresaController {
         
         $result = $this->empresaDAO->publicarEmpleo($titulo, $modalidad, $ubicacion, $jornada, $descripcion, $habilidad, $materia, $idUsuario);
         if($result) {
-            http_response_code(200);
-            echo json_encode([
+            http_response_code(200); 
+            echo json_encode([    
                 "success" => true,
                 "body" => $result
             ]);
@@ -253,9 +263,20 @@ class EmpresaController {
     public function reclutarAlumno() {
         // Decodificar la entrada JSON
         $input = json_decode(file_get_contents('php://input'), true);               
-        $usuarioId = $input['usuario_id']; 
-        $publicacionId = $input['publicacion_id']; 
+        $usuarioId = htmlspecialchars($input['usuario_id'] ?? ''); 
+        $publicacionId = htmlspecialchars($input['publicacion_id'] ?? ''); 
         $estadoId = 3;
+        //$idUsuario = htmlspecialchars($input['usuario_id'] ?? ''); Lo comento porque está repetido
+   
+        if (empty($publicacionId) || empty($usuarioId) ) { 
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Faltan datos obligatorios.'
+            ]);
+            return;
+        }
+
     
         // Llamada al DAO para reclutar al alumno
         $result = $this->empresaDAO->reclutarAlumno($usuarioId, $publicacionId, $estadoId);
@@ -276,8 +297,8 @@ class EmpresaController {
     
             // Descripción de la notificación que se enviará al usuario
             $descripcionNotificacion = "Fuiste reclutado para el puesto '{$publicacion->getTitulo()}'."; 
-            $idUsuario = $input['usuario_id']; 
-            $this->empresaDAO->agregarNotificacion($idUsuario, $descripcionNotificacion);
+            
+            $this->empresaDAO->agregarNotificacion($usuarioId, $descripcionNotificacion); //Cambié idUsuario por usuarioId
     
             // Responder con éxito
             http_response_code(200); 
@@ -317,10 +338,10 @@ class EmpresaController {
         }
     }
     public function obtenerMaterias() {
-        $id = $_GET['idPlanEstudio'];
-        $materias = $this->empresaDAO->obtenerMaterias($id);
+        $id = htmlspecialchars($_GET['idPlanEstudio'] ?? ''); 
+        $materias = $this->empresaDAO->obtenerMaterias($id); 
         if($materias){
-            http_response_code(200);
+            http_response_code(200); 
             echo json_encode([
                 "success" => true,
                 "body" => $materias
@@ -334,10 +355,11 @@ class EmpresaController {
                 'message' => 'Error: No se encontraron materias para este plan de estudios',
             ]);
         }
-    }
+    } 
+
     public function obtenerPlanesEstudio() {
-        $id = $_GET['id_carrera'];
-        $planesEstudio = $this->empresaDAO->obtenerPlanesEstudio($id);
+        $id = htmlspecialchars($_GET['id_carrera'] ?? '');
+        $planesEstudio = $this->empresaDAO->obtenerPlanesEstudio($id); //CAMBIO
         if($planesEstudio){
             http_response_code(200);
             echo json_encode([

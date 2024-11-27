@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 $alumnoController = new AlumnoController();
 
-$endpoint = $_GET['endpoint'] ?? '';
+$endpoint = htmlspecialchars($_GET['endpoint'] ?? '');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "register") {
     $resultado = $usuarioController->register();
@@ -66,14 +66,13 @@ class AlumnoController {
         $this->alumnoDao = new AlumnoDAO();
     }
     public function darBaja() {
-        $solicitudId = $_POST['solicitud_id'] ?? null;
+        $solicitudId = htmlspecialchars($_POST['solicitud_id'] ?? '');
         if (empty($solicitudId)) {
-            http_response_code(400);
-            echo json_encode([
+            return[
                 'success' => false,
                 'message' => 'Error: El ID de la solicitud es obligatorio',
-            ]);
-            return;
+            ];
+            
         }
 
         
@@ -96,6 +95,7 @@ class AlumnoController {
     public function checkPostulacion($empleoId){
         $idUsuario = $_SESSION['user']['user_id'];
         $id_publicacion = htmlspecialchars($empleoId ?? '');
+
         $postulacion = $this->alumnoDao->checkPostulacion($idUsuario, $id_publicacion);
         if($postulacion){
             return true;
@@ -105,20 +105,33 @@ class AlumnoController {
         }
     }
     public function editarPerfilAlumno($id) {
-        $email = $_POST['email'] ? $_POST['email'] : NULL;
+        $email = htmlspecialchars($_POST['email'] ?? '');
         // $password = $_POST['contraseña'] ? $_POST['contraseña'] : NULL;
-        $nombre = $_POST['nombre'] ? $_POST['nombre'] : NULL ;
-        $apellido = $_POST['apellido'] ? $_POST['apellido'] : NULL ;
-        $telefono = $_POST['telefono'] ? $_POST['telefono'] : NULL;
+        $nombre = htmlspecialchars($_POST['nombre'] ?? '') ;
+        $apellido = htmlspecialchars($_POST['apellido'] ?? '') ;
+        $telefono = htmlspecialchars($_POST['telefono'] ?? '');
         // $username = $_POST['username'] ? $_POST['username'] : NULL;
         // $habilidades = $_POST['habilidadesSeleccionadas'] ? $_POST['habilidadesSeleccionadas'] : NULL;
-        $habilidadesIds =$_POST['habilidadesSeleccionadas'] ? explode(",", $_POST['habilidadesSeleccionadas']) : [];
-        $carrera = $_POST['carrera'] ? $_POST['carrera'] : NULL;
+        $habilidadesIds =$_POST['habilidadesSeleccionadas'] ? explode(",", $_POST['habilidadesSeleccionadas']) : [];/////////////////////////////7777
+        $carrera = htmlspecialchars($_POST['carrera'] ?? '');
         $planEstudios = /*$_POST['planEstudios'] ? $_POST['planEstudios'] : */NULL;
         $materias = /*$_POST['materia'] ? $_POST['materia'] : */NULL;
-        $direccion = $_POST['direccion'] ? $_POST['direccion'] : NULL;
+        $direccion = htmlspecialchars($_POST['direccion'] ?? '');
         $deBaja = NULL;
         $foto_perfil = null;
+
+        if (
+            empty($email) || empty($nombre) || empty($apellido) || empty($telefono) || empty($carrera) || empty($direccion)
+        ) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Faltan datos obligatorios.'
+            ]);
+            return;
+        }
+
+
         if (isset($_FILES['fotoPerfil']) && $_FILES['fotoPerfil']['error'] === UPLOAD_ERR_OK) {
             
             $fileTmpPath = $_FILES['fotoPerfil']['tmp_name'];
@@ -151,7 +164,7 @@ class AlumnoController {
 
     }
     public function obtenerPlanesEstudio() {
-        $id = $_GET['id_carrera'];
+        $id = htmlspecialchars($_GET['id_carrera'] ?? '');
         $planesEstudio = $this->alumnoDao->obtenerPlanesEstudio($id);
         if($planesEstudio){
             http_response_code(200);
@@ -252,8 +265,8 @@ class AlumnoController {
             ];
         }
     }
-    public function listarPostulaciones(){
-        $postulaciones = $this->alumnoDao->getPostulaciones();
+    public function listarPostulaciones($idUsuario){
+        $postulaciones = $this->alumnoDao->getPostulaciones($idUsuario);
         if($postulaciones){
             
             $response = [
@@ -369,7 +382,15 @@ class AlumnoController {
         
         $input = json_decode(file_get_contents('php://input'), true);
     
-        $eventoId = $input['id'];      
+        $eventoId = htmlspecialchars($input['id'] ?? '');  
+
+        if(empty($eventoId)){
+            return[
+                "success" => false,
+                "message" => "No se encontró el evento"
+            ];
+        } 
+
         $idUsuario = $_SESSION['user']['user_id'];       
         $nombreEvento = $this->alumnoDao->getEventoNombreById($eventoId);
         
@@ -397,7 +418,15 @@ class AlumnoController {
         
         $input = json_decode(file_get_contents('php://input'), true);
     
-        $eventoId = $input['id'];      
+        $eventoId = htmlspecialchars($input['id'] ?? '');    
+        
+        if(empty($eventoId)){
+            return[
+                "success" => false,
+                "message" => "No se encontró el evento"
+            ];
+        } 
+
         $idUsuario = $_SESSION['user']['user_id'];
         $nombreEvento = $this->alumnoDao->getEventoNombreById($eventoId);
 

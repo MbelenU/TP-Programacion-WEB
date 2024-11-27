@@ -31,6 +31,8 @@ async function eliminarSuscripcion(id) {
             if (eventoElement) {
                 eventoElement.closest('.list-group-item').remove();
             }
+
+            location.reload();
         } else {
             console.log('Ocurrió un error al desuscribirse del evento');
         }

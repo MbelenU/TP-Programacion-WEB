@@ -273,7 +273,7 @@ class AlumnoDAO
                 $habilidad = new Habilidad();
                 $habilidad->setId($row['id']);
                 $habilidad->setNombreHabilidad($row['descripcion']);
-                // $habilidad->setNivelHabilidad($row['nivel_grado']);
+                $habilidad->setNivelHabilidad($row['nivel_grado']);
 
                 $habilidades[] = $habilidad;
             }
@@ -400,9 +400,11 @@ class AlumnoDAO
         return null;
     }
 
-    public function getPostulaciones() {
-        $queryPostulaciones = "SELECT * FROM postulaciones";
+    public function getPostulaciones($id) {
+
+        $queryPostulaciones = "SELECT * FROM postulaciones WHERE id_usuario = :id";
         $stmt = $this->conn->prepare($queryPostulaciones);
+        $stmt->bindParam(":id", $id);
         $stmt->execute();
     
         $postulacionesArray = [];
@@ -590,7 +592,6 @@ class AlumnoDAO
        
         if ($stmt->rowCount() > 0) {
             $empleos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
             $empleosArray = [];
             foreach($empleos as $empleo){
                 $id = $empleo['id'];
@@ -603,8 +604,8 @@ class AlumnoDAO
                 $estadoEmpleo = $this->getEstadoById($estadoId);
                 $jornadaId =  $empleo['id_jornada'];
                 $jornada = $this->getJornadaById($jornadaId);
-                $ubicacion = $empleo['ubicacion']; 
-    
+                $ubicacion = $empleo['ubicacion'];
+                
                 $queryHabilidades = "SELECT * FROM habilidades_publicaciones HP 
                                      JOIN habilidades HD ON HP.id_habilidad = HD.id
                                      WHERE HP.id_publicacion = :puestoId";

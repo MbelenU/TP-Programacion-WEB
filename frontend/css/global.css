@@ -22,3 +22,18 @@ html {
 img{
   width: 150px;
 }
+
+.stars {
+  display: flex;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.star {
+  font-size: 1.5rem;
+  color: #ccc;
+}
+
+.star.checked {
+  color: #ffc107;
+}

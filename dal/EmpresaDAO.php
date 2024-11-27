@@ -26,6 +26,10 @@ class EmpresaDAO {
     public function borrarPublicacion($id_publicacion) {
         try {
             $this->conn->beginTransaction();
+            $query = "DELETE FROM habilidades_publicaciones WHERE id_publicacion = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':id', $id_publicacion, PDO::PARAM_INT);
+            $stmt->execute();
 
             $query = "DELETE FROM materias_requeridas WHERE id_publicacionesempleos = :id";
             $stmt = $this->conn->prepare($query);

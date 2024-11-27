@@ -5,8 +5,9 @@ if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
-$allowedRoles = ['3'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Editar Empleo', $_SESSION['user']['user_id'])){
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
 }
@@ -43,7 +44,12 @@ $habilidades = $publicacion->getHabilidades(); // Array de objetos Habilidad
 </head>
 
 <body class="bg-inicio">
-    <?php require __DIR__ . '/../components/empresa-navbar.php' ?>
+    <?php if ($_SESSION['user']['user_type'] == 1){
+            require __DIR__ . '/../components/admin-navbar.php';
+    } elseif ($_SESSION['user']['user_type'] == 3){
+            require __DIR__ . '/../components/empresa-navbar.php';
+    }
+    ?>
     <div class="container p-sm-4 bg-white">
         <div class="container mt-5">
             <div class="pb-5">

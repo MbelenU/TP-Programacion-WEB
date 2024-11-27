@@ -10,7 +10,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-$endpoint = $_GET['endpoint'] ?? '';
+$endpoint = htmlspecialchars($_GET['endpoint'] ?? '');
 
 $administradorController = new AdministradorController();
 
@@ -53,7 +53,7 @@ elseif (isset($_GET['buscarAlumnos'])) {
     exit();
 }
 
-$endpoint = $_GET['endpoint'] ?? '';
+$endpoint = htmlspecialchars($_GET['endpoint'] ?? '');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "register") {
     $administradorController = new AdministradorController();
@@ -88,13 +88,23 @@ class AdministradorController
 
 
     public function crearEvento(){
-        $titulo = $_POST['titulo'] ? $_POST['titulo'] : NULL;
-        $fecha = $_POST['fecha'] ? $_POST['fecha'] : NULL ;
-        $hora = $_POST['hora'] ? $_POST['hora'] : NULL;
-        $tipo = $_POST['tipo'] ? $_POST['tipo'] : NULL;
-        $descripcion = $_POST['descripcion'] ? $_POST['descripcion'] : NULL;
-        $creditos = $_POST['creditos'] ? $_POST['creditos'] : NULL;
+        $titulo = htmlspecialchars($_POST['titulo'] ?? '');
+        $fecha = htmlspecialchars($_POST['fecha'] ?? '') ;
+        $hora = htmlspecialchars($_POST['hora'] ?? '');
+        $tipo = htmlspecialchars($_POST['tipo'] ?? '');
+        $descripcion = htmlspecialchars($_POST['descripcion'] ?? '');
+        $creditos = htmlspecialchars($_POST['creditos'] ?? '');
         
+        if (
+            empty($titulo) || empty($fecha) || empty($hora) || empty($tipo) || empty($descripcion) || empty($creditos)
+        ) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Faltan datos obligatorios.'
+            ]);
+            return;
+        }
 
         $evento = $this->administradorDAO->crearEvento($_SESSION['user']['user_id'], $titulo, $tipo ,$fecha, $hora, $descripcion, $creditos);
         if($evento){
@@ -149,11 +159,22 @@ class AdministradorController
 
     public function editarEvento($id){
         
-        $titulo = $_POST['titulo'] ? $_POST['titulo'] : NULL;
-        $fecha = $_POST['fecha'] ? $_POST['fecha'] : NULL ;
-        $tipo = $_POST['tipo'] ? $_POST['tipo'] : NULL;
-        $descripcion = $_POST['descripcion'] ? $_POST['descripcion'] : NULL;
-        $creditos = $_POST['creditos'] ? $_POST['creditos'] : NULL;
+        $titulo = htmlspecialchars($_POST['titulo'] ?? ''); 
+        $fecha = htmlspecialchars($_POST['fecha'] ?? '') ;
+        $tipo = htmlspecialchars($_POST['tipo'] ?? '');
+        $descripcion = htmlspecialchars($_POST['descripcion'] ?? '');
+        $creditos = htmlspecialchars($_POST['creditos'] ?? '');
+
+        if (
+            empty($titulo) || empty($fecha) || empty($tipo) || empty($descripcion) || empty($creditos)
+        ) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Faltan datos obligatorios.'
+            ]);
+            return;
+        }
 
         $check = $this->administradorDAO->editarEvento($id, $titulo, $fecha, $tipo, $descripcion, $creditos);
         if ($check) {
@@ -219,7 +240,7 @@ class AdministradorController
         $password = htmlspecialchars($input['password'] ?? '');
         $nombreUsuario = htmlspecialchars($input['nombreUsuario'] ?? '');
 
-        if (empty($email) || empty($password)  || empty($nombreUsuario)) {
+        if (empty($email) || empty($password)  || empty($nombreUsuario) || empty($typeUser)) {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
@@ -279,7 +300,7 @@ class AdministradorController
 
     public function handleRequest()
     {
-        $action = $_GET['action'] ?? null;
+        $action = htmlspecialchars($_GET['action'] ?? '');
         $input =  json_decode(file_get_contents('php://input'), true);
         switch ($action) {
             case 'getAllHabilidades':
@@ -295,7 +316,7 @@ class AdministradorController
                 $this->deleteHabilidad();
                 break;
             case 'darDeBaja':
-                $userId = $input['userId'] ?? null;
+                $userId = $input['userId'] ?? '';
                 if ($userId) {
                     $result = $this->darDeBaja($userId);
                     echo json_encode(['success' => $result]);
@@ -304,7 +325,7 @@ class AdministradorController
                 }
                 break;
             case 'habilitar':
-                $userId = $input['userId'] ?? null;
+                $userId = $input['userId'] ?? '';
                 if ($userId) {
                     $result = $this->habilitar($userId);
                     echo json_encode(['success' => $result]);
@@ -313,8 +334,8 @@ class AdministradorController
                 }
                 break;
             case 'cambiarContrasena':
-                $userId = $input['userId'] ?? null;
-                $newPassword = $input['newPassword'] ?? null;
+                $userId = $input['userId'] ?? '';
+                $newPassword = $input['newPassword'] ?? '';
                 if ($userId && $newPassword) {
                     $result = $this->cambiarClave($userId, $newPassword);
                     echo json_encode(['success' => $result]);
@@ -336,7 +357,7 @@ class AdministradorController
 
     private function searchHabilidad()
     {
-        $query = $_GET['query'] ?? '';
+        $query = htmlspecialchars($_GET['query'] ?? '');
         $administradorDAO = new AdministradorDAO();
         $habilidades = $administradorDAO->searchHabilidad($query);
         echo json_encode($habilidades);
@@ -371,7 +392,7 @@ class AdministradorController
 */
     private function deleteHabilidad()
     {
-        $id = $_GET['id'] ?? 0;
+        $id = htmlspecialchars($_GET['id'] ?? 0);
         $administradorDAO = new AdministradorDAO();
         $success = $administradorDAO->deleteHabilidad($id);
         echo json_encode(['success' => $success]);
@@ -381,10 +402,30 @@ class AdministradorController
         
         $input = json_decode(file_get_contents('php://input'), true);
     
-        $eventoId = $input['id'];
+        $eventoId = htmlspecialchars($input['id'] ?? '');
+
+        if(empty($eventoId)){
+            http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'No se encontró el evento.'
+                ]);
+                return; 
+        }
+
         $result = $this->administradorDAO->eliminarEvento($eventoId);
 
-        $nombreEvento = $input['nombreEvento'];
+        $nombreEvento = htmlspecialchars($input['nombreEvento'] ?? '');
+
+        if(empty($nombreEvento)){
+            http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'No se encontró el nombre del evento.'
+                ]);
+                return; 
+        }
+
         $alumnos = $this->administradorDAO->obtenerAlumnos();
         $descripcionNotificacion = "El evento '$nombreEvento' se ha eliminado.";
 
@@ -479,7 +520,7 @@ class AdministradorController
     }
 
     public function obtenerPlanesEstudio() {
-        $id = $_GET['id_carrera'];
+        $id = htmlspecialchars($_GET['id_carrera'] ?? '');
         $planesEstudio = $this->administradorDAO->obtenerPlanesEstudio($id);
         if($planesEstudio){
             http_response_code(200);
@@ -569,10 +610,18 @@ class AdministradorController
 
     public function reclutarAlumno() {
         $input = json_decode(file_get_contents('php://input'), true);               
-        $usuarioId = $input['usuario_id']; 
-        $publicacionId = $input['publicacion_id']; 
+        $usuarioId = htmlspecialchars($input['usuario_id'] ?? ''); 
+        $publicacionId = htmlspecialchars($input['publicacion_id']  ?? ''); 
         $estadoId = 3;
-    
+        
+        if(empty($usuarioId) || empty($publicacionId)){
+        http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error: No se encontraron planes estudio para esta carrera',
+            ]);
+        }
+
         $result = $this->administradorDAO->reclutarAlumno($usuarioId, $publicacionId, $estadoId);
     
         if ($result['success']) {
@@ -588,7 +637,15 @@ class AdministradorController
             }
     
             $descripcionNotificacion = "Fuiste reclutado para el puesto '{$publicacion->getTitulo()}'."; 
-            $idUsuario = $input['usuario_id']; 
+            $idUsuario = htmlspecialchars($input['usuario_id'] ?? ''); 
+            if (empty($idUsuario)) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'No se encontró el id de usuario',
+                ]);
+                return;
+            }
             $this->administradorDAO->agregarNotificacion($idUsuario, $descripcionNotificacion);
     
             http_response_code(200); 
@@ -683,13 +740,13 @@ class AdministradorController
         $idUsuario = $_SESSION['user']['user_id'];
         $input = json_decode(file_get_contents('php://input'), true);
 
-        $titulo = htmlspecialchars($input['titulo'] ?? null);
-        $modalidad = htmlspecialchars($input['modalidad'] ?? null);
-        $ubicacion = htmlspecialchars($input['ubicacion'] ?? null);
-        $jornada = htmlspecialchars($input['jornada'] ?? null);
-        $descripcion = htmlspecialchars($input['descripcion'] ?? null);
-        $habilidad = htmlspecialchars($input['habilidad'] ?? null);
-        $materia = htmlspecialchars($input['materia'] ?? null);
+        $titulo = htmlspecialchars($input['titulo'] ?? '');
+        $modalidad = htmlspecialchars($input['modalidad'] ?? '');
+        $ubicacion = htmlspecialchars($input['ubicacion'] ?? '');
+        $jornada = htmlspecialchars($input['jornada'] ?? '');
+        $descripcion = htmlspecialchars($input['descripcion'] ?? '');
+        $habilidad = htmlspecialchars($input['habilidad'] ?? '');
+        $materia = htmlspecialchars($input['materia'] ?? '');
 
         if (empty($idUsuario) || empty($titulo) || empty($modalidad) || empty($ubicacion) || empty($jornada) || empty($descripcion)) {
             http_response_code(400);

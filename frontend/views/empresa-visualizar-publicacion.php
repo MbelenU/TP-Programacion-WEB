@@ -6,11 +6,11 @@ if (!isset($_SESSION['user'])) {
 	header("Location: ./inicio.php");
 	exit();
 }
-$allowedRoles = ['3'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
-	echo "Acceso denegado. No tienes permisos para acceder a esta página.";
-	exit();
-} elseif (!isset($_GET['id'])) {
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Visualizar Publicacion', $_SESSION['user']['user_id'])){
+    echo "Acceso denegado. No tienes permisos para acceder a esta página.";
+    exit();
+}  elseif (!isset($_GET['id'])) {
 	echo "Publicacion no encontrada";
 	exit();
 }
@@ -29,7 +29,12 @@ $publicacion = $publicacion['body'];
 </head>
 
 <body class="bg-inicio">
-	<?php require __DIR__ . '/../components/empresa-navbar.php' ?>
+	<?php if ($_SESSION['user']['user_type'] == 1){
+            require __DIR__ . '/../components/admin-navbar.php';
+    } elseif ($_SESSION['user']['user_type'] == 3){
+            require __DIR__ . '/../components/empresa-navbar.php';
+    }
+    ?>
 	<div class="container p-sm-4 bg-white">
 		<div class="container mt-5">
 			<div class="pb-5">
@@ -42,9 +47,11 @@ $publicacion = $publicacion['body'];
 					</a>
 					<p><?php echo $publicacion->getDescripcion() ?></p>
 				</div>
+				<?php if (Permisos::tienePermiso('Editar Empleo', $_SESSION['user']['user_id'])){ ?>
 				<div>
 					<a href="<?php echo BASE_URL ?>views/empresa-editar-empleo.php?id=<?php echo $_GET['id']; ?>" class="btn btn-success">Editar publicación</a>
 				</div>
+				<?php } ?>
 			</div>
 			<ul class="list-group">
 			<li class="list-group-item disabled" aria-disabled="true">Postulaciones de Alumnos</li>
@@ -90,9 +97,11 @@ $publicacion = $publicacion['body'];
 					?>
 				</li>
 			</ul>
+			<?php if (Permisos::tienePermiso('Generar reporte Postulaciones', $_SESSION['user']['user_id'])){ ?>
 			<div class="puesto-header mt-3">
 				<a href="#" class="btn btn-success">Generar reporte</a>
 			</div>
+			<?php } ?>
 		</div>
 	</div>
 	<script src="../scripts/empresa/cambiar-estado-postulacion.js"></script>
