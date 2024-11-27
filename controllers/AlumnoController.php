@@ -265,9 +265,7 @@ class AlumnoController {
             ];
         }
     }
-    public function listarPostulaciones(){
-        session_start();
-        $idUsuario = $_SESSION['user']['user_id'];
+    public function listarPostulaciones($idUsuario){
         $postulaciones = $this->alumnoDao->getPostulaciones($idUsuario);
         if($postulaciones){
             

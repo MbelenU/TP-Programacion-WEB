@@ -2,18 +2,18 @@
 require_once '../../controllers/AlumnoController.php';
 
 $alumnoController = new AlumnoController();
-$response = $alumnoController->listarPostulaciones();
+session_start();
+$response = $alumnoController->listarPostulaciones($_SESSION['user']['user_id']);
 if ($response['success']) {
     $postulaciones = $response['body'];
 } else {
     $postulaciones = null;
 }
-session_start();
+
 if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
-
 require_once __DIR__ . '/../includes/permisos.php';
 if (!Permisos::tienePermiso('Visualizar Postulaciones', $_SESSION['user']['user_id'])){
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
