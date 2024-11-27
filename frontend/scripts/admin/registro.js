@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
             apellido: document.getElementById('apellido').value,
         };
 
-        // Validación de datos
         if (!alumnoData.email || !alumnoData.password || !alumnoData.nombre || !alumnoData.apellido || !alumnoData.nombreUsuario) {
             mostrarMensaje({ success: false, message: "Por favor, complete todos los campos." });
             return;
@@ -42,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(alumnoData);
         try {
             const data = await registrarse(alumnoData);
-            mostrarMensaje(data); // Mostrar el mensaje según la respuesta
+            mostrarMensaje(data);
         } catch (error) {
             console.error(error);
             mostrarMensaje({ success: false, message: 'Error en el servidor: ' + error.message });
@@ -75,10 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Función para manejar el registro
     async function registrarse(userData) {
-        try { // Asegúrate de que el BASEURL sea correcto
-            const response = await fetch(`/controllers/AdministradorController.php?endpoint=register`, {
+        try {
+            const response = await fetch(`/TP-Programacion-WEB/controllers/AdministradorController.php?endpoint=register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -52,9 +52,6 @@ elseif (isset($_GET['buscarAlumnos'])) {
     $resultados = $administradorController->reclutarAlumno();
     exit();
 }
-
-$endpoint = $_GET['endpoint'] ?? '';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "register") {
     $administradorController = new AdministradorController();
     $resultado = $administradorController->register();
