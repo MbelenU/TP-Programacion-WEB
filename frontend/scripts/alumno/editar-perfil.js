@@ -1,204 +1,187 @@
-// planes de estudio por carrera
-const planesEstudio = {
-    "Desarrollo de Software": ["2016", "2019"],
-    "Turismo": ["2016", "2019"],
-    "Comercio Internacional": ["2016", "2019"],
-    "Gestión Aeroportuaria": ["2016", "2019"],
-    "Logistica": ["2016", "2019"],
-    "Higiene y Seguridad": ["2016", "2019"]
-};
+document.addEventListener("DOMContentLoaded", function () {
+    const alumnoId = document.getElementById("alumnoId").getAttribute("data-id");  // Obtener el idAlumno de HTML
 
-// materias por carrera y plan de estudios
-const materiasPorCarreraYPlan = {
-    "Desarrollo de Software": {
-        "2016": ["Programación I", "Base de Datos", "Redes", "Matemáticas", "Inglés"],
-        "2019": ["Programación II", "Estructuras de Datos", "Sistemas Operativos", "Algoritmos", "Inglés Técnico"]
-    },
-    "Turismo": {
-        "2016": ["Gestión Hotelera", "Agencias de Viajes", "Turismo Sostenible", "Inglés", "Geografía"],
-        "2019": ["Gestión de Destinos", "Marketing Turístico", "Inglés Técnico", "Ecoturismo", "Planificación Turística"]
-    },
-    "Comercio Internacional": {
-        "2016": ["Logística Internacional", "Comercio Exterior", "Finanzas Internacionales", "Inglés", "Derecho Internacional"],
-        "2019": ["Negocios Internacionales", "Marketing Internacional", "Inglés Técnico", "Gestión de Proyectos", "Finanzas Globales"]
-    },
-    "Gestión Aeroportuaria": {
-        "2016": ["Operaciones Aeroportuarias", "Seguridad Aeronáutica", "Mantenimiento de Aeronaves", "Inglés", "Logística Aérea"],
-        "2019": ["Gestión de Aeropuertos", "Administración de Aerolíneas", "Inglés Técnico", "Marketing Aeroportuario", "Seguridad Aérea"]
-    },
-    "Logistica": {
-        "2016": ["Gestión de la Cadena de Suministro", "Transporte y Distribución", "Inglés", "Costos Logísticos", "Almacenamiento"],
-        "2019": ["Gestión de Operaciones", "Estrategias Logísticas", "Inglés Técnico", "Análisis de Datos Logísticos", "Gestión de Proyectos Logísticos"]
-    },
-    "Higiene y Seguridad": {
-        "2016": ["Seguridad Industrial", "Gestión de Riesgos", "Inglés", "Normativas de Seguridad", "Ergonomía"],
-        "2019": ["Prevención de Riesgos", "Gestión Ambiental", "Inglés Técnico", "Auditoría de Seguridad", "Planificación de Emergencias"]
-    }
-};
+    const agregarBtn = document.getElementById("agregarHabilidad");
+    const selectHabilidad = document.getElementById("habilidad");
+    const listaHabilidades = document.getElementById("listaHabilidades");
+    const habilidadesSeleccionadas = document.getElementById("habilidadesSeleccionadas");
 
+    // Agregar habilidad seleccionada
+    agregarBtn.addEventListener("click", () => {
+        const habilidadId = selectHabilidad.value;
+        const habilidadNombre = selectHabilidad.options[selectHabilidad.selectedIndex].text;
 
-const carreraSelect = document.getElementById('carrera');
-const planEstudiosSelect = document.getElementById('planEstudios');
-const planEstudiosLabel = document.getElementById('planEstudiosLabel');
-const materiaSelect = document.getElementById('materia');
-const materiaLabel = document.getElementById('materiaLabel');
-const agregarMateriaBtn = document.getElementById('agregarMateria');
-const materiasAprobadasList = document.getElementById('materiasAprobadasList');
-const habilidadSelect = document.getElementById('habilidad');
-const habilidaderror = document.getElementById('habilidaderror');
-const carreraerror = document.getElementById('carreraerror');
-const planerror = document.getElementById('planerror');
-const listaHabilidades = document.getElementById('listaHabilidades');
-
-
-function handleCarreraChange() {
-    const selectedCarrera = carreraSelect.value;
-    planEstudiosSelect.innerHTML = '<option value="" disabled selected>Seleccione un plan de estudios</option>';
-    materiaSelect.classList.add('d-none');
-    agregarMateriaBtn.classList.add('d-none');
-
-    if (selectedCarrera) {
-
-        planEstudiosSelect.classList.remove('d-none');
-        planEstudiosLabel.classList.remove('d-none');
-
-
-        planesEstudio[selectedCarrera].forEach(function (plan) {
-            const option = document.createElement('option');
-            option.value = plan;
-            option.textContent = plan;
-            planEstudiosSelect.appendChild(option);
-        });
-    } else {
-        planEstudiosSelect.classList.add('d-none');
-        planEstudiosLabel.classList.add('d-none');
-    }
-}
-
-
-function handlePlanEstudiosChange() {
-    const selectedPlan = planEstudiosSelect.value;
-    materiaSelect.innerHTML = '<option value="" disabled selected>Seleccione una materia</option>';
-    agregarMateriaBtn.classList.add('d-none');
-
-    if (selectedPlan) {
-
-        const selectedCarrera = carreraSelect.value;
-
-
-        materiaSelect.classList.remove('d-none');
-        materiaLabel.classList.remove('d-none');
-
-
-        if (selectedCarrera && materiasPorCarreraYPlan[selectedCarrera][selectedPlan]) {
-            materiasPorCarreraYPlan[selectedCarrera][selectedPlan].forEach(function (materia) {
-                const option = document.createElement('option');
-                option.value = materia;
-                option.textContent = materia;
-                materiaSelect.appendChild(option);
-            });
-
-            agregarMateriaBtn.classList.remove('d-none');
+        if (!habilidadId || habilidadId === "") {
+            alert("Por favor, selecciona una habilidad válida.");
+            return;
         }
-    } else {
-        materiaSelect.classList.add('d-none');
-        materiaLabel.classList.add('d-none');
-    }
-}
 
-// agregar una materia aprobada
-function handleAgregarMateria() {
-    const selectedMateria = materiaSelect.value;
-    let materias = materiasAprobadasList.querySelectorAll('li');
-    materias = Array.from(materias).map(materia => materia.textContent);
-    if (!selectedMateria || materias.includes(selectedMateria)) {
-        return;
-    }
+        // Verificar si ya existe
+        const existe = Array.from(listaHabilidades.querySelectorAll(".habilidad-item"))
+            .some(item => item.dataset.id === habilidadId);
 
+        if (existe) {
+            alert("La habilidad ya está en la lista.");
+            return;
+        }
 
-    const textMateria = document.createElement('li');
-    textMateria.textContent = selectedMateria;
-    materiasAprobadasList.appendChild(textMateria);
+        // Crear un nuevo elemento de habilidad
+        const nuevaHabilidad = document.createElement("div");
+        nuevaHabilidad.className = "habilidad-item d-grid align-items-center justify-content-start bg-light p-2 rounded mb-2";
+        nuevaHabilidad.dataset.id = habilidadId;
 
+        // Crear las estrellas dinámicamente
+        let estrellasHTML = '';
+        for (let i = 1; i <= 5; i++) {
+            estrellasHTML += `
+                <i class="star bi ${i <= 0 ? 'bi-star-fill' : 'bi-star'}" 
+                   data-value="${i}"
+                   data-id="${habilidadId}">
+                </i>`;
+        }
 
-    materiaSelect.selectedIndex = 0;
-}
+        nuevaHabilidad.innerHTML = `
+            <span class="habilidad-nombre fw-bold text-center">${habilidadNombre}</span>
+            <div class="stars" data-id="${habilidadId}">
+            </div>
+            <button type="button" class="btn btn-danger btn-sm eliminarHabilidad">Eliminar</button>
+        `;
 
-// manejar habilidades
-function handleAddHabilidad() {
-    const habilidad = habilidadSelect.value;
-
-    if (!habilidad) {
-        habilidaderror.innerHTML = "Debe seleccionar alguna habilidad del listado.";
-        return;
-    }
-
-    habilidaderror.innerHTML = "";
-
-    // verificar si la habilidad ya se agrego
-    const habilidadesAgregadas = Array.from(listaHabilidades.children).map(div => div.querySelector('label').textContent);
-    if (habilidadesAgregadas.includes(habilidad)) { 
-        habilidaderror.innerHTML = "Esta habilidad ya ha sido agregada.";
-        return;
-    }
-
-    const divHabilidad = document.createElement('div');
-    divHabilidad.classList.add('my-2','p-2', 'border','rounded', 'd-inline-block','me-2', 'shadow' );
-
-
-    const label = document.createElement('label');
-    label.classList.add('d-flex','justify-content-center');
-    label.textContent = habilidad;
-    divHabilidad.appendChild(label);
-
-
-    const starsDiv = document.createElement('div');
-    starsDiv.classList.add('stars');
-
-
-    for (let i = 1; i <= 5; i++) {
-        const star = document.createElement('span');
-        star.classList.add('star');
-        star.setAttribute('data-skill', habilidad.toLowerCase());
-        star.setAttribute('data-value', i);
-        star.innerHTML = '&#9733;';
-
-
-        star.addEventListener('click', function () {
-            const rating = star.getAttribute('data-value');
-            starsDiv.querySelectorAll('.star').forEach(s => {
-                s.style.color = s.getAttribute('data-value') <= rating ? 'gold' : 'gray';
-            });
+        // Añadir evento al botón "Eliminar"
+        nuevaHabilidad.querySelector(".eliminarHabilidad").addEventListener("click", function () {
+            eliminarHabilidad(habilidadId, nuevaHabilidad, alumnoId);  // Pasar el alumnoId también
         });
 
-        starsDiv.appendChild(star);
-    }
+        // Agregar al DOM
+        listaHabilidades.appendChild(nuevaHabilidad);
 
-
-    const btnEliminar = document.createElement('button');
-    btnEliminar.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-2');
-
-    const icon = document.createElement('i');
-    icon.classList.add('bi', 'bi-trash');
-
-    btnEliminar.appendChild(icon);
-    icon.textContent = ' Eliminar';
-
-    btnEliminar.addEventListener('click', function () {
-        divHabilidad.remove();
+        // Actualizar el campo hidden
+        actualizarHabilidadesSeleccionadas();
     });
 
+    // Delegar evento "Eliminar" para elementos ya renderizados
+    listaHabilidades.addEventListener("click", (event) => {
+        if (event.target.classList.contains("eliminarHabilidad")) {
+            const elementoHabilidad = event.target.closest(".habilidad-item");
+            const habilidadId = elementoHabilidad.dataset.id;
 
-    divHabilidad.appendChild(starsDiv);
-    divHabilidad.appendChild(btnEliminar);
-    listaHabilidades.appendChild(divHabilidad);
+            // Llamar a la función para eliminar la habilidad en el servidor
+            eliminarHabilidad(habilidadId, alumnoId);
 
+            // Remover del DOM después de eliminar
+            elementoHabilidad.remove();
 
-    habilidadSelect.selectedIndex = 0;
+            // Actualizar las habilidades seleccionadas
+            actualizarHabilidadesSeleccionadas();
+        }
+    });
+
+    // Función para agregar habilidad
+    function agregarHabilidad(habilidadId, alumnoId) {
+        // Obtener el nivel de habilidad (número de estrellas llenas)
+        const habilidadItem = document.querySelector(`.habilidad-item[data-id="${habilidadId}"]`);
+        const nivelHabilidad = habilidadItem.querySelectorAll('.bi-star-fill').length; // Contar las estrellas llenas
+
+        // Enviar AJAX para agregar la habilidad con el nivel de habilidad
+        fetch(`http://localhost/TP-Programacion-WEB/controllers/AlumnoController.php?agregarHabilidad=`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                idAlumno: alumnoId,
+                idHabilidad: habilidadId
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert("Error al agregar la habilidad. Intente nuevamente.");
+                }
+            })
+            .catch(() => alert("Error de conexión con el servidor."));
+    }
+
+    // Función para eliminar habilidad
+    function agregarHabilidad(habilidadId, alumnoId) {
+        // Obtener el nivel de habilidad (número de estrellas llenas)
+        const habilidadItem = document.querySelector(`.habilidad-item[data-id="${habilidadId}"]`);
+        const nivelHabilidad = habilidadItem.querySelectorAll('.bi-star-fill').length; // Contar las estrellas llenas
+    
+        // Enviar AJAX para agregar la habilidad con el nivel de habilidad
+        fetch(`http://localhost/TP-Programacion-WEB/controllers/AlumnoController.php?agregarHabilidad=`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                idAlumno: alumnoId,
+                idHabilidad: habilidadId,
+                nivelHabilidad: nivelHabilidad  // Enviar el nivel de habilidad (incluido 0)
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                alert("Error al agregar la habilidad. Intente nuevamente.");
+            }
+        })
+        .catch((error) => {
+            // Solo mostrar el mensaje de error si el nivel de habilidad no es 0
+            if (nivelHabilidad !== 0) {
+                alert("Error de conexión con el servidor.");
+            }
+            // Si el nivel es 0, no mostrar el error
+        });
+    }
+
+    // Función para calificar habilidad (marcar estrellas)
+    function calificarHabilidad(star, habilidadId) {
+        const habilidadItem = document.querySelector(`.habilidad-item[data-id="${habilidadId}"]`);
+        const estrellas = habilidadItem.querySelectorAll('.star');
+        const nivel = star.dataset.value;
+
+        // Cambiar el estado de las estrellas
+        estrellas.forEach(est => {
+            if (parseInt(est.dataset.value) <= nivel) {
+                est.classList.add('bi-star-fill');
+                est.classList.remove('bi-star');
+            } else {
+                est.classList.add('bi-star');
+                est.classList.remove('bi-star-fill');
+            }
+        });
+
+        // Actualizar el valor de habilidades seleccionadas
+        actualizarHabilidadesSeleccionadas();
+    }
+
+    // Actualizar el valor del campo hidden con los IDs de las habilidades y sus niveles
+    function actualizarHabilidadesSeleccionadas() {
+        const habilidadesSeleccionadasData = [];
+        document.querySelectorAll(".habilidad-item").forEach(item => {
+            const habilidadId = item.dataset.id;
+            const nivelGrado = item.querySelectorAll('.bi-star-fill').length; // Contar las estrellas llenas
+            habilidadesSeleccionadasData.push({
+                id_habilidad: habilidadId,
+                nivel_grado: nivelGrado
+            });
+        });
+
+    }
+});
+
+// Función para eliminar habilidad
+function eliminarHabilidad(habilidadId, alumnoId) {
+    fetch(`http://localhost/TP-Programacion-WEB/controllers/AlumnoController.php?eliminarHabilidad=`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            idAlumno: alumnoId,
+            idHabilidad: habilidadId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            alert("Error al eliminar la habilidad. Intente nuevamente.");
+        }
+    })
+    .catch(() => alert("Error de conexión con el servidor."));
 }
-
-// eventos
-carreraSelect.addEventListener('change', handleCarreraChange);
-planEstudiosSelect.addEventListener('change', handlePlanEstudiosChange);
-agregarMateriaBtn.addEventListener('click', handleAgregarMateria);
-document.getElementById('agregarHabilidad').addEventListener('click', handleAddHabilidad);

@@ -28,6 +28,12 @@ class Habilidad {
     public function setNivelHabilidad(string $nivelHabilidad): void {
         $this->nivelHabilidad = $nivelHabilidad;
     }
+    public function toArray(): array {
+        return [
+            'id' => $this->id,
+            'nombre' => $this->nombreHabilidad
+        ];
+    }
 }
 
 ?>

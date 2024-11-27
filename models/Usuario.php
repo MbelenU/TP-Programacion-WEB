@@ -1,46 +1,115 @@
 <?php
 
-abstract class Usuario {
+class Usuario
+{
     private int $id;
     private string $nombre;
     private string $email;
     private string $contraseña;
     private string $rol;
-
-    public function getId(): int {
+    private ?string $fotoPerfil;
+    private string $ubicacion;
+    private string $telefono;
+    private string $estado;
+    public function getId(): int
+    {
         return $this->id;
     }
 
-    public function setId(int $id): void {
+    public function setId(int $id): void
+    {
         $this->id = $id;
     }
 
-    public function getNombre(): string {
+    public function getContraseña(): string
+    {
+        return $this->contraseña;
+    }
+
+    public function setContraseña(string $contraseña): void
+    {
+        $this->contraseña = $contraseña;
+    }
+
+    public function getTelefono(): string
+    {
+        return $this->telefono;
+    }
+
+    public function setTelefono(string $telefono): void
+    {
+        $this->telefono = $telefono;
+    }
+
+    public function getUbicacion(): string
+    {
+        return $this->ubicacion;
+    }
+
+    public function setUbicacion(string $ubicacion): void
+    {
+        $this->ubicacion = $ubicacion;
+    }
+
+    public function getNombre(): string
+    {
         return $this->nombre;
     }
 
-    public function setNombre(string $nombre): void {
+    public function setNombre(string $nombre): void
+    {
         $this->nombre = $nombre;
     }
 
-    public function getEmail(): string {
+    public function getEmail(): string
+    {
         return $this->email;
     }
 
-    public function setEmail(string $email): void {
+    public function setEmail(string $email): void
+    {
         $this->email = $email;
     }
 
-    public function getRol(): string {
+    public function getRol(): string
+    {
         return $this->rol;
     }
 
-    public function setRol(string $rol): void {
+    public function setRol(string $rol): void
+    {
         $this->rol = $rol;
     }
 
-    public function __toString(): string {
+    public function getFotoPerfil(): ?string
+    {
+        return $this->fotoPerfil;
+    }
+
+    public function setFotoPerfil(?string $fotoPerfil): void
+    {
+        $this->fotoPerfil = $fotoPerfil;
+    }
+    public function getEstado(): string
+    {
+        return $this->estado;
+    }
+
+    public function setEstado(string $estado): void
+    {
+        $this->estado = $estado;
+    }
+    public function __toString(): string
+    {
         return "Nombre: $this->nombre";
     }
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id, 
+            'nombre' => $this->nombre,
+            'email' => $this->email, 
+            'estado' => $this->estado,
+        ];
+    }
 }
-?>

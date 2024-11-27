@@ -2,10 +2,14 @@
 class Postulacion {
     private int $id;
     private DateTime $fechaPostulacion;
+    private string $puestoOfrecido;
+    private string $descripcion;
+    private string $ubicacion;
+    private array  $habilidades;
+    private string $modalidad;
+    private string $jornada;
     private EstadoPostulacion $estadoPostulacion;
-    private Alumno $postulante;
-    private PublicacionEmpleo $publicacionEmpleo;
-
+    private Usuario $postulante;
     public function getId(): int {
         return $this->id;
     }
@@ -14,6 +18,13 @@ class Postulacion {
         $this->id = $id;
     }
 
+    public function getPuestoOfrecido(): string {
+        return $this->puestoOfrecido;
+    }
+
+    public function setPuestoOfrecido(string $puestoOfrecido): void {
+        $this->puestoOfrecido = $puestoOfrecido;
+    }
     public function getFechaPostulacion(): DateTime {
         return $this->fechaPostulacion;
     }
@@ -22,29 +33,62 @@ class Postulacion {
         $this->fechaPostulacion = $fechaPostulacion;
     }
 
-    public function getEstadoPostulacion(): EstadoPostulacion {
+    public function getEstadoPostulacion(): EstadoPostulacion  {
         return $this->estadoPostulacion;
     }
 
-    public function setEstadoPostulacion(EstadoPostulacion $estadoPostulacion): void {
+    public function setEstadoPostulacion(EstadoPostulacion  $estadoPostulacion): void {
         $this->estadoPostulacion = $estadoPostulacion;
     }
 
-    public function getPostulante(): Alumno {
+    public function getPostulante(): Usuario {
         return $this->postulante;
     }
 
-    public function setPostulante(Alumno $postulante): void {
+    public function setPostulante(Usuario $postulante): void {
         $this->postulante = $postulante;
     }
 
-    public function getPublicacionEmpleo(): PublicacionEmpleo {
-        return $this->publicacionEmpleo;
+    public function getDescripcion(): string {
+        return $this->descripcion;
     }
 
-    public function setPublicacionEmpleo(PublicacionEmpleo $publicacionEmpleo): void {
-        $this->publicacionEmpleo = $publicacionEmpleo;
+    public function setDescripcion(string $descripcion): void {
+        $this->descripcion = $descripcion;
+    }
+
+    public function getUbicacion(): string {
+        return $this->ubicacion;
+    }
+
+    public function setUbicacion(string $ubicacion): void {
+        $this->ubicacion = $ubicacion;
+    }
+
+    public function getHabilidades(): array {
+        return $this->habilidades;
+    }
+    
+    public function setHabilidades(array $habilidades): void {
+        $this->habilidades = $habilidades;
+    }    
+
+    public function getModalidad(): string {
+        return $this->modalidad;
+    }
+
+    public function setModalidad(string $modalidad): void {
+        $this->modalidad = $modalidad;
+    }
+
+    public function getJornada(): string {
+        return $this->jornada;
+    }
+
+    public function setJornada(string $jornada): void {
+        $this->jornada = $jornada;
     }
 }
+
 
 ?>

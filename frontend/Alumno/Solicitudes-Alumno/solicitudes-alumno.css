@@ -1,66 +1,69 @@
+/* COMIENZA SOLICITUDES ALUMNO */
+
+
 .container-solic {
-    background-color: #E1E7D0;
-    border-radius: 15px;
-    padding: 20px;
-    text-align: center;
-    margin: 20px auto;
-    width: flex;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    background-color: #E1E7D0; /* Color de fondo */
+    border-radius: 15px; /* Bordes circulares */
+    padding: 20px; /* Espaciado interno */
+    text-align: center; /* Centra el texto dentro del div */
+    margin: 20px auto; /* Centra el div en la página */
+    width: flex; /* Ajusta el ancho al contenido */
+    display: flex; /* Usar flexbox */
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+    justify-content: space-around; /* Espacia los elementos */
 }
 
 .solic-item {
-    width: 100%;
-    margin-bottom: 20px;
+    width: 100%; /* Asegúrate de que ocupe el 100% del ancho del contenedor */
+    margin-bottom: 20px; /* Espacio entre elementos */
 }
 
 .solic-details {
     padding: 10px;
-    background-color: #eef1e5;
-    border-radius: 10px;
-    margin-top: 10px;
-    text-align: left;
-    width: 100%;
-    box-sizing: border-box;
+    background-color: #eef1e5; /* Color de fondo para detalles */
+    border-radius: 10px; /* Bordes redondeados */
+    margin-top: 10px; /* Espacio entre el título y los detalles */
+    text-align: left; /* Alinear el texto a la izquierda */
+    width: 100%; /* Asegúrate de que el ancho sea del 100% */
+    box-sizing: border-box; /* Incluir padding y border en el ancho total */
 }
 
-.titulo-solic {
+.titulo-solic{
     font-size: 20px;
 }
 
 ul {
-    padding-left: 20px;
-    list-style-type: disc;
+    padding-left: 20px; /* Añadir espaciado a la izquierda para las listas */
+    list-style-type: disc; /* Puedes cambiar esto a "circle" o "square" si lo deseas */
 }
 
 .mt-4 {
-    margin-top: 1.5rem;
+    margin-top: 1.5rem; /* Espacio adicional entre secciones */
 }
 
 .btn {
-    width: 100%;
-    border: 2px solid #E1E7D0;
-    border-radius: 5px;
-    background-color: rgb(233, 67, 67);
-    color: black;
-    transition: background-color 0.3s, color 0.3s;
+    width: 100%; /* Hacer que el botón ocupe el ancho completo del contenedor */
+    border: 2px solid #E1E7D0; /* Bordes de color azul (puedes cambiar el color) */
+    border-radius: 5px; /* Bordes redondeados */
+    background-color: rgb(233, 67, 67); /* Color de fondo blanco */
+    color: black; /* Color del texto */
+    transition: background-color 0.3s, color 0.3s; /* Transiciones para hover */
 }
 
 .btn:hover {
-    background-color: #e47f63;
+    background-color: #e47f63; /* Cambia el fondo al hacer hover */
 }
 
-.estado-empleo {
+.estado-empleo{
     background-color: white;
-    text-align: center;
-    border-radius: 15px;
+    text-align: center; /* Centra el texto dentro del div */
+    border-radius: 15px; /* Bordes circulares */
     display: inline-block;
     padding: 10px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .bi-geo-alt {
-    display: block;
-    margin-bottom: 10px;
+    display: block; /* Cambia el ícono para que ocupe toda la línea */
+    margin-bottom: 10px; /* Espacio opcional entre el ícono y el siguiente div */
 }

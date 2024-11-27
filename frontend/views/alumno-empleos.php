@@ -1,3 +1,26 @@
+<?php
+session_start();
+require_once '../../controllers/AlumnoController.php';
+$alumnoController = new AlumnoController();
+
+if (!isset($_SESSION['user'])) {
+    header("Location: ./inicio.php");
+    exit();
+}
+
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Visualizar Empleos', $_SESSION['user']['user_id'])){
+    echo "Acceso denegado. No tienes permisos para acceder a esta página.";
+    exit();
+} 
+
+
+$response = $alumnoController->listarEmpleos();
+$empleos = $response['body'];
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -9,160 +32,84 @@
 
 <body class="bg-inicio">
     <?php require __DIR__ . '/../components/alumno-navbar.php' ?>
+
     <div class="container p-sm-4 bg-white">
-        <div class="row mb-3">
-            <h1>Empleos</h1>
-            <form class="filtro d-flex" role="search">
-                <input class="form-control me-2" type="search" id="form-control"
-                    placeholder="Rubro | Nombre del empleo | Disponibilidad horaria | Ubicación | Modalidad"
-                    aria-label="Search">
-                <button class="botonFiltro btn btn-light border border-success-subtle" type="submit">Filtrar</button>
+        <div class="container mt-5">
+            <div class="pb-5">
+                <h1>Empleos</h1>
+            </div>
+            <form class="filtro d-flex mb-5" role="search">
+                <input class="form-control me-2" type="search" id="buscarInput" placeholder="Buscar">
+                <button class="botonFiltro btn btn-light border border-success-subtle" id="buscarBoton">Buscar</button>
             </form>
-        </div>
-        <div class="container-empleo bg-navbar border border-success-subtle">
-            <div class="empleo-item mb-6">
-                <div class="row px-2">
-                    <button class="toggleButton btn border-0 d-flex justify-content-between align-items-center w-100">
-                        <div class="titulo-empleo">Programador Frontend</div>
-                        <i class="bi bi-geo-alt">San Isidro, Zona Norte BS AS</i>
-                        <i class="arrowIcon fas fa-chevron-left "></i>
-                    </button>
-                </div>
-                <div class="empleo-details d-none">
-                    <div>
-                        <strong>Descripción:</strong>
-                        <p>Buscamos un programador frontend para sumarse a nuestro equipo.</p>
-                    </div>
-                    <div class="mt-4">
-                        <strong>Materias Necesarias:</strong>
-                        <ul>
-                            <li>Programación Web</li>
-                        </ul>
-                    </div>
-                    <div class="mt-4">
-                        <strong>Habilidades Necesarias:</strong>
-                        <ul>
-                            <li>HTML</li>
-                            <li>CSS</li>
-                            <li>Javascript</li>
-                        </ul>
-                    </div>
-                    <div class="mt-4">
-                        <strong>Disponibilidad Horaria:</strong>
-                        <ul>
-                            <li>Part-time</li>
-                        </ul>
-                    </div>
-                    <div class="mt-4">
-                        <strong>Modalidad:</strong>
-                        <ul>
-                            <li>Presencial en nuestras oficinas de San Isidro.</li>
-                        </ul>
-                    </div>
-                    <div class="vstack col-md-5 mx-auto">
-                        <button class="btn btn-light mt-3 border border-success-subtle">Enviar Solicitud</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container-empleo bg-navbar border border-success-subtle">
-            <div class="empleo-item mb-6">
-                <div class="row px-2">
-                    <button class="toggleButton btn border-0 d-flex justify-content-between align-items-center w-100">
-                        <div class="titulo-empleo">Programador de Base de Datos</div>
-                        <i class="bi bi-geo-alt">Argentina</i>
-                        <i class="arrowIcon fas fa-chevron-left "></i>
-                    </button>
-                </div>
-                <div class="empleo-details d-none">
-                    <div>
-                        <strong>Descripción:</strong>
-                        <p>Buscamos un nuevo miembro para nuestro equipo, con conocimientos en bases de datos
-                            relacionales</p>
-                    </div>
-                    <div class="mt-4">
-                        <strong>Materias Necesarias:</strong>
-                        <ul>
-                            <li>Bases de datos I</li>
-                            <li>Bases de datos II</li>
-                        </ul>
-                    </div>
-                    <div class="mt-4">
-                        <strong>Habilidades Necesarias:</strong>
-                        <ul>
-                            <li>SQL</li>
-                        </ul>
-                    </div>
-                    <div class="mt-4">
-                        <strong>Disponibilidad Horaria:</strong>
-                        <ul>
-                            <li>Part-time</li>
-                        </ul>
-                    </div>
-                    <div class="mt-4">
-                        <strong>Modalidad:</strong>
-                        <ul>
-                            <li>Full Remoto</li>
-                        </ul>
-                    </div>
-                    <div class="vstack col-md-5 mx-auto">
-                        <button class="btn btn-light mt-3 border border-success-subtle">Enviar Solicitud</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container-empleo bg-navbar border border-success-subtle">
-            <div class="empleo-item mb-6">
-                <div class="row px-2">
-                    <button class="toggleButton btn border-0 d-flex justify-content-between align-items-center w-100">
-                        <div class="titulo-empleo">Desarrollador Fullstack</div>
-                        <i class="bi bi-geo-alt">Parque Patricios, CABA</i>
-                        <i class="arrowIcon fas fa-chevron-left "></i>
-                    </button>
-                </div>
-                <div class="empleo-details d-none">
-                    <div>
-                        <strong>Descripción:</strong>
-                        <p>Para uno de nuestros clientes estamos buscando un/a desarrollador/a Jr Fullstack, con
-                            experiencia y conocimientos en Javascript, NodeJS o .Net para desarrollar software Backend y
-                            Frontend</p>
-                    </div>
-                    <div class="mt-4">
-                        <strong>Materias Necesarias:</strong>
-                        <ul>
-                            <li>Programación WEB</li>
-                            <li>Bases de datos I</li>
-                            <li>Bases de datos II</li>
-                        </ul>
-                    </div>
-                    <div class="mt-4">
-                        <strong>Habilidades Necesarias:</strong>
-                        <ul>
-                            <li>HTML</li>
-                            <li>CSS</li>
-                            <li>Javascript, NodeJS o .Net</li>
-                            <li>SQL</li>
-                        </ul>
-                    </div>
-                    <div class="mt-4">
-                        <strong>Disponibilidad Horaria:</strong>
-                        <ul>
-                            <li>Full-time</li>
-                        </ul>
-                    </div>
-                    <div class="mt-4">
-                        <strong>Modalidad:</strong>
-                        <ul>
-                            <li>Híbrida (2 días presenciales en Parque Patricios / 3 días home office)</li>
-                        </ul>
-                    </div>
-                    <div class="vstack col-md-5 mx-auto">
-                        <button class="btn btn-light mt-3 border border-success-subtle">Enviar Solicitud</button>
-                    </div>
-                </div>
+            <div class="mb-5 list-group col-12 p-0" id="resultadosBusqueda">
+                <?php foreach ($empleos as $empleo): ?>
+                    <li class="list-group-item list-group-item-action bg-white border">
+                        <div class="w-100 justify-content-between">
+                            <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
+                                <h5 class="mb-1">
+                                    <div class="titulo-empleo"><?php echo htmlspecialchars($empleo->getTitulo()); ?></div>
+                                </h5>
+                                <p class="mb-1"><?php echo htmlspecialchars($empleo->getDescripcion()); ?></p>
+                                <small><?php echo htmlspecialchars($empleo->getUbicacion()); ?></small>
+                                <div class="mt-4">
+                                    <?php echo htmlspecialchars($empleo->getEstadoEmpleo()->getEstado()); ?>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="empleo-details d-none">
+                            <div class="mt-4">
+                                <strong>Habilidades Necesarias:</strong>
+                                <ul>
+                                    <?php foreach ($empleo->getHabilidades() as $habilidad): ?>
+                                        <li><?php echo htmlspecialchars($habilidad->getNombreHabilidad()); ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+
+                            <div class="mt-4">
+                                <strong>Disponibilidad Horaria:</strong>
+                                <ul>
+                                    <?php if ($empleo->getJornada()): ?>
+                                        <li><?php echo htmlspecialchars($empleo->getJornada()->getDescripcionJornada()); ?></li>
+                                    <?php else: ?>
+                                        <li>No disponible</li>
+                                    <?php endif; ?>
+                                </ul>
+                            </div>
+
+                            <div class="mt-4">
+                                <strong>Modalidad:</strong>
+                                <ul>
+                                    <?php if ($empleo->getModalidad()): ?>
+                                        <li><?php echo htmlspecialchars($empleo->getModalidad()->getDescripcionModalidad()); ?></li>
+                                    <?php else: ?>
+                                        <li>No disponible</li>
+                                    <?php endif; ?>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <div class="d-flex align-items-center">
+                                <?php if ($empleo->getEstadoEmpleo()->getId() !== 2): ?>
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Acciones de empleo">
+                                        <?php if ($alumnoController->checkPostulacion($empleo->getId())): ?>
+                                            <button type="button" disabled class="btn btn-success btn-sm aplicar-empleo" data-empleo-id="<?php echo $empleo->getId() ?>">Postulado</button>
+                                        <?php else: ?>
+                                            <button type="button" class="btn btn-success btn-sm aplicar-empleo" data-empleo-id="<?php echo $empleo->getId() ?>">Aplicar</button>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+
             </div>
         </div>
     </div>
+    <script src="../scripts/alumno/aplicarEmpleo.js"></script>
+    <script src="../scripts/alumno/buscarEmpleos.js"></script>
 
 </body>
 

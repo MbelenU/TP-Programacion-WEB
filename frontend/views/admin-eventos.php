@@ -1,61 +1,152 @@
+<?php
+require_once __DIR__ . '/../../controllers/AdministradorController.php';
+require_once __DIR__ . '/../utils/paginacion.php';
+
+session_start();
+if (!isset($_SESSION['user'])) {
+    header("Location: ./inicio.php");
+    exit();
+}
+
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Visualizar Eventos', $_SESSION['user']['user_id'])){
+    echo "Acceso denegado. No tienes permisos para acceder a esta página.";
+    exit();
+} 
+
+$userId = $_SESSION['user'];
+$administradorController = new AdministradorController();
+
+$searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+$eventos = $administradorController->getEventos();
+if ($searchQuery !== '') {
+    $eventos = array_filter($eventos, function ($evento) use ($searchQuery) {
+        return stripos($evento->getNombreEvento(), $searchQuery) !== false;
+    });
+}
+
+$itemsPerPage = 10;
+$currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$paginationData = paginateArray($eventos, $itemsPerPage, $currentPage);
+$paginatedEventos = $paginationData['items'];
+$totalPages = $paginationData['totalPages'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-    <?php require __DIR__ . '/../components/header.php'?>
+    <?php require __DIR__ . '/../components/header.php' ?>
     <link rel="stylesheet" href="<?php echo BASE_URL ?>css/admin-eventos.css">
+    <script src="<?php echo BASE_URL ?>scripts/admin/eventos.js" defer></script>
+    <script src="<?php echo BASE_URL ?>scripts/admin/eventos-admin.js" defer></script>
+    <script src="<?php echo BASE_URL ?>scripts/admin/pagination.js" defer></script>
+    <script src="../scripts/alumno/buscarEvento.js" defer></script>
+    <script src="../scripts/admin/borrarEventos.js" defer></script>
 </head>
 
-<body class="bg-inicio p-0">
+<body class="bg-inicio">
     <?php require __DIR__ . '/../components/admin-navbar.php' ?>
-    <div class="container p-sm-4 bg-secondary-subtle">
-        <div class="eventos-header">
-            <div class="evento d-flex justify-content-between align-items-center">
+    <div class="container p-sm-4 bg-white">
+        <div class="container mt-5">
+            <div class="evento mb-5 d-flex justify-content-between align-items-center">
                 <div class="nombre-evento">
                     <h1>Eventos</h1>
                 </div>
-                <a href="<?php echo BASE_URL ?>views/admin-publicar-evento.php"><button class="btn btn-success">Publicar
-                        evento</button></a>
+                <?php if (Permisos::tienePermiso('Publicar Eventos', $_SESSION['user']['user_id'])){ ?>
+                <a href="<?php echo BASE_URL ?>views/admin-publicar-evento.php"><button class="btn btn-success">Publicar evento</button></a>
+                <?php } ?>
             </div>
-            <form class="filtro d-flex mb-sm-3" role="search">
-                <input class="form-control me-2" type="search" id="form-control"
-                    placeholder="Tipo del evento | Nombre del evento | Fecha | Horario" aria-label="Search">
-                <button class="botonFiltro btn btn-light border border-success-subtle " type="submit">Filtrar</button>
+
+            <!-- Formulario de búsqueda -->
+            <form class="filtro d-flex mb-4" role="search" method="get">
+                <input
+                    class="form-control me-2 border-success-subtle"
+                    type="search"
+                    name="search"
+                    id="form-control"
+                    placeholder="Buscar eventos"
+                    value="<?php echo htmlspecialchars($searchQuery); ?>">
+                <button
+                    class="botonFiltro btn btn-light border border-success-subtle me-2"
+                    type="submit">
+                    Filtrar
+                </button>
+                <!-- Botón para limpiar el filtro -->
+                <a href="?" class="btn btn-secondary">Limpiar</a>
             </form>
-        </div>
 
-        <div class="container-evento">
-            <div class="evento-item mb-6">
 
-                <div class="row mb-5">
-                    <div class="list-group col-12 p-0">
-                        <a href="<?php echo BASE_URL ?>views/admin-detalle-evento.php" class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">Explorando la Deep Web: entre mitos y realidades</h5>
+            <?php if (!empty($paginatedEventos)): ?>
+                <div class="mb-5 list-group col-12 p-0">
+                    <?php foreach ($paginatedEventos as $evento): ?>
+                        <div class="list-group-item list-group-item-action bg-white border border-success-subtle">
+                            <div class="w-100 justify-content-between">
+                                <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
+                                    <h5 class="mb-1 evento-titulo text-decoration-none">
+                                        <a href="<?php echo BASE_URL . 'views/admin-detalle-evento.php?id=' . $evento->getId(); ?>" class="text-decoration-none"><?php echo htmlspecialchars($evento->getNombreEvento()); ?></a>
+                                    </h5>
+                                    <small class="mb-1"><i class="bi bi-calendar3"></i> <?php echo htmlspecialchars($evento->getFechaEvento()); ?></small>
+                                    <div class="mt-4"><?php echo htmlspecialchars($evento->getTipoEvento()); ?></div>
+                                </button>
                             </div>
-                            <div class="mt-4">
-                                <strong>Tipo de evento:</strong>
-                                <div>Capacitación</div>
+                            <div class="evento-details d-none">
+                                <div class="mt-4">
+                                    <p><strong>Descripción:</strong></p>
+                                    <p><?php echo htmlspecialchars($evento->getDescripcionEvento()); ?></p>
+                                </div>
+                                <div class="mt-4">
+                                    <strong>Créditos:</strong>
+                                    <div><?php echo htmlspecialchars($evento->getCreditos()); ?></div>
+                                </div>
                             </div>
-                            <div class="mt-4">
-                                <i class="bi bi-calendar3"><strong> Fecha:</strong> 19/09/2024 19 hs. </i>
+                            <?php if (Permisos::tienePermiso('Editar Perfil', $_SESSION['user']['user_id'])){ ?>
+                            <a href="<?php echo BASE_URL . 'views/admin-editar-evento.php?id=' . $evento->getId(); ?>" class="btn btn-light mt-2 mb-3">Editar evento</a>
+                            <?php } ?>         
+                            <?php if (Permisos::tienePermiso('Eliminar Eventos', $_SESSION['user']['user_id'])){ ?>                                            
+                            <button type="button" class="btn btn-outline-danger mt-2 mb-3" title="Eliminar evento" data-bs-toggle="modal" data-bs-target="#modalEliminar<?php echo $evento->getId(); ?>" data-evento-id="<?php echo $evento->getId(); ?>">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </button>
+                            <?php } ?>
+                        </div>
+
+                        <!-- Modal de Confirmación de Eliminación -->
+                        <div class="modal fade" id="modalEliminar<?php echo $evento->getId(); ?>" tabindex="-1" aria-labelledby="modalEliminarLabel<?php echo $evento->getId(); ?>" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalEliminarLabel<?php echo $evento->getId(); ?>">Confirmación de eliminación</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Estás seguro de que deseas eliminar este evento?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" data-borrar-id="<?php echo $evento->getId(); ?>" data-borrar-nombre="<?php echo $evento->getNombreEvento(); ?>">Eliminar</button>
+                                    </div>
+                                </div>
                             </div>
-                        </a>
-                        <a href="<?php echo BASE_URL ?>views/admin-detalle-evento.php" class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">Tutorías - Desarrollo de Software</h5>
-                            </div>
-                            <div class="mt-4">
-                                <strong>Tipo de evento:</strong>
-                                <div>Tutoría</div>
-                            </div>
-                            <div class="mt-4">
-                                <i class="bi bi-calendar3"><strong> Fecha:</strong> 23/10/2024 18 hs. </i>
-                            </div>
-                        </a>
-                    </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            </div>
+
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <li class="page-item <?php echo $i === $currentPage ? 'active' : ''; ?>">
+                                <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo urlencode($searchQuery); ?>">
+                                    <?php echo $i; ?>
+                                </a>
+                            </li>
+                        <?php endfor; ?>
+                    </ul>
+                </nav>
+            <?php else: ?>
+                <p>No hay eventos disponibles en este momento.</p>
+            <?php endif; ?>
         </div>
     </div>
 </body>

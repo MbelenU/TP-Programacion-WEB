@@ -1,3 +1,4 @@
+
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", function () {
     const tipoUsuario = document.getElementById('tipoUsuario');
@@ -48,20 +49,34 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Validación de los formularios (Opcional)
-    formAlumno.addEventListener('submit', function(event) {
+    formAlumno.addEventListener('submit', async function(event) {
         event.preventDefault();
 
         if (formAlumno.checkValidity() === false) {
             // Mostrar los mensajes de error de HTML5
             formAlumno.classList.add("was-validated");
             // Resetea el Formulario
-            formAlumno.reset();
+            //formAlumno.reset();
         }else{
-            mensaje();
+            let alumnoData = {};
+            alumnoData.typeUser = tipoUsuario.value;
+            alumnoData.email = document.getElementById('email').value;
+            alumnoData.password = document.getElementById('password').value;
+            alumnoData.repeatPassword = document.getElementById('repeatPassword').value;
+            alumnoData.direccion = document.getElementById('direccion').value;
+            alumnoData.telefono = document.getElementById('telefono').value;
+            alumnoData.nombreUsuario = document.getElementById('nombreUsuario').value;
+            alumnoData.nombre = document.getElementById('nombre').value;
+            alumnoData.apellido = document.getElementById('apellido').value;
+            alumnoData.dni = document.getElementById('dni').value;
+            const data = await registrarse(alumnoData);
+            if(data.success){
+                mensaje();
+            }
         } 
     });
 
-    formEmpresa.addEventListener('submit', function(event) {
+    formEmpresa.addEventListener('submit', async function(event) {
         event.preventDefault();
 
         if (formEmpresa.checkValidity() === false) {
@@ -70,9 +85,52 @@ document.addEventListener("DOMContentLoaded", function () {
             // Resetea el Formulario
             formEmpresa.reset();
         }else{
-            mensaje();
-        }
+            const empresaData = {}
+            empresaData.typeUser = tipoUsuario.value;
+            empresaData.nombreUsuario = document.getElementById('nombreUsuarioEmpresa').value;
+            empresaData.nombreEmpresa = document.getElementById('nombreEmpresa').value;
+            empresaData.email = document.getElementById('emailEmpresa').value;
+            empresaData.password = document.getElementById('passwordEmpresa').value;
+            empresaData.repeatPassword = document.getElementById('repeatPasswordEmpresa').value;
+            empresaData.direccion = document.getElementById('direccionEmpresa').value;
+            empresaData.telefono = document.getElementById('telefonoEmpresa').value;
+            empresaData.RazonSocial = document.getElementById('RazonSocial').value;
+            empresaData.CUIT = document.getElementById('CUIT').value;
+            const data = await registrarse(empresaData);
+            if(data.success){
+                mensaje();
+            }
+        } 
         
     });
 
 });
+
+async function registrarse(userData) {
+    try {
+        const BASEURL = "localhost:80/Proyecto-Final-Back"
+        const response = await fetch(`http://${BASEURL}/index.php?endpoint=register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de la red');
+        }
+
+        const data = await response.json(); 
+        console.log(data)
+        // Manejo de datos
+        if (data.success) {
+            console.log('Inicio de sesión exitoso:', data.alumno);
+            return data;
+        } else {
+            console.log('Error al iniciar sesión:', data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}

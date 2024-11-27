@@ -18,6 +18,12 @@ class EstadoPostulacion {
     public function setEstado(string $estado): void {
         $this->estado = $estado;
     }
+    public function toArray(): array {
+        return [
+            'id' => $this->id,
+            'estado' => $this->estado
+        ];
+    }
 }
 
 ?>

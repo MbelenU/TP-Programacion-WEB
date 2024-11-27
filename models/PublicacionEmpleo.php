@@ -5,19 +5,28 @@ class PublicacionEmpleo {
     private string $titulo;
     private string $descripcion;
     private Modalidad $modalidad;
-    private estadoEmpleo $estadoEmpleo;
-    private string $carreraRequerida;
+    private EstadoEmpleo $estadoEmpleo;
     private Jornada $jornada;
     private string $ubicacion;
-    private array $postulacion; // Lista de postulaciones
-    private array $materiasRequeridas; // Lista de materias requeridas
+    private array $postulacion;
+    private array $materiasRequeridas;
+    private DateTime $fecha;
+    private array $habilidades;
+    private bool $checkPostulado;
 
     public function getId(): int {
         return $this->id;
     }
-
     public function setId(int $id): void {
         $this->id = $id;
+    }
+
+    public function getFecha(): DateTime {
+        return $this->fecha;
+    }
+    
+    public function setFecha(DateTime $fecha): void {
+        $this->fecha = $fecha;
     }
 
     public function getTitulo(): string {
@@ -51,15 +60,6 @@ class PublicacionEmpleo {
     public function setEstadoEmpleo(estadoEmpleo $estadoEmpleo): void {
         $this->estadoEmpleo = $estadoEmpleo;
     }
-
-    public function getCarreraRequerida(): string {
-        return $this->carreraRequerida;
-    }
-
-    public function setCarreraRequerida(string $carreraRequerida): void {
-        $this->carreraRequerida = $carreraRequerida;
-    }
-
     public function getJornada(): Jornada {
         return $this->jornada;
     }
@@ -91,6 +91,43 @@ class PublicacionEmpleo {
     public function setMateriasRequeridas(array $materiasRequeridas): void {
         $this->materiasRequeridas = $materiasRequeridas;
     }
+    public function getCheckPostulado(): bool {
+        return $this->checkPostulado;
+    }
+    public function setCheckPostulado(bool $checkPostulado): void {
+        $this->checkPostulado = $checkPostulado;
+    }
+    public function setHabilidades(array $habilidades): void {
+        // Verificamos que todas las habilidades sean objetos de la clase Habilidad
+        foreach ($habilidades as $habilidad) {
+            if (!$habilidad instanceof Habilidad) {
+                throw new Exception("Las habilidades deben ser objetos de la clase Habilidad");
+            }
+        }
+        $this->habilidades = $habilidades;
+    }
+
+    // Método para obtener las habilidades (array de objetos Habilidad)
+    public function getHabilidades(): array {
+        return $this->habilidades;
+    }
+
+    public function toArray(): array {
+        return [
+            'id' => $this->id,
+            'titulo' => $this->titulo,
+            'descripcion' => $this->descripcion,
+            'estadoEmpleo' => $this->estadoEmpleo->toArray(),
+            'jornada' => $this->jornada->toArray(),
+            'modalidad' => $this->modalidad->toArray(),
+            'ubicacion' => $this->ubicacion,
+            'habilidades' => array_map(function($habilidad) {
+                return $habilidad->toArray(); 
+            }, $this->habilidades),
+            'checkPostulado' => $this->checkPostulado
+        ];
+    }
+    
 }
 
 ?>
