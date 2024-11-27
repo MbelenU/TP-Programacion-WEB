@@ -70,12 +70,6 @@ $carreras = $carreras['body'];
                         <div class="col-md-6">
                             <label for="ubicacion" class="form-label">Ubicación</label>
                             <input class="form-control" list="datalistOptions" id="ubicacion" placeholder="Buscar">
-                            <datalist id="datalistOptions">
-                                <option value="CABA">
-                                <option value="Ezeiza">
-                                <option value="Montegrande">
-                                <option value="Cañuelas">
-                            </datalist>
                         </div>
                         <div class="col-md-6">
                             <label for="jornada" class="form-label">Jornada</label>

@@ -400,9 +400,11 @@ class AlumnoDAO
         return null;
     }
 
-    public function getPostulaciones() {
-        $queryPostulaciones = "SELECT * FROM postulaciones";
+    public function getPostulaciones($id) {
+
+        $queryPostulaciones = "SELECT * FROM postulaciones WHERE id_usuario = :id";
         $stmt = $this->conn->prepare($queryPostulaciones);
+        $stmt->bindParam(":id", $id);
         $stmt->execute();
     
         $postulacionesArray = [];
