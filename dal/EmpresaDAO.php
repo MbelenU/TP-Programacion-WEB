@@ -439,76 +439,112 @@ class EmpresaDAO {
     }*/
 
     public function obtenerPublicacion($idPublicacion) {
-        // Consulta para obtener toda la información de la publicación
-        
-
-
-        $queryPublicacion = "SELECT * FROM publicaciones_empleos WHERE id = :id";
-        $stmt = $this->conn->prepare($queryPublicacion);
-        $stmt->bindParam(':id', $idPublicacion);
-        $stmt->execute();
-    
-        // Verificamos si se encontró la publicación
-        if ($stmt->rowCount() > 0) {
-            $publicacion = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-            // Obtener postulaciones asociadas a la publicación (si aplica)
-            $postulaciones = $this->listarPostulaciones($idPublicacion);
-    
-            // Crear un objeto PublicacionEmpleo y asignar la información
-            $publicacionObj = new PublicacionEmpleo();
-            $publicacionObj->setId($publicacion['id']);
-            $publicacionObj->setTitulo($publicacion['puesto_ofrecido']);
-            $publicacionObj->setDescripcion($publicacion['descripcion']);
-            //$publicacionObj->setFecha($publicacion['fecha']);
-            $publicacionObj->setUbicacion($publicacion['ubicacion']);
-            $publicacionObj->setPostulacion($postulaciones);
-            
-            $queryPublicacion = "SELECT h.*
-            FROM habilidades h
-            JOIN habilidades_publicaciones hp ON h.id = hp.id_habilidad
-            JOIN publicaciones_empleos pe ON hp.id_publicacion = pe.id
-            WHERE pe.id = :puestoId";
+        try {
+            $queryPublicacion = "SELECT * FROM publicaciones_empleos WHERE id = :id";
             $stmt = $this->conn->prepare($queryPublicacion);
-            $stmt->bindParam(':puestoId', $idPublicacion);
+            $stmt->bindParam(':id', $idPublicacion);
             $stmt->execute();
-
-            
-
-            if ($stmt->rowCount() > 0) {
-                $habilidades = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                $habilidadesarray = [];
-                foreach($habilidades as $habilidad){
-                    $habilidadObj = new Habilidad();
-                    $habilidadObj->setId($habilidad['id']);
-                    $habilidadObj->setNombreHabilidad($habilidad['habilidad_nombre']);
-                    $habilidadesarray[] = $habilidadObj;
-
-                }
         
-                // Obtener postulaciones asociadas a la publicación (si aplica)
+            if ($stmt->rowCount() > 0) {
+                $publicacion = $stmt->fetch(PDO::FETCH_ASSOC);
+                
                 $postulaciones = $this->listarPostulaciones($idPublicacion);
         
-                // Crear un objeto PublicacionEmpleo y asignar la información
                 $publicacionObj = new PublicacionEmpleo();
                 $publicacionObj->setId($publicacion['id']);
                 $publicacionObj->setTitulo($publicacion['puesto_ofrecido']);
                 $publicacionObj->setDescripcion($publicacion['descripcion']);
-                //$publicacionObj->setFecha($publicacion['fecha']);
+                //$publicacionObj->setFecha($publicacion['fecha']); 
                 $publicacionObj->setUbicacion($publicacion['ubicacion']);
                 $publicacionObj->setPostulacion($postulaciones);
-                $publicacionObj->setHabilidades($habilidadesarray);
         
+                $queryHabilidades = "
+                    SELECT h.* 
+                    FROM habilidades h
+                    JOIN habilidades_publicaciones hp ON h.id = hp.id_habilidad
+                    JOIN publicaciones_empleos pe ON hp.id_publicacion = pe.id
+                    WHERE pe.id = :puestoId
+                ";
+                $stmt = $this->conn->prepare($queryHabilidades);
+                $stmt->bindParam(':puestoId', $idPublicacion);
+                $stmt->execute();
+        
+                $habilidadesarray = [];
+                if ($stmt->rowCount() > 0) {
+                    $habilidades = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($habilidades as $habilidad) {
+                        $habilidadObj = new Habilidad();
+                        $habilidadObj->setId($habilidad['id']);
+                        $habilidadObj->setNombreHabilidad($habilidad['descripcion']);
+                        $habilidadesarray[] = $habilidadObj;
+                    }
+                }
+                $jornada = $this->getJornadaById($publicacion['id_jornada']);
+                $modalidad = $this->getModalidadById($publicacion['id_modalidad']);
+
+                $publicacionObj->setJornada($jornada);
+                $publicacionObj->setModalidad($modalidad);
+                $publicacionObj->setHabilidades($habilidadesarray);
+
+
                 return $publicacionObj;
             }
-    
-            return $publicacionObj;
+        
+            return null; 
+        } catch (Exception $e) {
+            error_log("Error al obtener publicación: " . $e->getMessage());
+            return null;
+        }
+    }
+    public function getHabilidades()
+    {
+        $query = "SELECT * FROM habilidades";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        $habilidades = [];
+
+        if ($stmt->rowCount() > 0) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $habilidad = new Habilidad();
+
+                $habilidad->setId($row['id']);
+                $habilidad->setNombreHabilidad($row['descripcion']);
+
+                $habilidades[] = $habilidad;
+            }
         }
 
-    
-        return null;  // Si no se encuentra la publicación, retornamos null
+        return $habilidades;
     }
-
+    public function getJornadaById($jornadaId) {
+        $query = "SELECT * FROM jornadas WHERE id = :jornadaId";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':jornadaId', $jornadaId); 
+        $stmt->execute();
+    
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $jornada = new Jornada($row['id'], $row['nombre']);
+            return $jornada;
+        } else {
+            return null; 
+        }
+    }
+    public function getModalidadById($modalidadId) {
+        $query = "SELECT * FROM modalidades WHERE id = :modalidadId";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':modalidadId', $modalidadId);
+        $stmt->execute();
+    
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);                   
+            $modalidad = new Modalidad($row['id'], $row['descripcion']);
+            return $modalidad;
+        } else {
+            return null; 
+        }
+    }
     public function publicarEmpleo($titulo, $modalidad, $ubicacion, $jornada, $descripcion, $habilidades, $materias, $idUsuario) {
         date_default_timezone_set('America/Argentina/Buenos_Aires');
         $date = date('Y-m-d H:i:s');
@@ -552,6 +588,69 @@ class EmpresaDAO {
             return null;
         }
     }
+    public function editarEmpleo($idEmpleo, $titulo, $modalidad, $ubicacion, $jornada, $descripcion, $idUsuario) {
+
+        date_default_timezone_set('America/Argentina/Buenos_Aires');
+        $date = date('Y-m-d H:i:s');
+        $estadoPublicacion = 1;
+        
+        $queryEmpleo = "
+            UPDATE publicaciones_empleos 
+            SET puesto_ofrecido = :titulo, descripcion = :descripcion, fecha = :date, ubicacion = :ubicacion, 
+                id_usuario = :idUsuario, id_estadopublicacion = :estadoPublicacion, id_jornada = :jornada, id_modalidad = :modalidad
+            WHERE id = :idEmpleo
+        ";
+        
+        $stmt = $this->conn->prepare($queryEmpleo);
+        $stmt->bindParam(':idEmpleo', $idEmpleo);
+        $stmt->bindParam(':titulo', $titulo);
+        $stmt->bindParam(':descripcion', $descripcion);
+        $stmt->bindParam(':date', $date);
+        $stmt->bindParam(':ubicacion', $ubicacion);
+        $stmt->bindParam(':idUsuario', $idUsuario);
+        $stmt->bindParam(':estadoPublicacion', $estadoPublicacion);
+        $stmt->bindParam(':jornada', $jornada);
+        $stmt->bindParam(':modalidad', $modalidad);
+    
+        if($stmt->execute()) {
+                /*
+            $queryEliminarHabilidades = "DELETE FROM habilidades_publicaciones WHERE id_publicacion = :empleoId";
+            $stmt = $this->conn->prepare($queryEliminarHabilidades);
+            $stmt->bindParam(':empleoId', $idEmpleo);
+            $stmt->execute();
+      
+            if($habilidades) {
+                foreach($habilidades as $habilidad) {
+                    $queryHabilidades = "INSERT INTO habilidades_publicaciones (id_habilidad, id_publicacion) VALUES (:habilidad, :empleoId)";
+                    $stmt = $this->conn->prepare($queryHabilidades);
+                    $stmt->bindParam(':habilidad', $habilidad);
+                    $stmt->bindParam(':empleoId', $idEmpleo);
+                    $stmt->execute();
+                }
+            }
+      
+            $queryEliminarMaterias = "DELETE FROM materias_requeridas WHERE id_publicacionesempleos = :empleoId";
+            $stmt = $this->conn->prepare($queryEliminarMaterias);
+            $stmt->bindParam(':empleoId', $idEmpleo);
+            $stmt->execute();
+    
+         
+            if($materias) {
+                foreach($materias as $materia) {
+                    $queryMaterias = "INSERT INTO materias_requeridas (id_materia, id_publicacionesempleos) VALUES (:materia, :empleoId)";
+                    $stmt = $this->conn->prepare($queryMaterias);
+                    $stmt->bindParam(':materia', $materia);
+                    $stmt->bindParam(':empleoId', $idEmpleo);
+                    $stmt->execute();
+                }
+            }
+            */
+            return $idEmpleo;
+        } else {
+            return null;
+        }
+    }
+    
     public function listarCarreras() {
         $queryCarreras = "SELECT * FROM carreras";
         $stmt = $this->conn->prepare($queryCarreras);
@@ -575,10 +674,10 @@ class EmpresaDAO {
         }
         return null;
     }
-    public function obtenerHabilidad($nombreHabilidad) {
-        $query = "SELECT * FROM habilidades WHERE descripcion = :nombreHabilidad";
+    public function obtenerHabilidad($id) {
+        $query = "SELECT * FROM habilidades WHERE id = :id";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':nombreHabilidad', $nombreHabilidad);
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);

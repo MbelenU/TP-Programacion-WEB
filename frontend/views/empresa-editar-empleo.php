@@ -7,31 +7,27 @@ if (!isset($_SESSION['user'])) {
 }
 
 require_once __DIR__ . '/../includes/permisos.php';
-if (!Permisos::tienePermiso('Editar Empleo', $_SESSION['user']['user_id'])){
+if (!Permisos::tienePermiso('Editar Empleo', $_SESSION['user']['user_id'])) {
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
 }
 
-$empresaController = new EmpresaDAO();
+$empresaController = new EmpresaController();
 
-// Verifica si se recibe un ID de publicación
 $idPublicacion = $_GET['id'] ?? null;
 
 if ($idPublicacion) {
     $publicacion = $empresaController->obtenerPublicacion($idPublicacion);
+    $publicacion = $publicacion['body'];
 } else {
-    // Manejo del caso donde no se proporciona un ID
     echo "Error: No se ha proporcionado un ID válido para la publicación.";
     exit;
 }
-$titulo = $publicacion->getTitulo();
-$descripcion = $publicacion->getDescripcion();
-$modalidades = $empresaController->listarModalidades($getDescripcionModalidad);
-$jornadas = $empresaController->listarJornadas($getDescripcionJornada);
 
-$ubicacion = $publicacion->getUbicacion();
-$habilidades = $publicacion->getHabilidades(); // Array de objetos Habilidad
-//$materiasRequeridas = $publicacion->getMateriasRequeridas(); // Array de materias
+$modalidades = $empresaController->listarModalidades();
+$modalidades = $modalidades['body'];
+$jornadas = $empresaController->listarJornadas();
+$jornadas = $jornadas['body'];
 ?>
 
 <!DOCTYPE html>
@@ -44,10 +40,10 @@ $habilidades = $publicacion->getHabilidades(); // Array de objetos Habilidad
 </head>
 
 <body class="bg-inicio">
-    <?php if ($_SESSION['user']['user_type'] == 1){
-            require __DIR__ . '/../components/admin-navbar.php';
-    } elseif ($_SESSION['user']['user_type'] == 3){
-            require __DIR__ . '/../components/empresa-navbar.php';
+    <?php if ($_SESSION['user']['user_type'] == 1) {
+        require __DIR__ . '/../components/admin-navbar.php';
+    } elseif ($_SESSION['user']['user_type'] == 3) {
+        require __DIR__ . '/../components/empresa-navbar.php';
     }
     ?>
     <div class="container p-sm-4 bg-white">
@@ -61,19 +57,23 @@ $habilidades = $publicacion->getHabilidades(); // Array de objetos Habilidad
                     </div>
                 </div>
             </div>
-            <form class="row g-3">
+            <form class="row g-3" id="publicarForm">
                 <div class="col-md-12">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="titulo" class="form-label">Titulo</label>
-                            <input type="text" class="form-control" id="titulo" value="<?php echo htmlspecialchars($titulo); ?>" required>
+                            <input type="text" class="form-control" id="titulo" value="<?php echo htmlspecialchars($publicacion->getTitulo()); ?>" required>
                         </div>
                         <div class="col-md-6">
                             <label for="modalidad" class="form-label">Modalidad</label>
                             <select class="form-select" id="modalidad">
                                 <option value="" disabled selected>Seleccione una modalidad</option>
                                 <?php foreach ($modalidades as $modalidad) : ?>
-                                    <option value="<?php echo $modalidad->getId(); ?>"><?php echo $modalidad->getDescripcionModalidad(); ?></option>
+                                    <?php if ($publicacion->getModalidad()->getId() == $modalidad->getId()): ?>
+                                        <option value="<?php echo $publicacion->getModalidad()->getId(); ?>" selected><?php echo $publicacion->getModalidad()->getDescripcionModalidad(); ?></option>
+                                    <?php else: ?>
+                                        <option value="<?php echo $modalidad->getId(); ?>"><?php echo $modalidad->getDescripcionModalidad(); ?></option>
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -81,64 +81,32 @@ $habilidades = $publicacion->getHabilidades(); // Array de objetos Habilidad
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="ubicacion" class="form-label">Ubicación</label>
-                            <input class="form-control" list="datalistOptions" id="ubicacion" placeholder="Buscar" value="<?php echo htmlspecialchars($ubicacion); ?>">
-
+                            <input class="form-control" list="datalistOptions" id="ubicacion" placeholder="Buscar" value="<?php echo htmlspecialchars($publicacion->getUbicacion()); ?>">
                         </div>
                         <div class="col-md-6">
                             <label for="jornada" class="form-label">Jornada</label>
                             <select class="form-select" id="jornada">
                                 <option value="" disabled selected>Seleccione un tipo de jornada</option>
                                 <?php foreach ($jornadas as $jornada) : ?>
-                                    <option value="<?php echo $jornada->getId(); ?>"><?php echo $jornada->getDescripcionJornada(); ?></option>
+                                    <?php if ($publicacion->getJornada()->getId() == $jornada->getId()): ?>
+                                        <option value="<?php echo $publicacion->getJornada()->getId(); ?>" selected><?php echo $publicacion->getJornada()->getDescripcionJornada(); ?></option>
+                                    <?php else: ?>
+                                        <option value="<?php echo $jornada->getId(); ?>"><?php echo $jornada->getDescripcionJornada(); ?></option>
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
                             <label for="text-area" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="text-area" rows="3"><?php echo htmlspecialchars($descripcion); ?></textarea>
+                            <textarea class="form-control" id="descripcion" rows="3"><?php echo htmlspecialchars($publicacion->getDescripcion()); ?></textarea>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-md-12 mb-3">
-                    <div>
-                        <h2 class="datospersonales-header">Habilidades requeridas</h2>
-                        <div id="habilidaderror" class="text-danger"></div>
-                        <input class="form-control" list="datalistOptions" id="habilidad" placeholder="Buscar">
-                        
-                        <button type="button" class="btn btn-secondary mt-2" id="agregarHabilidad">Agregar
-                            Habilidad</button>
-                       
-                            <?php foreach ($habilidades as $habilidad): ?>
-                                <li><?php echo htmlspecialchars($habilidad->getDescripcion()); ?></li> <!-- Suponiendo que Habilidad tiene un método getDescripcion() -->
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                    <div class="row justify-content-between">
-                        <h2 class="datospersonales-header">Materias requeridas</h2>
-                        <div class="col-md-6">
-                            <div id="carreraerror" class="text-danger"></div>
-                            <label for="carrera" class="form-label">Carrera</label>
-                            <select class="form-select" id="carrera" required>
-                                <option value="" disabled selected>Seleccione una opción</option>
-                                <option value="Desarrollo de Software" <?php echo (in_array('Desarrollo de Software', $materiasRequeridas)) ? 'selected' : ''; ?>>Desarrollo de Software</option>
-                                <option value="Turismo" <?php echo (in_array('Turismo', $materiasRequeridas)) ? 'selected' : ''; ?>>Turismo</option>
-                                <option value="Comercio Internacional" <?php echo (in_array('Comercio Internacional', $materiasRequeridas)) ? 'selected' : ''; ?>>Comercio Internacional</option>
-                                <option value="Gestión Aeroportuaria" <?php echo (in_array('Gestión Aeroportuaria', $materiasRequeridas)) ? 'selected' : ''; ?>>Gestión Aeroportuaria</option>
-                                <option value="Logistica" <?php echo (in_array('Logistica', $materiasRequeridas)) ? 'selected' : ''; ?>>Logistica</option>
-                                <option value="Higiene y Seguridad" <?php echo (in_array('Higiene y Seguridad', $materiasRequeridas)) ? 'selected' : ''; ?>>Higiene y Seguridad</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <ul id="materiasAprobadasList" class="mb-3">
-                                <?php foreach ($materiasRequeridas as $materia): ?>
-                                    <li><?php echo htmlspecialchars($materia); ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success mt-2">Guardar</button>
+                    <button type="submit" class="btn btn-success mt-2" data-empleo-id="<?php echo $publicacion->getId() ?>" id='guardarPublicacion'>Guardar</button>
                     <a href="<?php echo BASE_URL ?>views/empresa-visualizar-publicaciones.php">
                         <button type="button" class="btn btn-danger mt-2">Cancelar</button>
                     </a>
@@ -146,6 +114,7 @@ $habilidades = $publicacion->getHabilidades(); // Array de objetos Habilidad
             </form>
         </div>
     </div>
+    <script src="../scripts/empresa/editar-empleo.js"></script>
 </body>
 
 </html>

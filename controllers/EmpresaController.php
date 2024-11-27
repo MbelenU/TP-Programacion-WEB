@@ -13,11 +13,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 $empresaController = new EmpresaController();
 
+
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['publicarEmpleo'])) {
     $resultado = $empresaController->publicarEmpleo();
     return $resultado;
     exit;
-}elseif($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id_carrera'])) {
+    
+}elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['editarEmpleo'])) {
+    $resultado = $empresaController->editarEmpleo($_GET['editarEmpleo']);
+    return $resultado;
+    exit;
+}
+elseif($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id_carrera'])) {
     $resultado = $empresaController->obtenerPlanesEstudio();
     return $resultado;
     exit;
@@ -86,6 +93,24 @@ class EmpresaController {
             ]);
         }
     }  
+    
+    public function getHabilidades(){
+        $result = $this->empresaDAO->getHabilidades();
+        if($result){
+            return [
+                "success" => true,
+                "body" => $result
+            ];
+        }
+        else {
+            return [
+                'success' => false,
+                'message' => 'Error: No se pudo obtener habilidades',
+            ];
+        }
+    }
+    
+
     public function editarPerfilEmpresa($id) {
         $email = htmlspecialchars($_POST['email'] ?? ''); 
         $nombreEmpresa = htmlspecialchars($_POST['nombreEmpresa'] ?? ''); 
@@ -134,6 +159,45 @@ class EmpresaController {
         }
     }
     
+    public function editarEmpleo($idEmpleo){
+        session_start();
+        $idUsuario = $_SESSION['user']['user_id'];
+        $input = json_decode(file_get_contents('php://input'), true);
+        $idEmpleo = htmlspecialchars($idEmpleo ?? '');
+        $titulo = htmlspecialchars($input['titulo'] ?? '');
+        $modalidad = htmlspecialchars($input['modalidad'] ?? '');
+        $ubicacion = htmlspecialchars($input['ubicacion'] ?? '');
+        $jornada = htmlspecialchars($input['jornada'] ?? '');
+        $descripcion = htmlspecialchars($input['descripcion'] ?? '');
+        //$habilidad = $input['habilidades'] ?? '';
+        //$materia = $input['materias'] ?? '';
+
+        if (empty($idUsuario) ||empty($idUsuario) || empty($titulo) || empty($modalidad) || empty($ubicacion) || empty($jornada) || empty($descripcion)) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'error' => 'Error: Faltan atributos',
+            ]);
+            return;
+        } 
+        
+        $result = $this->empresaDAO->editarEmpleo($idEmpleo, $titulo, $modalidad, $ubicacion, $jornada, $descripcion, $idUsuario);
+        if($result) {
+            http_response_code(200); 
+            echo json_encode([    
+                "success" => true,
+                "body" => $result
+            ]);
+            return;
+        }else {
+            http_response_code(500);
+            echo json_encode([
+                "success" => false,
+                "error" => "Error no se pudo editar el empleo"
+            ]);
+            return;
+        }
+    }
     public function publicarEmpleo(){
         session_start();
         $idUsuario = $_SESSION['user']['user_id'];
@@ -438,9 +502,9 @@ class EmpresaController {
             ];
         }
     }
-    public function obtenerHabilidad($nombreHabilidad)
+    public function obtenerHabilidad($id)
     {
-        $habilidad = $this->empresaDAO->obtenerHabilidad($nombreHabilidad);
+        $habilidad = $this->empresaDAO->obtenerHabilidad($id);
         if ($habilidad) {
             echo json_encode([
                 'success' => true,
