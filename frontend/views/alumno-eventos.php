@@ -1,12 +1,10 @@
 <?php
 require_once '../../controllers/AlumnoController.php';
-
-
+require_once __DIR__ . '/../utils/paginacion.php';
 
 $alumnoController = new AlumnoController();
 $responseEventos = $alumnoController->listarEventos();
-$eventos = isset($responseEventos['body']) && is_array($responseEventos['body']) ? $responseEventos['body'] : []; // Asegúrate que eventos siempre sea un arreglo
-
+$eventos = isset($responseEventos['body']) && is_array($responseEventos['body']) ? $responseEventos['body'] : [];
 
 session_start();
 if (!isset($_SESSION['user'])) {
@@ -21,11 +19,17 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 
 $userId = $_SESSION['user']['user_id'];
 $responseSuscripciones = $alumnoController->listarSuscripciones($userId);
-$suscripciones = isset($responseSuscripciones['body']) && is_array($responseSuscripciones['body']) ? $responseSuscripciones['body'] : []; // Asegúrate que suscripciones siempre sea un arreglo
+$suscripciones = isset($responseSuscripciones['body']) && is_array($responseSuscripciones['body']) ? $responseSuscripciones['body'] : [];
+
+if (isset($_GET['tab'])) {
+    $_SESSION['currentTab'] = $_GET['tab'];
+} else {
+    $_SESSION['currentTab'] = $_SESSION['currentTab'] ?? 'events';
+}
 
 function filtrarEventosNoSuscritos($eventos, $suscripciones) {
     if (empty($suscripciones)) {
-        return $eventos; // Si no hay suscripciones, devuelve todos los eventos
+        return $eventos;
     }
 
     $idsEventosSuscritos = array_map(function($suscripcion) {
@@ -40,8 +44,42 @@ function filtrarEventosNoSuscritos($eventos, $suscripciones) {
 }
 
 $eventosNoSuscritos = filtrarEventosNoSuscritos($eventos, $suscripciones);
-?>
 
+$searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
+if ($searchQuery !== '') {
+
+    if($_SESSION['currentTab'] === 'events'){
+        $eventosNoSuscritos = array_filter($eventosNoSuscritos, function ($evento) use ($searchQuery) {
+            return stripos($evento['nombreEvento'], $searchQuery) !== false;
+        });
+    }else{
+        $eventosNoSuscritos = array_filter($eventosNoSuscritos, function ($evento) use ($searchQuery) {
+        return stripos($evento['nombreEvento'], $searchQuery) !== false;
+    });
+}
+
+    $suscripciones = array_filter($suscripciones, function ($suscripcion) use ($searchQuery) {
+        return stripos($suscripcion['nombre'], $searchQuery) !== false;
+    });
+}
+
+$itemsPerPage = 10;
+$currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$paginationData = paginateArray($eventosNoSuscritos, $itemsPerPage, $currentPage);
+$paginatedEventosNoSuscritos = $paginationData['items'];
+$totalPagesEventosNoSuscritos = $paginationData['totalPages'];
+
+$paginatedSuscripciones = [];
+$totalPagesSuscripciones = 0;
+
+if (!empty($suscripciones)) {
+    $paginationSuscripcionesData = paginateArray($suscripciones, $itemsPerPage, $currentPage);
+    $paginatedSuscripciones = $paginationSuscripcionesData['items'];
+    $totalPagesSuscripciones = $paginationSuscripcionesData['totalPages'];
+}
+
+
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -60,25 +98,35 @@ $eventosNoSuscritos = filtrarEventosNoSuscritos($eventos, $suscripciones);
             <div class="pb-5">
                 <h1>Eventos</h1>
             </div>
-            <form class="filtro d-flex mb-5" role="search">
+            <form class="filtro d-flex mb-5" role="search" method="get">
                 <input class="form-control me-2 border-success-subtle" type="search"
-                    id="form-control" placeholder="Carreras | Nombre del evento | Fecha | Ubicación | Modalidad"
-                    aria-label="Search">
+                    name="search" id="form-control" placeholder="Carreras | Nombre del evento | Fecha | Ubicación | Modalidad"
+                    aria-label="Search" value="<?php echo htmlspecialchars($searchQuery); ?>">
                 <button class="botonFiltro btn btn-light border border-success-subtle" type="submit">Filtrar</button>
             </form>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item " role="presentation">
-                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Nuevos Eventos</button>
+                       <a class="nav-link <?php echo $_SESSION['currentTab'] === 'events' ? 'active' : ''; ?>" 
+                       href="?tab=events">
+                       Nuevos Eventos
+                    </a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Suscripciones</button>
+                    <a class="nav-link <?php echo $_SESSION['currentTab'] === 'subscriptions' ? 'active' : ''; ?>" 
+                       href="?tab=subscriptions">
+                        Suscripciones
+                    </a>
                 </li>
             </ul>
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-                    <?php if (!empty($eventosNoSuscritos)): ?>
+                <div class="tab-pane fade show <?php echo $_SESSION['currentTab'] === 'events' ? 'active' : ''; ?>" 
+                     id="home-tab-pane" 
+                     role="tabpanel" 
+                     aria-labelledby="home-tab" 
+                     tabindex="0">
+                    <?php if (!empty($paginatedEventosNoSuscritos)): ?>
                         <div class="mb-5 list-group col-12 p-0">
-                            <?php foreach ($eventosNoSuscritos as $evento) : ?>
+                            <?php foreach ($paginatedEventosNoSuscritos as $evento) : ?>
                                 <div class="list-group-item list-group-item-action bg-white border border-success-subtle">
                                     <div class="w-100 justify-content-between">
                                         <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
@@ -107,45 +155,67 @@ $eventosNoSuscritos = filtrarEventosNoSuscritos($eventos, $suscripciones);
                                 </div>
                             <?php endforeach; ?>
                         </div>
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                <?php for ($i = 1; $i <= $totalPagesEventosNoSuscritos; $i++): ?>
+                                    <li class="page-item <?php echo $i === $currentPage ? 'active' : ''; ?>">
+                                        <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo urlencode($searchQuery); ?>&tab=events">
+                                            <?php echo $i; ?>
+                                        </a>
+                                    </li>
+                                <?php endfor; ?>
+                            </ul>
+                        </nav>
                     <?php else: ?>
                         <div class="pt-3 text-center ">
                             <h5 class="d-grid justify-content-center align-items-center "> <i class="bi bi-emoji-frown fs-1"></i> "Actualmente no hay evento disponibles."</h5>
                         </div>
                     <?php endif; ?>
                 </div>
-                <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-                    <?php if (!empty($suscripciones)): ?>
+
+                <div class="tab-pane fade <?php echo $_SESSION['currentTab'] === 'subscriptions' ? 'show active' : ''; ?>" 
+                     id="profile-tab-pane" 
+                     role="tabpanel" 
+                     aria-labelledby="profile-tab" 
+                     tabindex="0">
+                    <?php if (!empty($paginatedSuscripciones)): ?>
                         <div class="mb-5 list-group col-12 p-0">
-                            <?php foreach ($suscripciones as $evento) :
-                            ?>
+                            <?php foreach ($paginatedSuscripciones as $suscripcion) : ?>
                                 <div class="list-group-item list-group-item-action bg-white border border-success-subtle">
                                     <div class="w-100 justify-content-between">
                                         <button class="toggleButton btn border-0 w-100 d-flex flex-column text-start">
                                             <h5 class="mb-1">
-                                                <div class="evento-titulo"><?php echo htmlspecialchars($evento['nombre']); ?></div>
+                                                <div class="evento-titulo"><?php echo htmlspecialchars($suscripcion['nombre']); ?></div>
                                             </h5>
-                                            <small class="mb-1"><i class="bi bi-calendar3"></i> <?php echo htmlspecialchars($evento['fecha']); ?></small>
-                                            <div class="mt-4"><?php echo htmlspecialchars($evento['tipo']); ?></div>
+                                            <small class="mb-1"><i class="bi bi-calendar3"></i> <?php echo htmlspecialchars($suscripcion['fecha']); ?></small>
+                                            <div class="mt-4"><?php echo htmlspecialchars($suscripcion['tipo']); ?></div>
                                         </button>
                                     </div>
                                     <div class="evento-details d-none">
                                         <div class="mt-4">
                                             <p><strong>Descripción:</strong></p>
-                                            <p><?php echo htmlspecialchars($evento['descripcion']); ?></p>
-                                        </div>
-                                        <div class="mt-4">
-                                            <strong>Créditos:</strong>
-                                            <div><?php echo htmlspecialchars($evento['creditos']); ?></div>
+                                            <p><?php echo htmlspecialchars($suscripcion['descripcion']); ?></p>
                                         </div>
                                         <div class="row mt-4 d-flex align-items-center">
-                                        <button class="btn btn-danger" data-desuscribir-id="<?php echo $evento['id']; ?>">
+                                        <button class="btn btn-danger" data-desuscribir-id="<?php echo $suscripcion['id']; ?>">
                                             <i class="bi bi-bell"></i> Desuscribirme
-                                        </button>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                <?php for ($i = 1; $i <= $totalPagesSuscripciones; $i++): ?>
+                                    <li class="page-item <?php echo $i === $currentPage ? 'active' : ''; ?>">
+                                        <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo urlencode($searchQuery); ?>&tab=subscriptions">
+                                            <?php echo $i; ?>
+                                        </a>
+                                    </li>
+                                <?php endfor; ?>
+                            </ul>
+                        </nav>
                     <?php else: ?>
                         <div class="pt-3 text-center ">
                             <h5 class="d-grid justify-content-center align-items-center "> <i class="bi bi-emoji-frown fs-1"></i> "Actualmente no estás suscripto a ningún evento."</h5>
@@ -154,6 +224,7 @@ $eventosNoSuscritos = filtrarEventosNoSuscritos($eventos, $suscripciones);
                 </div>
             </div>
         </div>
+    </div>
 </body>
 
 </html>

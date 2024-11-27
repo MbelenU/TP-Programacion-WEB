@@ -37,6 +37,7 @@ async function agregarSuscripcion(idUsuario, id) {
             if (eventoElement) {
                 eventoElement.closest('.list-group-item').remove();
             }
+            location.reload();
         } else {
             console.log('Ocurrió un error al suscribirse al evento');
         }
