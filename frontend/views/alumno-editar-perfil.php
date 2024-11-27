@@ -126,14 +126,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarPerfil'])) {
                                     foreach ($alumno->getHabilidades() as $habilidad): { ?>
                                             <div class="habilidad-item d-grid align-items-center justify-content-start bg-light p-2 rounded mb-2" data-id="<?= htmlspecialchars($habilidad->getId()) ?>">
                                                 <span class="habilidad-nombre fw-bold text-center"><?= htmlspecialchars($habilidad->getNombreHabilidad()) ?></span>
-                                                <!-- Estrellas para calificar el nivel -->
-                                                <div class="stars" data-id="<?= htmlspecialchars($habilidad->getId()) ?>">
-                                                    <?php foreach (range(1, 5) as $i): ?>
-                                                        <i class="star checked bi <?= $i <= $habilidad->getNivelHabilidad() ? 'bi-star-fill' : 'bi-star' ?>"
-                                                            data-value="<?= $i ?>"
-                                                            data-id="<?= htmlspecialchars($habilidad->getId()) ?>"></i>
-                                                    <?php endforeach; ?>
-                                                </div>
 
                                                 <button type="button" class="btn btn-danger btn-sm eliminarHabilidad">Eliminar</button>
                                             </div>
