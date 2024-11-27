@@ -129,7 +129,7 @@ class AlumnoController {
         $foto_perfil = null;
 
         if (
-            empty($email) || empty($nombre) || empty($apellido) || empty($telefono) || empty($carrera) || empty($direccion)
+            empty($email) || empty($nombre) || empty($apellido) || empty($telefono) || empty($direccion)
         ) {
             http_response_code(400);
             echo json_encode([

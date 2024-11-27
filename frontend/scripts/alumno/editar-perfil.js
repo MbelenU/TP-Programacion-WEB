@@ -43,13 +43,13 @@ document.addEventListener("DOMContentLoaded", function () {
         nuevaHabilidad.innerHTML = `
             <span class="habilidad-nombre fw-bold text-center">${habilidadNombre}</span>
             <div class="stars" data-id="${habilidadId}">
-                ${estrellasHTML}
             </div>
             <button type="button" class="btn btn-danger btn-sm eliminarHabilidad">Eliminar</button>
         `;
 
+        // Añadir evento al botón "Eliminar"
         nuevaHabilidad.querySelector(".eliminarHabilidad").addEventListener("click", function () {
-            eliminarHabilidad(habilidadId, nuevaHabilidad, alumnoId);  
+            eliminarHabilidad(habilidadId, nuevaHabilidad, alumnoId);  // Pasar el alumnoId también
         });
 
         // Agregar al DOM
