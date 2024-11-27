@@ -144,8 +144,8 @@ class EmpresaController {
         $ubicacion = htmlspecialchars($input['ubicacion'] ?? '');
         $jornada = htmlspecialchars($input['jornada'] ?? '');
         $descripcion = htmlspecialchars($input['descripcion'] ?? '');
-        $habilidad = htmlspecialchars($input['habilidad'] ?? '');
-    $materia = htmlspecialchars($input['materia'] ?? '');
+        $habilidad = $input['habilidades'] ?? '';
+        $materia = $input['materias'] ?? '';
 
         if (empty($idUsuario) || empty($titulo) || empty($modalidad) || empty($ubicacion) || empty($jornada) || empty($descripcion)) {
             http_response_code(400);
