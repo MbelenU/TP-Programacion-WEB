@@ -816,20 +816,6 @@ class AdministradorController
     }
 
 
-   
-     /*   public function eliminarInscripto($alumnoId, $eventoId) {
-            $resultado = $this->administradorDAO->eliminarInscripto($alumnoId, $eventoId);
-        
-            if ($resultado['success'] === 'true') {
-                return [
-                    "message" => $resultado['message']
-                ];
-            } else {
-                return [
-                    "message" => $resultado['message']
-                ];
-            }
-        }*/
         
         public function eliminarInscripto() {
         

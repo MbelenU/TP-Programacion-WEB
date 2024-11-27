@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editarEvento'])) {
                 </div>
                
                 <button type="submit" class="btn btn-success mt-2" name="editarEvento" id="btn-editar">Guardar</button>
-                <a href="<?php echo BASE_URL ?>views/admin-miseventos.php">
+                <a href="<?php echo BASE_URL ?>views/admin-eventos.php">
                                 <button type="button" class="btn btn-danger mt-2"> Cancelar</button>
                 </a>
             </form>

@@ -32,7 +32,7 @@ $allowedRoles = ['1'];
         echo "<div class='alert alert-danger'>Alumno no encontrado</div>";
         exit();
     }else{
-        $inscriptos = $inscriptos['body'];
+        $inscriptos = $inscriptos['body'] ?? [];
     }
     //var_dump($inscriptos);
 
@@ -79,10 +79,7 @@ $allowedRoles = ['1'];
                             <strong>Descripción:</strong>
                             <p><?php echo htmlspecialchars($evento->getDescripcionEvento()); ?></p>
                         </div>
-                       <!-- <div class="mt-4">
-                            <strong>Modalidad:</strong>
-                            <p><?php // echo htmlspecialchars($evento->getModalidadEvento()); ?></p>
-                        </div>-->
+                       
                         <div class="mt-4">
                             <strong>Créditos:</strong>
                             <p><?php echo htmlspecialchars($evento->getCreditos()); ?></p>
@@ -90,7 +87,7 @@ $allowedRoles = ['1'];
                     </div>
                     <div class="button-container">
                         <a href="<?php echo BASE_URL ?>views/admin-editar-evento.php?id=<?php echo $evento->getId(); ?>" class="btn btn-success btn-reporte mb-2">Editar</a>
-                        <button type="button" class="btn btn-danger btn-reporte mb-2">Eliminar</button>
+                        
                     </div>
                     
                         </div>
