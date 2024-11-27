@@ -66,6 +66,14 @@ elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['eliminarHabilidad']
     return $resultado;
     exit;
 }
+elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['agregarHabilidad'])){
+    session_start();
+    $idUsuario = $_SESSION['user']['user_id'];
+    $alumnoController = new AlumnoController();
+    $resultado = $alumnoController->agregarHabilidad();
+    return $resultado;
+    exit;
+}
 
 class AlumnoController {
     private AlumnoDAO $alumnoDao;
@@ -481,6 +489,28 @@ class AlumnoController {
             ]);
         }
     }
+
+    public function agregarHabilidad()
+{
+    // Obtener datos enviados por AJAX (idAlumno, idHabilidad y nivelHabilidad)
+    $input = json_decode(file_get_contents('php://input'), true);
+
+    $idAlumno = $input['idAlumno'];
+    $idHabilidad = $input['idHabilidad'];
+    $nivelHabilidad = $input['nivelHabilidad']; // Recibimos el nivel de habilidad
+    var_dump($input); //
+    // Llamar al modelo para agregar la habilidad con el nivel de habilidad al alumno
+    $response = $this->alumnoDao->agregarHabilidad($idAlumno, $idHabilidad, $nivelHabilidad);
+
+    // Comprobar si la habilidad fue agregada con éxito
+    if ($response) {
+        http_response_code(200);
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false]);
+    }
+}
 
         
 }

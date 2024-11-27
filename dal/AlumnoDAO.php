@@ -904,6 +904,18 @@ class AlumnoDAO
             }
         }
 
+        public function agregarHabilidad($idAlumno, $idHabilidad, $nivelHabilidad)
+            {
+                $query = "INSERT INTO habilidades_alumnos (id_usuario, id_habilidad, nivel_grado) VALUES (:idAlumno, :idHabilidad, :nivelHabilidad)";
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindValue(':idAlumno', $idAlumno);
+                $stmt->bindValue(':idHabilidad', $idHabilidad);
+                $stmt->bindValue(':nivelHabilidad', $nivelHabilidad);
+                $stmt->execute();
+
+                return $stmt->rowCount() > 0;
+            }
+
 
 
 }

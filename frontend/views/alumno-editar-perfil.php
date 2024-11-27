@@ -142,6 +142,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarPerfil'])) {
                             <?php }
                             endif; ?>
                         </div>
+                        <input type="hidden" id="habilidadesSeleccionadas" name="habilidadesSeleccionadas">
                     </div>
                     <hr>
                     <div class="row">
