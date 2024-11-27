@@ -45,7 +45,7 @@ if ($publicaciones['success']) {
 				<h1>Mis publicaciones</h1>
 			</div>
 			<?php if (Permisos::tienePermiso('Generar reporte Publicaciones', $_SESSION['user']['user_id'])){ ?>
-			<div class="puesto-header mb-5">
+			<div class="puesto-header mb-2">
 				<a href="#" class="btn btn-success">Reporte</a>
 			</div>
 			<?php } ?>

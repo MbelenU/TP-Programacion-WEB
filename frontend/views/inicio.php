@@ -84,7 +84,7 @@
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary" name="login">Iniciar Sesión</button>
                     <a href="./register.php" class="btn btn-secondary">Registrarse</a>
-                    <a href="login_google.php" class="btn btn-outline-danger">Iniciar sesión con Google</a>
+                    <!--<a href="login_google.php" class="btn btn-outline-danger">Iniciar sesión con Google</a>-->
 
                 </div>
             </form>

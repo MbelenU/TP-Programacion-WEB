@@ -46,9 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
             <button type="button" class="btn btn-danger btn-sm eliminarHabilidad">Eliminar</button>
         `;
 
-        // Añadir evento al botón "Eliminar"
         nuevaHabilidad.querySelector(".eliminarHabilidad").addEventListener("click", function () {
-            eliminarHabilidad(habilidadId, nuevaHabilidad, alumnoId);  // Pasar el alumnoId también
+            eliminarHabilidad(habilidadId, nuevaHabilidad, alumnoId);  
         });
 
         // Añadir evento a las estrellas para permitir calificación

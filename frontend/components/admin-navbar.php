@@ -36,15 +36,6 @@ $foto_perfil = $_SESSION['user']['foto_perfil'];
                         <a class="nav-link"
                             href="<?php echo BASE_URL ?>views/admin-eventos.php">Eventos</a>
                     </li>
-                    <!--
-                    <li class="nav-item ">
-                        <a class="nav-link"
-                            href="<?/*php echo BASE_URL */?>views/admin-notificaciones.php">Notificaciones</a>
-                    </li>-->
-                    <li class="nav-item">
-                        <a class="nav-link"
-                            href="<?php echo BASE_URL ?>views/admin-visualizar-carreras.php">Carreras</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link"
                             href="<?php echo BASE_URL ?>views/admin-gestionar-habilidades.php">Habilidades</a>
