@@ -74,7 +74,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $endpoint === "register") {
     $resultado = $administradorController->eliminarEvento();
     return $resultado;
     exit;
+}elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['borrarInscripto'])){
+    $administradorController = new AdministradorController();
+    $resultado = $administradorController->eliminarInscripto();
+    return $resultado;
+    exit;
 }
+
+
 
 
 
@@ -790,6 +797,80 @@ class AdministradorController
             ];
         }
     }
+
+    public function obtenerInscriptos($eventoId) {
+        
+        $inscriptos = $this->administradorDAO->obtenerInscriptos($eventoId);
+    
+        if (!empty($inscriptos)) {
+            return [
+                "success" => true,
+                "body" => $inscriptos
+            ];
+        } else {
+            return [
+                "success" => false,
+                "message" => "No se encontraron notificaciones"
+            ];
+        }
+    }
+
+
+   
+     /*   public function eliminarInscripto($alumnoId, $eventoId) {
+            $resultado = $this->administradorDAO->eliminarInscripto($alumnoId, $eventoId);
+        
+            if ($resultado['success'] === 'true') {
+                return [
+                    "message" => $resultado['message']
+                ];
+            } else {
+                return [
+                    "message" => $resultado['message']
+                ];
+            }
+        }*/
+        
+        public function eliminarInscripto() {
+        
+            $input = json_decode(file_get_contents('php://input'), true);
+        
+            //$eventoId = htmlspecialchars($input['id'] ?? ''); 
+            $eventoId = htmlspecialchars($input['id_evento'] ?? ''); 
+            $alumnoId = htmlspecialchars($input['id_usuario'] ?? ''); 
+    
+            if (empty($eventoId)) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "No se encontró el evento"
+                ]);
+                exit();
+            }
+        
+            if (empty($alumnoId)) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "No se encontró el alumno"
+                ]);
+                exit();
+            }
+    
+               
+           $result = $this->administradorDAO->eliminarInscripto($eventoId,$alumnoId);
+
+            echo json_encode([
+               
+                "body" => $result
+            ]);
+            
+        
+    
+           
+            
+        }
+
+
+    
 
 }
 
