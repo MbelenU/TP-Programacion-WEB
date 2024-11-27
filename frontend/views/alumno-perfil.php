@@ -101,8 +101,6 @@ function mostrarValor($valor, $mensaje = 'No disponible')
                                                         data-id="<?= htmlspecialchars($habilidad->getId()) ?>"></i>
                                                 <?php endforeach; ?>
                                             </div>
-
-                                            <button type="button" class="btn btn-danger btn-sm eliminarHabilidad">Eliminar</button>
                                         </div>
                                 <?php }
                                 endforeach; ?>
