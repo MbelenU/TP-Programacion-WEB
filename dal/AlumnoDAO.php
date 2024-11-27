@@ -273,7 +273,7 @@ class AlumnoDAO
                 $habilidad = new Habilidad();
                 $habilidad->setId($row['id']);
                 $habilidad->setNombreHabilidad($row['descripcion']);
-                // $habilidad->setNivelHabilidad($row['nivel_grado']);
+                $habilidad->setNivelHabilidad($row['nivel_grado']);
 
                 $habilidades[] = $habilidad;
             }

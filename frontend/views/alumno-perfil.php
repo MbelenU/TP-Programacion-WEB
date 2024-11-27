@@ -22,7 +22,8 @@ if (!$alumno['success']) {
 }
 $alumno = $alumno['body'];
 
-function mostrarValor($valor, $mensaje = 'No disponible') {
+function mostrarValor($valor, $mensaje = 'No disponible')
+{
     return htmlspecialchars($valor ?? $mensaje);
 }
 ?>
@@ -32,7 +33,7 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
 
 <head>
     <?php require __DIR__ . '/../components/header.php' ?>
-    <link rel="stylesheet" href="<?php echo BASE_URL ?>frontend/css/global.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>css/global.css">
 </head>
 
 <body class="bg-inicio">
@@ -45,7 +46,7 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
                 $fotoPerfil = ($alumno->getFotoPerfil()) ? BASE_URL . 'img/' . htmlspecialchars($alumno->getFotoPerfil()) : BASE_URL . 'img/perfil.jpg';
                 ?>
                 <img src="<?php echo $fotoPerfil; ?>" alt="Foto de perfil" id="foto-perfil" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; margin-right: 20px;">
-                
+
                 <div class="info">
                     <div class="nombre mb-3">
                         <h1><?php echo htmlspecialchars($alumno->getNombreAlumno() . ' ' . $alumno->getApellidoAlumno()); ?></h1>
@@ -72,9 +73,9 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
                 <div class="info-item mb-4">
                     <i class="bi bi-book"></i>
                     <span>
-                        <?php 
+                        <?php
                         $carrera = $alumno->getCarrera();
-                        echo $carrera ? htmlspecialchars($carrera->getNombreCarrera()) : 'Carrera no asignada'; 
+                        echo $carrera ? htmlspecialchars($carrera->getNombreCarrera()) : 'Carrera no asignada';
                         ?>
                     </span>
                 </div>
@@ -87,28 +88,27 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
             <section class="habilidades mb-5">
                 <h2 class="mb-4">Habilidades</h2>
                 <ul>
-                <?php
-                    $habilidades = $alumno->getHabilidades();
-                    if ($habilidades && count($habilidades) > 0) {
-                        foreach ($habilidades as $habilidad) {
-                            $nombreHabilidad = htmlspecialchars($habilidad->getNombreHabilidad());
-                            // $nivelHabilidad = (int) $habilidad->getNivelHabilidad();
-                            
-                            // $estrellas = '';
-                            // for ($i = 0; $i < 5; $i++) {
-                            //     if ($i < $nivelHabilidad) {
-                            //         $estrellas .= '<i class="bi bi-star-fill text-warning"></i>';
-                            //     } else {
-                            //         $estrellas .= '<i class="bi bi-star text-muted"></i>';
-                            //     }
-                            // }
+                    <div id="listaHabilidades" class="mt-3 d-flex flex-wrap gap-3">
+                        <?php if (!empty($alumno->getHabilidades())): {
+                                foreach ($alumno->getHabilidades() as $habilidad): { ?>
+                                        <div class="habilidad-item d-grid align-items-center justify-content-start bg-light p-2 rounded mb-2" data-id="<?= htmlspecialchars($habilidad->getId()) ?>">
+                                            <span class="habilidad-nombre fw-bold text-center"><?= htmlspecialchars($habilidad->getNombreHabilidad()) ?></span>
+                                            <!-- Estrellas para calificar el nivel -->
+                                            <div class="stars" data-id="<?= htmlspecialchars($habilidad->getId()) ?>">
+                                                <?php foreach (range(1, 5) as $i): ?>
+                                                    <i class="star checked bi <?= $i <= $habilidad->getNivelHabilidad() ? 'bi-star-fill' : 'bi-star' ?>"
+                                                        data-value="<?= $i ?>"
+                                                        data-id="<?= htmlspecialchars($habilidad->getId()) ?>"></i>
+                                                <?php endforeach; ?>
+                                            </div>
 
-                            echo '<li class="mb-3">' . $nombreHabilidad . '</li>';
-                        }
-                    } else {
-                        echo '<p class="mb-3">-</p>';
-                    }
-                ?>
+                                            <button type="button" class="btn btn-danger btn-sm eliminarHabilidad">Eliminar</button>
+                                        </div>
+                                <?php }
+                                endforeach; ?>
+                        <?php }
+                        endif; ?>
+                    </div>
                 </ul>
             </section>
 
