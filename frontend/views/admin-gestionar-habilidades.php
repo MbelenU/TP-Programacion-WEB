@@ -8,11 +8,12 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$allowedRoles = ['1'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Visualizar Habilidades', $_SESSION['user']['user_id'])){
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
-}
+} 
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -36,10 +37,12 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                     <input type="text" id="searchInput" class="form-control me-2" placeholder="Buscar Habilidad">
                     <button id="searchButton" class="btn btn-light border border-success-subtle">Buscar</button>
                 </div>
+                <?php if (Permisos::tienePermiso('Crear Habilidades', $_SESSION['user']['user_id'])){ ?>
                 <div class="d-flex flex-grow-1 mt-2 mt-md-0">
                     <input type="text" id="newSkillInput" class="form-control me-2" placeholder="Nueva Habilidad">
                     <button id="addSkillButton" class="btn btn-success">Agregar</button>
                 </div>
+                <?php } ?>
             </div>
 
             <!-- Tabla de habilidades -->

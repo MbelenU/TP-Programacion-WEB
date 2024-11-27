@@ -8,11 +8,11 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$allowedRoles = ['3'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Visualizar Alumno', $_SESSION['user']['user_id'])){
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
-}
+} 
 
 $alumno = $empresaController->obtenerAlumno($_GET['id']);
 $publicaciones = $empresaController->listarPublicaciones();
@@ -43,7 +43,12 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
 </head>
 
 <body class="bg-inicio">
-    <?php require __DIR__ . '/../components/empresa-navbar.php' ?>
+    <?php if ($_SESSION['user']['user_type'] == 1){
+            require __DIR__ . '/../components/admin-navbar.php';
+    } elseif ($_SESSION['user']['user_type'] == 3){
+            require __DIR__ . '/../components/empresa-navbar.php';
+    }
+    ?>
 
 <div id="alumno-info" data-alumno-id="<?php echo $alumno->getUsuarioId(); ?>"></div>
 
@@ -67,9 +72,11 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
                         <p><?php echo mostrarValor($alumno->getDescripcion()); ?></p>
                     </div>
                     <button class="btn btn-outline-success">Descargar CV</button>
+                    <?php if (Permisos::tienePermiso('Reclutar Perfil', $_SESSION['user']['user_id'])){ ?>
                     <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalReclutar">
                         Reclutar
                     </button>
+                    <?php } ?>
                 </div>
             </div>
 

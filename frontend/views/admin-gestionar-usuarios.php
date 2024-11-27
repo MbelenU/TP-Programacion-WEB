@@ -2,7 +2,6 @@
 require_once __DIR__ . '/../../controllers/AdministradorController.php';
 
 
-
 $administradorController = new AdministradorController();
 $response = $administradorController->listarUsuarios();
 
@@ -12,11 +11,13 @@ if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
-$allowedRoles = ['1'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Visualizar Usuarios', $_SESSION['user']['user_id'])){
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
-}
+} 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +41,9 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                 <div class="mt-4 mb-4">
+                    <?php if (Permisos::tienePermiso('Registrar Usuario', $_SESSION['user']['user_id'])){ ?>
                     <button onclick="window.location.href='admin-registro.php'" class="btn-registrar">Registrar Usuario</button>
+                    <?php } ?>
                     <form class="d-sm-flex" role="search">
                         <input class="form-control me-2" type="search" id="buscarInput" placeholder="Buscar usuarios" aria-label="Search">
                         <button class="btn btn-outline-success d-grid align-content-center" id="buscarUsuarios">
@@ -56,9 +59,15 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
                                     <div class="user-info"><strong>Email:</strong> <?= htmlspecialchars($usuario['mail']) ?></div>
                                     <div class="user-info"><strong>Estado:</strong> <?= ($usuario['de_baja'] === 'N') ? 'Activo' : 'Inactivo' ?></div>
                                     <div class="user-actions">
+                                        <?php if (Permisos::tienePermiso('Cambiar contraseña', $_SESSION['user']['user_id'])){ ?>
                                         <button class="btn btn-warning btn-cambiar-pass" type="button" data-id="<?= $usuario['id'] ?>">Cambiar Clave</button>
+                                        <?php } ?>
+                                        <?php if (Permisos::tienePermiso('Baja Usuario', $_SESSION['user']['user_id'])){ ?>
                                         <button class="btn btn-danger btn-dar-baja" type="button" data-id="<?= $usuario['id'] ?>">Deshabilitar</button>
+                                        <?php } ?>
+                                        <?php if (Permisos::tienePermiso('Alta Usuario', $_SESSION['user']['user_id'])){ ?>
                                         <button class="btn btn-success btn-habilitar" type="button" data-id="<?= $usuario['id'] ?>">Habilitar</button>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             <?php endforeach; ?>

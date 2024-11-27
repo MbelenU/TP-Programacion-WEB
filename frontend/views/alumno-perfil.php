@@ -8,11 +8,11 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$allowedRoles = ['2'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Visualizar Perfil', $_SESSION['user']['user_id'])){
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
-}
+} 
 
 $alumno = $alumnoController->obtenerAlumnoPorId($_SESSION['user']['user_id']);
 
@@ -54,7 +54,9 @@ function mostrarValor($valor, $mensaje = 'No disponible') {
                         <p><?php echo mostrarValor($alumno->getDescripcion()); ?></p>
                     </div>
                     <button class="btn btn-outline-success">Cargar CV</button>
+                    <?php if (Permisos::tienePermiso('Editar Perfil', $_SESSION['user']['user_id'])){ ?>
                     <a href="<?php echo BASE_URL ?>views/alumno-editar-perfil.php" class="btn btn-outline-success">Editar perfil</a>
+                    <?php } ?>
                 </div>
             </div>
 

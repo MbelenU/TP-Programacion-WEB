@@ -1,4 +1,20 @@
-<?php require_once __DIR__ .'/../includes/base-url.php' ?>
+<?php
+require_once __DIR__ .'/../includes/base-url.php';
+
+session_start();
+if (!isset($_SESSION['user'])) {
+    header("Location: ./inicio.php");
+    exit();
+}
+
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Registrar Usuario', $_SESSION['user']['user_id'])){
+    echo "Acceso denegado. No tienes permisos para acceder a esta página.";
+    exit();
+} 
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 

@@ -4,6 +4,10 @@
 
 require_once(__DIR__ . '/../../dal/Database.php');
 
+// Obtener la conexión PDO
+$db = new Database();
+$conn = $db->getConnection(); 
+
 
 class Permisos
 {
@@ -41,11 +45,11 @@ class Permisos
                     ON
                         roles_permisos.id_permiso = permisos.id
             INNER JOIN
-                roles_usuarios
+                roles_usuario
                     ON
-                        roles_usuarios.id_rol = roles_permisos.id_rol
+                        roles_usuario.id_rol = roles_permisos.id_rol
             WHERE 
-                    roles_usuarios.id_usuario = :idUsuario 
+                    roles_usuario.id_usuario = :idUsuario 
                 AND permisos.nombre IN (" . $bindPermisos . ")
             LIMIT 1;
         ";
@@ -76,11 +80,11 @@ class Permisos
                     ON
                         roles_permisos.id_permiso = permisos.id
             INNER JOIN
-                roles_usuarios
+                roles_usuario
                     ON
-                        roles_usuarios.id_rol = roles_permisos.id_rol
+                        roles_usuario.id_rol = roles_permisos.id_rol
             WHERE 
-                roles_usuarios.id_usuario = :idUsuario;
+                roles_usuario.id_usuario = :idUsuario;
         ";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':idUsuario', $idUsuario);
@@ -98,15 +102,15 @@ class Permisos
         }
         $sql = "
             SELECT 
-                roles.nombre
+                rol.nombre
             FROM 
-                roles
+                rol
             INNER JOIN
-                roles_usuarios
+                roles_usuario
                     ON
-                        roles_usuarios.id_rol = roles.id
+                        roles_usuario.id_rol = rol.id
             WHERE 
-                roles_usuarios.id_usuario = :idUsuario;
+                roles_usuario.id_usuario = :idUsuario;
         ";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':idUsuario', $idUsuario);
@@ -141,14 +145,14 @@ class Permisos
             SELECT 
                 1 
             FROM 
-                roles
+                rol
             INNER JOIN
-                roles_usuarios
+                roles_usuario
                     ON
-                        roles_usuarios.id_rol = roles.id
+                        roles_usuario.id_rol = rol.id
             WHERE 
-                    roles_usuarios.id_usuario = :idUsuario 
-                AND roles.nombre IN (" . $bindRoles . ")
+                    roles_usuario.id_usuario = :idUsuario 
+                AND rol.nombre IN (" . $bindRoles . ")
             LIMIT 1;
         ";
         $stmt = $conn->prepare($sql);

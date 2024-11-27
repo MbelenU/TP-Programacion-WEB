@@ -10,11 +10,12 @@ if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
-$allowedRoles = ['1'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Publicar Eventos', $_SESSION['user']['user_id'])){
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
-}
+} 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarEvento'])) {
     $evento = $administradorController->crearEvento();
