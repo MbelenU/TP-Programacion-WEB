@@ -590,7 +590,6 @@ class AlumnoDAO
        
         if ($stmt->rowCount() > 0) {
             $empleos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
             $empleosArray = [];
             foreach($empleos as $empleo){
                 $id = $empleo['id'];
@@ -603,8 +602,8 @@ class AlumnoDAO
                 $estadoEmpleo = $this->getEstadoById($estadoId);
                 $jornadaId =  $empleo['id_jornada'];
                 $jornada = $this->getJornadaById($jornadaId);
-                $ubicacion = $empleo['ubicacion']; 
-    
+                $ubicacion = $empleo['ubicacion'];
+                
                 $queryHabilidades = "SELECT * FROM habilidades_publicaciones HP 
                                      JOIN habilidades HD ON HP.id_habilidad = HD.id
                                      WHERE HP.id_publicacion = :puestoId";

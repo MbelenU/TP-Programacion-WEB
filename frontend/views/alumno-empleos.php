@@ -14,6 +14,9 @@ if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
 }
 $response = $alumnoController->listarEmpleos();
 $empleos = $response['body'];
+echo '<pre>'; // Para que el formato sea más legible
+print_r($empleos);
+echo '</pre>';
 ?>
 <!DOCTYPE html>
 <html lang="es">
