@@ -58,6 +58,14 @@ elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['agregarSuscripcion'
     return $resultado;
     exit;
 }
+elseif($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['eliminarHabilidad'])){
+    session_start();
+    $idUsuario = $_SESSION['user']['user_id'];
+    $alumnoController = new AlumnoController();
+    $resultado = $alumnoController->eliminarHabilidad();
+    return $resultado;
+    exit;
+}
 
 class AlumnoController {
     private AlumnoDAO $alumnoDao;
@@ -447,6 +455,31 @@ class AlumnoController {
         echo json_encode(['success' => $result]);
         exit();
         
+    }
+
+    public function eliminarHabilidad()
+    {
+        
+        $input = json_decode(file_get_contents('php://input'), true);
+
+       
+        $idAlumno = $input['idAlumno'];
+        $idHabilidad = $input['idHabilidad'];
+
+        
+        $response = $this->alumnoDao->eliminarHabilidad($idAlumno, $idHabilidad);
+        
+        if ($response) {
+            http_response_code(200);
+            echo json_encode([
+                'success' => true
+            ]);
+        } else {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false
+            ]);
+        }
     }
 
         

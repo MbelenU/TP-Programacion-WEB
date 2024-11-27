@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['guardarPerfil'])) {
                     </div>
                     <hr>
                     <input type="hidden" id="habilidadesSeleccionadas" name="habilidadesSeleccionadas">
-
+                    <div id="alumnoId" data-id="<?php echo $_SESSION['user']['user_id']; ?>"></div>
                     <div class="row">
                         <label for="habilidad" class="form-label fw-bold">HABILIDADES</label>
                         <div id="habilidaderror" class="text-danger"></div>

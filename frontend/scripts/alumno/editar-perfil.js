@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const alumnoId = document.getElementById("alumnoId").getAttribute("data-id");  // Obtener el idAlumno de HTML
+
     const agregarBtn = document.getElementById("agregarHabilidad");
     const selectHabilidad = document.getElementById("habilidad");
     const listaHabilidades = document.getElementById("listaHabilidades");
@@ -48,8 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Añadir evento al botón "Eliminar"
         nuevaHabilidad.querySelector(".eliminarHabilidad").addEventListener("click", function () {
-            nuevaHabilidad.remove();
-            actualizarHabilidadesSeleccionadas();
+            eliminarHabilidad(habilidadId, nuevaHabilidad, alumnoId);  // Pasar el alumnoId también
         });
 
         // Agregar al DOM
@@ -62,45 +63,37 @@ document.addEventListener("DOMContentLoaded", function () {
     // Delegar evento "Eliminar" para elementos ya renderizados
     listaHabilidades.addEventListener("click", (event) => {
         if (event.target.classList.contains("eliminarHabilidad")) {
-            event.target.closest(".habilidad-item").remove();
-            actualizarHabilidadesSeleccionadas();
+            const habilidadId = event.target.closest(".habilidad-item").dataset.id;
+            const elementoHabilidad = event.target.closest(".habilidad-item");
+            eliminarHabilidad(habilidadId, elementoHabilidad, alumnoId);  // Pasar el alumnoId también
         }
     });
 
-    // Agregar evento click a las estrellas
-    document.querySelectorAll(".stars .star").forEach(star => {
-        star.addEventListener("click", function () {
-            const habilidadId = this.getAttribute("data-id");
-            const nivel = this.getAttribute("data-value");
-
-            // Actualizar visualmente las estrellas
-            const starsContainer = this.parentElement;
-            starsContainer.querySelectorAll(".star").forEach(s => {
-                s.classList.remove("bi-star-fill");
-                s.classList.add("bi-star");
-                if (s.getAttribute("data-value") <= nivel) {
-                    s.classList.remove("bi-star");
-                    s.classList.add("bi-star-fill");
-                }
-            });
-
-            // Enviar nivel al servidor con AJAX
-            fetch("<?= BASE_URL ?>alumno/actualizarNivelHabilidad", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ id: habilidadId, nivel: nivel })
+    // Función para eliminar habilidad
+    function eliminarHabilidad(habilidadId, elementoHabilidad, alumnoId) {
+        // Enviar AJAX para eliminar la habilidad
+        fetch(`http://localhost/TP-Programacion-WEB/controllers/AlumnoController.php?eliminarHabilidad=`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                idAlumno: alumnoId,
+                idHabilidad: habilidadId
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        alert("Error al actualizar el nivel. Intente nuevamente.");
-                    }
-                })
-                .catch(() => alert("Error de conexión con el servidor."));
-        });
-    });
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Si la habilidad fue eliminada con éxito, eliminarla del DOM
+                if (elementoHabilidad) {
+                    elementoHabilidad.remove();
+                }
+                actualizarHabilidadesSeleccionadas();
+            } else {
+                alert("Error al eliminar la habilidad. Intente nuevamente.");
+            }
+        })
+        .catch(() => alert("Error de conexión con el servidor."));
+    }
 
     // Actualizar el valor del campo hidden con los IDs de las habilidades
     function actualizarHabilidadesSeleccionadas() {

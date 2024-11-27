@@ -889,5 +889,21 @@ class AlumnoDAO
             return null; // Si no encontramos el evento
         }
 
+        public function eliminarHabilidad($idAlumno, $idHabilidad)
+        {
+            $query = "DELETE FROM habilidades_alumnos WHERE id_usuario = :idAlumno AND id_habilidad = :idHabilidad";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(':idAlumno', $idAlumno);
+            $stmt->bindValue(':idHabilidad', $idHabilidad);
+            $stmt->execute();
+    
+            if ($stmt->rowCount() > 0) {
+                return ['success' => true];
+            } else {
+                return ['success' => false];
+            }
+        }
+
+
 
 }
