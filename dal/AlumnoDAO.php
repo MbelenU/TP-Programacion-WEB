@@ -53,7 +53,7 @@ class AlumnoDAO
             return false;
         }
     }
-    public function editarPerfilAlumno($id, $email, $nombre, $apellido, $telefono, $direccion, $fotoPerfil, $deBaja, $habilidades, $planEstudios, $materias): ?Alumno
+    public function editarPerfilAlumno($id, $email, $nombre, $apellido, $telefono, $direccion, $fotoPerfil, $deBaja, $habilidades): ?Alumno
     {
         // Actualizar información del usuario
         $updateUserQuery = "UPDATE usuario SET ";
