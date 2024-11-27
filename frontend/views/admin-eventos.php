@@ -7,11 +7,12 @@ if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
-$allowedRoles = ['1'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Visualizar Eventos', $_SESSION['user']['user_id'])){
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
-}
+} 
 
 $userId = $_SESSION['user'];
 $administradorController = new AdministradorController();
@@ -54,7 +55,9 @@ $totalPages = $paginationData['totalPages'];
                 <div class="nombre-evento">
                     <h1>Eventos</h1>
                 </div>
+                <?php if (Permisos::tienePermiso('Publicar Eventos', $_SESSION['user']['user_id'])){ ?>
                 <a href="<?php echo BASE_URL ?>views/admin-publicar-evento.php"><button class="btn btn-success">Publicar evento</button></a>
+                <?php } ?>
             </div>
 
             <!-- Formulario de búsqueda -->
@@ -99,12 +102,14 @@ $totalPages = $paginationData['totalPages'];
                                     <div><?php echo htmlspecialchars($evento->getCreditos()); ?></div>
                                 </div>
                             </div>
+                            <?php if (Permisos::tienePermiso('Editar Perfil', $_SESSION['user']['user_id'])){ ?>
                             <a href="<?php echo BASE_URL . 'views/admin-editar-evento.php?id=' . $evento->getId(); ?>" class="btn btn-light mt-2 mb-3">Editar evento</a>
-                                                                                   
+                            <?php } ?>         
+                            <?php if (Permisos::tienePermiso('Eliminar Eventos', $_SESSION['user']['user_id'])){ ?>                                            
                             <button type="button" class="btn btn-outline-danger mt-2 mb-3" title="Eliminar evento" data-bs-toggle="modal" data-bs-target="#modalEliminar<?php echo $evento->getId(); ?>" data-evento-id="<?php echo $evento->getId(); ?>">
                                 <i class="fas fa-trash-alt"></i> Eliminar
                             </button>
-
+                            <?php } ?>
                         </div>
 
                         <!-- Modal de Confirmación de Eliminación -->

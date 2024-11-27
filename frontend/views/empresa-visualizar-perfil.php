@@ -8,11 +8,12 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$allowedRoles = ['3'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Visualizar Perfil', $_SESSION['user']['user_id'])){
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
-}
+} 
+
 $empresa = $usuarioController->obtenerEmpresa();
 $empresa = $empresa['body']; 
 ?>
@@ -27,7 +28,12 @@ $empresa = $empresa['body'];
 </head>
 
 <body class="bg-inicio">
-    <?php require __DIR__ . '/../components/empresa-navbar.php'; ?>
+    <?php if ($_SESSION['user']['user_type'] == 1){
+            require __DIR__ . '/../components/admin-navbar.php';
+    } elseif ($_SESSION['user']['user_type'] == 3){
+            require __DIR__ . '/../components/empresa-navbar.php';
+    }
+    ?>
 
     <div class="container p-sm-4 bg-white">
         <div class="container mt-5">
@@ -43,8 +49,10 @@ $empresa = $empresa['body'];
 					<div class="descripcion">
 						<p><strong>Empresa:</strong>  <?php echo $empresa->getNombreEmpresa(); ?></p>
 					</div>
+                    <?php if (Permisos::tienePermiso('Editar Perfil', $_SESSION['user']['user_id'])){ ?>
 					<a href="<?php echo BASE_URL ?>views/empresa-editar-perfil.php" class="btn btn-outline-success">Editar perfil</a>
-				</div>
+                    <?php } ?>
+                </div>
 			</div>
             <div class="mt-4">
                 <h3>Descripcion</h3>

@@ -11,11 +11,12 @@ if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
-$allowedRoles = ['2'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Visualizar Eventos', $_SESSION['user']['user_id'])){
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
-}
+} 
 
 $userId = $_SESSION['user']['user_id'];
 $responseSuscripciones = $alumnoController->listarSuscripciones($userId);

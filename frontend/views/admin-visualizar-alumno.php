@@ -8,11 +8,11 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$allowedRoles = ['1'];
-if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+require_once __DIR__ . '/../includes/permisos.php';
+if (!Permisos::tienePermiso('Visualizar Usuarios', $_SESSION['user']['user_id'])){
     echo "Acceso denegado. No tienes permisos para acceder a esta página.";
     exit();
-}
+} 
 
 $alumno = $administradorController->obtenerAlumno($_GET['id']);
 $publicaciones = $administradorController->listarPublicaciones();
