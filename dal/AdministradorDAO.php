@@ -353,29 +353,6 @@ class AdministradorDAO
         return $this->obtenerEventoPorId($id);
     }
 
-    public function obtenerEventoPorId($eventoId) {
-        $query = "SELECT * FROM eventos WHERE id = :eventoId";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':eventoId', $eventoId, PDO::PARAM_INT);
-
-        if ($stmt->execute()) {
-            $eventoData = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($eventoData) {
-                
-                $evento = new Evento();
-                $evento->setId($eventoData['id']);
-                $evento->setNombreEvento($eventoData['nombre']);
-          //      $evento->getModalidadEvento($eventoData['modalidad']);
-                $evento->setFechaEvento($eventoData['fecha']);
-                $evento->setDescripcionEvento($eventoData['descripcion']);
-                $evento->setCreditos($eventoData['creditos']);
-
-                return $evento;
-            }
-        }
-
-        return null; //evento no encontrado 
-    }
 
     public function agregarNotificacion($idUsuario, $descripcion)
     {
@@ -1133,7 +1110,75 @@ class AdministradorDAO
 
     }
 
+    public function obtenerEventoPorId($eventoId) {
+        $query = "SELECT * FROM eventos WHERE id = :eventoId";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':eventoId', $eventoId, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            $eventoData = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($eventoData) {
+                
+                $evento = new Evento();
+                $evento->setId($eventoData['id']);
+                $evento->setNombreEvento($eventoData['nombre']);
+          //      $evento->getModalidadEvento($eventoData['modalidad']);
+                $evento->setFechaEvento($eventoData['fecha']);
+                $evento->setDescripcionEvento($eventoData['descripcion']);
+                $evento->setCreditos($eventoData['creditos']);
+
+                return $evento;
+            }
+        }
+
+        return null; //evento no encontrado 
+    }
+
+        public function obtenerInscriptos($eventoId) {
+
+            $query = $query = "SELECT a.id_usuario,
+                             a.nombre AS nombre_alumno,
+                             a.apellido AS apellido_alumno
+                      FROM suscripciones s
+                      JOIN alumno a ON s.id_usuario = a.id_usuario
+                      WHERE s.id_evento = :eventoId";
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':eventoId', $eventoId, PDO::PARAM_INT);
+
+            if ($stmt->execute()) {
+                $inscriptos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $inscriptos;
+            }
+
+            return []; 
+        }
+
+
+        public function eliminarInscripto($eventoId, $idUsuario) {
+            
+            try {
     
+                $querySuscripcion = "DELETE FROM suscripciones WHERE id_evento = :evento_id AND id_usuario = :idUsuario";
+                $stmtSuscripcion = $this->conn->prepare($querySuscripcion);
+                $stmtSuscripcion->bindParam(':evento_id', $eventoId, PDO::PARAM_INT);
+                $stmtSuscripcion->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+    
+                if (!$stmtSuscripcion->execute()) {
+                    return false;
+                }
+    
+                return true; 
+
+            } catch (PDOException $e) {
+                // Manejo de errores
+                echo "Error: " . $e->getMessage();
+                return false;
+            }
+    
+           
+        }
+        
     
 }
 

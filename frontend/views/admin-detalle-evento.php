@@ -8,22 +8,42 @@ if (!isset($_SESSION['user'])) {
     header("Location: ./inicio.php");
     exit();
 }
+$allowedRoles = ['1'];
 
-require_once __DIR__ . '/../includes/permisos.php';
-if (!Permisos::tienePermiso('Visualizar Eventos', $_SESSION['user']['user_id'])){
-    echo "Acceso denegado. No tienes permisos para acceder a esta página.";
-    exit();
-} 
+    if (!in_array($_SESSION['user']['user_type'], $allowedRoles)) {
+        echo "Acceso denegado. No tienes permisos para acceder a esta página.";
+        exit();
+    }
 
+    $evento = $administradorController->obtenerEventoPorId($_GET['id']);
 
-$evento = $administradorController->obtenerEventoPorId($_GET['id']);
+    if(!$evento['status'] === "success"){
+        echo "<div class='alert alert-danger'>Evento no encontrado</div>";
+        exit();
+    }else{
+        $evento = $evento['body'];
+    }
 
-if(!$evento['status'] === "success"){
-    echo "<div class='alert alert-danger'>Evento no encontrado</div>";
-    exit();
-}else{
-    $evento = $evento['body'];
-}
+   // var_dump($evento);
+    
+    $inscriptos = $administradorController->obtenerInscriptos($evento->getId());
+    
+    if(!$inscriptos['success'] === "false"){
+        echo "<div class='alert alert-danger'>Alumno no encontrado</div>";
+        exit();
+    }else{
+        $inscriptos = $inscriptos['body'];
+    }
+    //var_dump($inscriptos);
+
+    if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['borrarInscripto'])){
+        $alumnoId = $_POST['id_usuario'];
+        $eventoId = $evento->getId();
+
+       
+        $resultado = $administradorController->eliminarInscripto($alumnoId, $eventoId);
+    }
+        //var_dump($resultado);
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +52,7 @@ if(!$evento['status'] === "success"){
 <head>
     <?php require __DIR__ . '/../components/header.php' ?>
     <link rel="stylesheet" href="<?php echo BASE_URL ?>css/admin-detalle-evento.css">
+    <script src="<?php echo BASE_URL ?>/scripts/admin-detalle-evento.js" defer></script>
 </head>
 
 <body class="p-0 bg-inicio">
@@ -60,7 +81,7 @@ if(!$evento['status'] === "success"){
                         </div>
                        <!-- <div class="mt-4">
                             <strong>Modalidad:</strong>
-                            <p><?php echo htmlspecialchars($evento->getModalidadEvento()); ?></p>
+                            <p><?php // echo htmlspecialchars($evento->getModalidadEvento()); ?></p>
                         </div>-->
                         <div class="mt-4">
                             <strong>Créditos:</strong>
@@ -69,7 +90,7 @@ if(!$evento['status'] === "success"){
                     </div>
                     <div class="button-container">
                         <a href="<?php echo BASE_URL ?>views/admin-editar-evento.php?id=<?php echo $evento->getId(); ?>" class="btn btn-success btn-reporte mb-2">Editar</a>
-                        <button type="button" class="btn btn-danger btn-reporte">Eliminar</button>
+                        <button type="button" class="btn btn-danger btn-reporte mb-2">Eliminar</button>
                     </div>
                     
                         </div>
@@ -77,22 +98,36 @@ if(!$evento['status'] === "success"){
                         <p>No hay eventos disponibles en este momento.</p>
                     <?php endif; ?>
                 </div>
+                
+
                 <ul class="list-group">
                     <li class="list-group-item disabled bg-secondary-subtle" aria-disabled="true">Inscriptos</li>
-                    <!-- Aquí agregarías la lista de inscriptos dinámicamente si tienes esa información -->
-                    <!-- Ejemplo de un inscripto -->
-                    <li class="list-group-item">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <span>Laura Martínez</span>
-                            </div>
-                            <div class="btn-group" role="group" aria-label="Estado del evento">
-                                <button type="button" class="btn btn-success btn-sm btn-anular">Anular</button>
-                            </div>
-                        </div>
-                    </li>
-                    
+                    <?php if (!empty($inscriptos)): ?>
+                        <?php foreach ($inscriptos as $inscripto): ?>
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <span><?php echo htmlspecialchars($inscripto['nombre_alumno']) . ' ' . htmlspecialchars($inscripto['apellido_alumno']); ?></span>
+                                    </div>
+                                    <div>
+            
+                                            
+                                    <div class="row mt-4 d-flex align-items-center">
+                                        <button class="btn btn-danger" data-desuscribir-id="<?php echo htmlspecialchars($inscripto['id_usuario']); ?>" data-desuscribir-evento-id="<?php echo $evento->getId(); ?>">
+                                            <i class="bi bi-bell"></i> Eliminar
+                                            </button>
+                                        </div>
+
+                                       
+                                    </div>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <li class="list-group-item">No hay inscriptos para este evento.</li>
+                    <?php endif; ?>
                 </ul>
+
 
             </div>
         </section>
