@@ -293,10 +293,10 @@ class AdministradorDAO
             $eventos = [];
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $evento = new Evento();
-                $evento->setId((int)$row['id']);
-                $evento->setNombreEvento($row['nombre']);
-                $evento->setFechaEvento($row['fecha']);
-                $evento->setDescripcionEvento($row['descripcion']);
+                $evento->setId((int)$row['id'] ?? '');
+                $evento->setNombreEvento($row['nombre'] ?? '');
+                $evento->setFechaEvento($row['fecha'] ?? '');
+                $evento->setDescripcionEvento($row['descripcion'] ?? '');
                 $evento->setCreditos((float)($row['creditos'] ?? 0));
                 $evento->setTipoEvento($row['tipo'] ?? ''); 
                 $eventos[] = $evento;
